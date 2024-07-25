@@ -56,7 +56,7 @@ if (options.ls) {
   const filepath = typeof options.ls === "string" ? options.ls : __dirname;
   console.log("TODO");
 
-  // listDirectoryNames();
+  listDirectoryNames();
 }
 if (options.mkdir) {
   createDir(path.resolve(__dirname, options.mkdir));

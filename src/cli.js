@@ -1,4 +1,4 @@
-const figlet = require("figlet");
+// const figlet = require("figlet");
 const { Command } = require("commander"); // add this line
 // const fs = require("fs");
 // const path = require("path");
@@ -38,7 +38,7 @@ function createFile(filepath) {
   console.log("An empty file has been created");
 }
 
-console.log(figlet.textSync("Welcome to Myelin"));
+// console.log(figlet.textSync("Welcome to Myelin"));
 
 program
   .version("1.0.1")

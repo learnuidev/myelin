@@ -15,7 +15,7 @@ program
   .version("1.0.1")
   .description("An example CLI for managing a directory")
   .option("-l, --ls  [value]", "List directory names")
-  .option("-c, --gc <value> <value-2>", "Get component")
+  .option("-c, --c <value> <value-2>", "Get component")
   .option("-t, --touch <value>", "Create a file")
   .parse(process.argv);
 

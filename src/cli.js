@@ -14,7 +14,7 @@ program
   .version("1.0.1")
   .description("An example CLI for managing a directory")
   .option("-l, --ls  [value]", "List directory names")
-  .option("-m, --mkdir <value>", "Create a directory")
+  .option("-c, --gc <value>", "Get component")
   .option("-t, --touch <value>", "Create a file")
   .parse(process.argv);
 

@@ -29,7 +29,7 @@ if (options.ls) {
   });
 }
 
-if (options.gc) {
+if (options.c) {
   const filepath = typeof options.ls === "string" ? options.ls : __dirname;
   const [a, b, c, directoryPath, name] = process.argv;
 

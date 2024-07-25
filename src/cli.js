@@ -34,7 +34,7 @@ if (options.gc) {
   const [a, b, c, directoryPath, name] = process.argv;
 
   getComponent({
-    name: directoryPath || "no-lesson-view.tsx",
+    name: name || "no-lesson-view.tsx",
     directoryPath: directoryPath || "nmm",
   }).then((names) => {
     console.log(names);

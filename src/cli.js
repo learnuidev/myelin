@@ -7,6 +7,7 @@ const { Command } = require("commander"); // add this line
 
 const { listDirectoryNames } = require("./actions/list-directory-names");
 const { getComponent } = require("./actions/get-component");
+const { addComponent } = require("./actions/add-component");
 
 //add the following line
 const program = new Command();
@@ -16,6 +17,7 @@ program
   .description("An example CLI for managing a directory")
   .option("-l, --ls  [value]", "List directory names")
   .option("-c, --c <value> <value-2>", "Get component")
+  .option("-a, --add <name>", "Add a component")
   .option("-t, --touch <value>", "Create a file")
   .parse(process.argv);
 
@@ -39,4 +41,8 @@ if (options.c) {
   }).then((names) => {
     console.log(names);
   });
+}
+
+if (options.add) {
+  addComponent(options.add);
 }

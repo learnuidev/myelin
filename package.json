@@ -1,7 +1,7 @@
 {
   "name": "myelino",
-  "version": "1.2.0",
-  "main": "src/cli.js",
+  "version": "1.2.1",
+  "main": "src/index.js",
   "bin": {
     "myelino": "src/cli.js"
   },

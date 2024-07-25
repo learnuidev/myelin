@@ -1,7 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 
-const { listDirectoryNames } = require(".");
+const { listDirectoryNames } = require("./list-directory-names");
 const { componentParser1 } = require("./component-parser-1");
 
 const listTsxComponents = (name, options) => {

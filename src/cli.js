@@ -6,6 +6,7 @@ const { Command } = require("commander"); // add this line
 // const path = require("path");
 
 const { listDirectoryNames } = require("./actions/list-directory-names");
+const { getComponent } = require("./actions/get-component");
 
 //add the following line
 const program = new Command();

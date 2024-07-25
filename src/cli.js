@@ -11,7 +11,7 @@ async function main() {
     .parse(process.argv);
 
   if (program.greet) {
-    console.log("Hello, CLI world!");
+    console.log("Hello, CLI!");
   }
 }
 

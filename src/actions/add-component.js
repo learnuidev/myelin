@@ -114,7 +114,8 @@ function Cursor({ position }: { position: ICursorPosition }) {
       className="absolute z-0 h-10 rounded-full bg-white"
     />
   );
-}`,
+}
+`,
 };
 
 const addComponent = (name) => {

@@ -15,7 +15,7 @@ program
   .version("1.0.1")
   .description("An example CLI for managing a directory")
   .option("-l, --ls  [value]", "List directory names")
-  .option("-c, --gc <value>", "Get component")
+  .option("-c, --gc <value> <value-2>", "Get component")
   .option("-t, --touch <value>", "Create a file")
   .parse(process.argv);
 
@@ -31,10 +31,11 @@ if (options.ls) {
 
 if (options.gc) {
   const filepath = typeof options.ls === "string" ? options.ls : __dirname;
+  const [a, b, c, directoryPath, name] = process.argv;
 
   getComponent({
-    name: "no-lesson-view.tsx",
-    directoryPath: "nmm",
+    name: directoryPath || "no-lesson-view.tsx",
+    directoryPath: directoryPath || "nmm",
   }).then((names) => {
     console.log(names);
   });

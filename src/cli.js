@@ -22,9 +22,19 @@ const options = program.opts();
 
 if (options.ls) {
   const filepath = typeof options.ls === "string" ? options.ls : __dirname;
-  console.log("TODO");
 
   listDirectoryNames().then((names) => {
+    console.log(names);
+  });
+}
+
+if (options.gc) {
+  const filepath = typeof options.ls === "string" ? options.ls : __dirname;
+
+  getComponent({
+    name: "no-lesson-view.tsx",
+    directoryPath: "nmm",
+  }).then((names) => {
     console.log(names);
   });
 }

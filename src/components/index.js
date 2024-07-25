@@ -1,4 +1,5 @@
 const animatedNavbar = `"use client";
+
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 

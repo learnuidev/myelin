@@ -7,7 +7,7 @@ const addComponent = (name) => {
   if (!component) {
     console.log(`Component: ${name} does not exist`);
     console.log(
-      `The following components are currently supported: ${JSON.stringify(Object.keys(comps))}`
+      `The following components are currently supported: ${JSON.stringify(Object.keys(components))}`
     );
     return null;
   }

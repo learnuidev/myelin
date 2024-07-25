@@ -1,8 +1,4 @@
-const fs = require("fs").promises;
-const path = require("path");
-
-const comps = {
-  "animated-navbar": `"use client";
+"use client";
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -114,25 +110,4 @@ function Cursor({ position }: { position: ICursorPosition }) {
       className="absolute z-0 h-10 rounded-full bg-white"
     />
   );
-}`,
-};
-
-const addComponent = (name) => {
-  if (!comps[name]) {
-    console.log(`Component: ${name} does not exist`);
-    console.log(
-      `The following components are currently supported: ${JSON.stringify(Object.keys(comps))}`
-    );
-    return null;
-  }
-
-  console.log(`Installing: ${name}... please wait`);
-
-  const pathName = path.resolve(`./components/${name}.tsx`);
-
-  fs.writeFile(pathName, comps[name]).then(() => {
-    console.log(`${name}: successfully installed`);
-  });
-};
-
-module.exports.addComponent = addComponent;
+}

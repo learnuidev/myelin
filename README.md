@@ -1,8 +1,8 @@
-# Myelino
+# myelino
 
-Myelino is a small chadn library but for framer-motion animations
+myelino is a small chadn library but for framer-motion animations
 
-## Usage
+## Components
 
 1. Animated NavBar
 
@@ -11,7 +11,7 @@ npx myelino --add animated-navbar
 
 ```
 
-2. Animated Pill (Coming Soon)
+2. Animated Pill
 
 ```
 npx myelino --add animated-pill

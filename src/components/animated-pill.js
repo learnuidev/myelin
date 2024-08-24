@@ -1,4 +1,4 @@
-const animatedPill = `"use client";
+const animatedPillCode = `"use client";
 
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -86,5 +86,10 @@ function Cursor({ position }: { position: ICursorPosition }) {
   );
 }
 `;
+
+const animatedPill = {
+  id: "animated-pill",
+  code: animatedPill,
+};
 
 module.exports.animatedPill = animatedPill;

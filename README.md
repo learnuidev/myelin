@@ -21,3 +21,9 @@ npx myelino --add animated-navbar
 npx myelino --add animated-pill
 
 ```
+
+3. The Dock
+
+```
+npx myelino --add the-dock
+```

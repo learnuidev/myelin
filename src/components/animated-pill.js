@@ -89,7 +89,7 @@ function Cursor({ position }: { position: ICursorPosition }) {
 
 const animatedPill = {
   id: "animated-pill",
-  code: animatedPill,
+  code: animatedPillCode,
 };
 
 module.exports.animatedPill = animatedPill;

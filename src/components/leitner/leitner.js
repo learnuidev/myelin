@@ -12,6 +12,23 @@ function createStudyItem(flashCard) {
 const minBoxIndex = 0;
 const maxBoxIndex = 8;
 
+const oneSecondInMilliSeconds = 1000;
+const oneMinuteInMilliSeconds = oneSecondInMilliSeconds * 60;
+const oneHourInMulliSeconds = oneMinuteInMilliSeconds * 60;
+const oneDayInMilliseconds = oneHourInMulliSeconds * 24;
+
+const indexToTime = {
+  0: 0,
+  1: oneMinuteInMilliSeconds * 10,
+  2: oneHourInMulliSeconds,
+  3: oneDayInMilliseconds,
+  4: oneDayInMilliseconds * 7,
+  5: oneDayInMilliseconds * 30,
+  6: oneDayInMilliseconds * 90,
+  7: oneDayInMilliseconds * 180,
+  8: oneDayInMilliseconds * 365,
+};
+
 const leitnerSystem = (flashCards, studyCards) => {
   // state
   const reviewId = Date.now();
@@ -47,7 +64,7 @@ const leitnerSystem = (flashCards, studyCards) => {
       (card) => card.id === currentCard.cardId
     );
     if (!flashCard) {
-      throw Error(`Card with ${currentCard.cardId} not found`);
+      throw Error("Card with " + currentCard.cardId + " not found");
     }
 
     if (answer === flashCard.answer) {
@@ -57,6 +74,7 @@ const leitnerSystem = (flashCards, studyCards) => {
         ...currentCard,
         status: "correct",
         currentBoxIndex: newIndex,
+        nextReviewDate: Date.now() + indexToTime?.[newIndex],
         previousBoxIndex: currentCard.currentBoxIndex,
         updatedAt: Date.now(),
       };
@@ -68,6 +86,7 @@ const leitnerSystem = (flashCards, studyCards) => {
       const newCardState = {
         ...currentCard,
         currentBoxIndex: newIndex,
+        nextReviewDate: Date.now() + indexToTime?.[newIndex],
         previousBoxIndex: currentCard.currentBoxIndex,
         updatedAt: Date.now(),
         status: "incorrect",

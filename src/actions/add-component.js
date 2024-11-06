@@ -30,9 +30,13 @@ const addComponent = async (name) => {
     // try importing locally
     const code = await importAsString(`../components/${component?.path}`);
 
-    fs.writeFile(pathName, code).then(() => {
-      console.log(`${name}: successfully installed from locally`);
-    });
+    fs.writeFile(pathName, code)
+      .then(() => {
+        console.log(`${name}: successfully installed from locally`);
+      })
+      .catch((err) => {
+        throw err;
+      });
   } catch (err) {
     try {
       const resp = await fetch(`${url}/${component?.path}`);

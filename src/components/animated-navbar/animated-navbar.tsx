@@ -1,4 +1,4 @@
-const animatedNavbarCode = `"use client";
+"use client";
 
 import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -111,11 +111,3 @@ function Cursor({ position }: { position: ICursorPosition }) {
     />
   );
 }
-  `;
-
-const animatedNavbar = {
-  id: "animated-navbar",
-  code: animatedNavbarCode,
-};
-
-module.exports.animatedNavbar = animatedNavbar;

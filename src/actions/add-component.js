@@ -2,7 +2,10 @@ const fs = require("fs").promises;
 const path = require("path");
 const { components } = require("../components");
 
-const addComponent = (name) => {
+const url =
+  "https://raw.githubusercontent.com/learnuidev/myelin/refs/heads/main/src/components";
+
+const addComponent = async (name) => {
   const component = components[name];
   if (!component) {
     console.log(`Component: ${name} does not exist`);
@@ -22,9 +25,18 @@ const addComponent = (name) => {
     pathName = path.resolve(`./components/${name}.tsx`);
   }
 
-  fs.writeFile(pathName, component?.code).then(() => {
-    console.log(`${name}: successfully installed`);
-  });
+  try {
+    const resp = await fetch(`${url}/${component?.path}`);
+    const code = await resp.text();
+
+    fs.writeFile(pathName, code).then(() => {
+      console.log(`${name}: successfully installed from cloud`);
+    });
+  } catch (err) {
+    fs.writeFile(pathName, component?.code).then(() => {
+      console.log(`${name}: successfully installed`);
+    });
+  }
 };
 
 module.exports.addComponent = addComponent;

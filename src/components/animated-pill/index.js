@@ -90,6 +90,7 @@ function Cursor({ position }: { position: ICursorPosition }) {
 const animatedPill = {
   id: "animated-pill",
   code: animatedPillCode,
+  path: "animated-pill/animated-pill.tsx",
 };
 
 module.exports.animatedPill = animatedPill;

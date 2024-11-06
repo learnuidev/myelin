@@ -207,6 +207,7 @@ console.log("3", newLeitnerSystem.getState());
 
 const leitner = {
   id: "leitner",
+  path: "leitner/leitner.js",
   code: leitnerCode,
 };
 

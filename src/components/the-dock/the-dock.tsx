@@ -1,6 +1,4 @@
-const theDock = {
-  id: "the-dock",
-  code: `import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 
@@ -64,7 +62,3 @@ export const TheDock = ({ children }: { children?: React.ReactNode }) => {
     </div>
   );
 };
-    `,
-};
-
-module.exports.theDock = theDock;

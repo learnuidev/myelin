@@ -1,10 +1,43 @@
-const leitnerCode = `// Leitner System
+// Leitner System
 
-function createStudyItem(flashCard) {
+type FlashCard = ListeningOptionsFlashCard | SimpleQuestionAnswerFlashCard;
+
+interface BaseFlashCard {
+  id: string;
+  title: string;
+  type: string;
+}
+
+interface ListeningOptionsFlashCard extends BaseFlashCard {
+  type: "listening:options";
+  audioUrl: string;
+  options: Array<{
+    id: string;
+    imageUrl: string;
+  }>;
+  answer: string;
+}
+
+interface SimpleQuestionAnswerFlashCard extends BaseFlashCard {
+  type: "question-answer:simple";
+  answer: number | string; // Assuming the answer can be either a number or a string
+}
+
+interface StudyCard {
+  id: number;
+  cardId: string | number; // Assuming flashCard.id could be string or number
+  currentBoxIndex: number;
+  previousBoxIndex: number;
+  createdAt: number;
+  status?: string;
+}
+
+function createStudyCard(flashCard: FlashCard): StudyCard {
   return {
     id: Date.now() + Math.floor(Math.random() * 1123123123),
     cardId: flashCard.id,
     currentBoxIndex: 0,
+    previousBoxIndex: 0,
     createdAt: Date.now(),
   };
 }
@@ -17,7 +50,7 @@ const oneMinuteInMilliSeconds = oneSecondInMilliSeconds * 60;
 const oneHourInMulliSeconds = oneMinuteInMilliSeconds * 60;
 const oneDayInMilliseconds = oneHourInMulliSeconds * 24;
 
-const indexToTime = {
+const indexToTime: Record<number, number> = {
   0: 0,
   1: oneMinuteInMilliSeconds * 10,
   2: oneHourInMulliSeconds,
@@ -29,15 +62,15 @@ const indexToTime = {
   8: oneDayInMilliseconds * 365,
 };
 
-const leitnerSystem = (flashCards, studyCards) => {
+const leitnerSystem = (flashCards: FlashCard[], studyCards: StudyCard[]) => {
   // state
   const reviewId = Date.now();
-  let reviewHistory = [];
+  let reviewHistory: any = [];
 
   let reviewStatus = "IN_PROGRESS";
 
-  let currentCard = studyCards[0];
-  let boxes = [
+  let currentCard: StudyCard = studyCards[0];
+  let boxes: StudyCard[][] = [
     [], // review immediately,
     [], // review every 10 mins
     [], // review every 1 hour
@@ -59,7 +92,7 @@ const leitnerSystem = (flashCards, studyCards) => {
     };
   };
 
-  const getNewCardState = (currentCard, answer) => {
+  const getNewCardState = (currentCard: StudyCard, answer: any): StudyCard => {
     const flashCard = flashCards?.find(
       (card) => card.id === currentCard.cardId
     );
@@ -95,7 +128,7 @@ const leitnerSystem = (flashCards, studyCards) => {
     }
   };
 
-  const getNewBoxesState = (answer) => {
+  const getNewBoxesState = (answer: string) => {
     const reviewedAt = Date.now();
     const newCardState = getNewCardState(currentCard, answer);
 
@@ -130,7 +163,7 @@ const leitnerSystem = (flashCards, studyCards) => {
     };
   };
 
-  const update = (answer) => {
+  const update = (answer: any) => {
     const { newBoxes: newBoxesState, newReview } = getNewBoxesState(answer);
 
     const currentCardIndex = studyCards?.findIndex(
@@ -145,6 +178,7 @@ const leitnerSystem = (flashCards, studyCards) => {
 
     if (!nextCard) {
       boxes = newBoxesState;
+      // @ts-ignore
       currentCard = null;
       reviewStatus = "DONE";
       reviewHistory.push(newReview);
@@ -162,7 +196,7 @@ const leitnerSystem = (flashCards, studyCards) => {
   };
 };
 
-const flashCards = [
+const flashCards: FlashCard[] = [
   {
     id: "b456be95-f964-442f-9e69-9f4762825df4",
     title: "Choose the correct picture",
@@ -182,14 +216,15 @@ const flashCards = [
   },
   {
     id: "b456be95-f964-442f-9e69-9f4762825df5",
+    type: "question-answer:simple",
     title: "Secret of life",
     answer: 42,
   },
 ];
 
 const studyDecks = [
-  createStudyItem(flashCards[0]),
-  createStudyItem(flashCards[1]),
+  createStudyCard(flashCards[0]),
+  createStudyCard(flashCards[1]),
 ];
 
 const newLeitnerSystem = leitnerSystem(flashCards, studyDecks);
@@ -202,20 +237,3 @@ newLeitnerSystem.update(41);
 console.log("2", newLeitnerSystem.getState());
 newLeitnerSystem.update(42);
 console.log("3", newLeitnerSystem.getState());
-
-`;
-
-const leitner = {
-  id: "leitner",
-  path: "leitner/leitner.js",
-  code: leitnerCode,
-};
-const leitnerTs = {
-  id: "leitner-ts",
-  path: "leitner/leitner.ts",
-};
-
-module.exports = {
-  leitner,
-  leitnerTs,
-};

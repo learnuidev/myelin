@@ -1,6 +1,6 @@
 const { animatedNavbar } = require("./animated-navbar");
 const { animatedPill } = require("./animated-pill");
-const { leitner } = require("./leitner");
+const { leitner, leitnerTs } = require("./leitner");
 const { theDock } = require("./the-dock");
 
 const components = {
@@ -8,6 +8,7 @@ const components = {
   "animated-pill": animatedPill,
   "the-dock": theDock,
   leitner: leitner,
+  "leitner-ts": leitnerTs,
 };
 
 module.exports.components = components;

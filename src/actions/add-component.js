@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 const path = require("path");
 const { components } = require("../components");
 
-const addComponent = (name, ext) => {
+const addComponent = (name) => {
   const component = components[name];
   if (!component) {
     console.log(`Component: ${name} does not exist`);
@@ -14,7 +14,13 @@ const addComponent = (name, ext) => {
 
   console.log(`Installing: ${name}... please wait`);
 
-  const pathName = path.resolve(`./components/${name}.${ext || "tsx"}`);
+  let pathName;
+
+  if (name === "leitner") {
+    pathName = path.resolve(`./components/${name}.js`);
+  } else {
+    pathName = path.resolve(`./components/${name}.tsx`);
+  }
 
   fs.writeFile(pathName, component?.code).then(() => {
     console.log(`${name}: successfully installed`);

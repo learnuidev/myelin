@@ -17,7 +17,7 @@ program
   .description("An example CLI for managing a directory")
   .option("-l, --ls  [value]", "List directory names")
   .option("-c, --c <value> <value-2>", "Get component")
-  .option("-a, --add <name> --ext <ext>", "Add a component")
+  .option("-a, --add <name>", "Add a component")
   .option("-t, --touch <value>", "Create a file")
   .parse(process.argv);
 
@@ -44,5 +44,5 @@ if (options.c) {
 }
 
 if (options.add) {
-  addComponent(options.add, options?.ext);
+  addComponent(options.add);
 }

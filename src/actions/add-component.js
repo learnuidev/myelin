@@ -28,7 +28,7 @@ const addComponent = async (name) => {
 
   try {
     // try importing locally
-    const code = await importAsString(`./components/${component?.path}`);
+    const code = await importAsString(`../components/${component?.path}`);
 
     fs.writeFile(pathName, code).then(() => {
       console.log(`${name}: successfully installed from locally`);

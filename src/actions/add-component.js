@@ -27,30 +27,43 @@ const addComponent = async (name) => {
   }
 
   try {
-    // try importing locally
-    const code = await importAsString(`../components/${component?.path}`);
+    const resp = await fetch(`${url}/${component?.path}`);
+    const code = await resp.text();
 
-    fs.writeFile(pathName, code)
-      .then(() => {
-        console.log(`${name}: successfully installed from locally`);
-      })
-      .catch((err) => {
-        throw err;
-      });
+    fs.writeFile(pathName, code).then(() => {
+      console.log(`${name}: successfully installed from cloud`);
+    });
   } catch (err) {
-    try {
-      const resp = await fetch(`${url}/${component?.path}`);
-      const code = await resp.text();
-
-      fs.writeFile(pathName, code).then(() => {
-        console.log(`${name}: successfully installed from cloud`);
-      });
-    } catch (err) {
-      fs.writeFile(pathName, component?.code).then(() => {
-        console.log(`${name}: successfully installed`);
-      });
-    }
+    fs.writeFile(pathName, component?.code).then(() => {
+      console.log(`${name}: successfully installed`);
+    });
   }
+
+  // try {
+  //   // try importing locally
+  //   const code = await importAsString(`../components/${component?.path}`);
+
+  //   fs.writeFile(pathName, code)
+  //     .then(() => {
+  //       console.log(`${name}: successfully installed from locally`);
+  //     })
+  //     .catch((err) => {
+  //       throw err;
+  //     });
+  // } catch (err) {
+  //   try {
+  //     const resp = await fetch(`${url}/${component?.path}`);
+  //     const code = await resp.text();
+
+  //     fs.writeFile(pathName, code).then(() => {
+  //       console.log(`${name}: successfully installed from cloud`);
+  //     });
+  //   } catch (err) {
+  //     fs.writeFile(pathName, component?.code).then(() => {
+  //       console.log(`${name}: successfully installed`);
+  //     });
+  //   }
+  // }
 };
 
 module.exports.addComponent = addComponent;

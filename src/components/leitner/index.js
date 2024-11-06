@@ -47,7 +47,7 @@ const leitnerSystem = (flashCards, studyCards) => {
       (card) => card.id === currentCard.cardId
     );
     if (!flashCard) {
-      throw Error(\`Card with ${currentCard.cardId} not found\`);
+      throw Error("Card with " + currentCard.cardId + " not found");
     }
 
     if (answer === flashCard.answer) {

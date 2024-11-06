@@ -1,6 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 const { components } = require("../components");
+const { importAsString } = require("../utils/import-as-string");
 
 const url =
   "https://raw.githubusercontent.com/learnuidev/myelin/refs/heads/main/src/components";
@@ -26,16 +27,25 @@ const addComponent = async (name) => {
   }
 
   try {
-    const resp = await fetch(`${url}/${component?.path}`);
-    const code = await resp.text();
+    // try importing locally
+    const code = await importAsString(`./components/${component?.path}`);
 
     fs.writeFile(pathName, code).then(() => {
-      console.log(`${name}: successfully installed from cloud`);
+      console.log(`${name}: successfully installed from locally`);
     });
   } catch (err) {
-    fs.writeFile(pathName, component?.code).then(() => {
-      console.log(`${name}: successfully installed`);
-    });
+    try {
+      const resp = await fetch(`${url}/${component?.path}`);
+      const code = await resp.text();
+
+      fs.writeFile(pathName, code).then(() => {
+        console.log(`${name}: successfully installed from cloud`);
+      });
+    } catch (err) {
+      fs.writeFile(pathName, component?.code).then(() => {
+        console.log(`${name}: successfully installed`);
+      });
+    }
   }
 };
 

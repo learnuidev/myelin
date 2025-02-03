@@ -56,7 +56,10 @@ const smartTranslateAndSave = async ({
     ...translation,
   };
 
-  console.log("NEW SOURCE TRANSLATION", newSourceTranslation);
+  console.log(
+    `New source translation found for: for ${targetLanguage}. Saving it in the path: ${fileLocation}`,
+    newSourceTranslation
+  );
 
   await writeJsonFile(fileLocation, newTranslation);
   return true;

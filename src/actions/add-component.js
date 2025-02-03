@@ -26,18 +26,22 @@ const addComponent = async (name) => {
     pathName = path.resolve(`./components/${name}.tsx`);
   }
 
-  try {
-    const resp = await fetch(`${url}/${component?.path}`);
-    const code = await resp.text();
+  fs.writeFile(pathName, component?.code).then(() => {
+    console.log(`${name}: successfully installed`);
+  });
 
-    fs.writeFile(pathName, code).then(() => {
-      console.log(`${name}: successfully installed from cloud`);
-    });
-  } catch (err) {
-    fs.writeFile(pathName, component?.code).then(() => {
-      console.log(`${name}: successfully installed`);
-    });
-  }
+  // try {
+  //   const resp = await fetch(`${url}/${component?.path}`);
+  //   const code = await resp.text();
+
+  //   fs.writeFile(pathName, code).then(() => {
+  //     console.log(`${name}: successfully installed from cloud`);
+  //   });
+  // } catch (err) {
+  //   fs.writeFile(pathName, component?.code).then(() => {
+  //     console.log(`${name}: successfully installed`);
+  //   });
+  // }
 
   // try {
   //   // try importing locally

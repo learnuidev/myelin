@@ -10,7 +10,7 @@ async function loadClient({ config }) {
       `Only the following ai providers are supported: ${JSON.stringify(Object.values(translationProviders))}`
     );
   }
-  const apiKey = await loadApiKey();
+  const apiKey = await loadApiKey({ config });
 
   const client = await (() => {
     switch (config?.aiProvider) {

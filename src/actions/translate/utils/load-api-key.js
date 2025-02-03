@@ -6,7 +6,7 @@ async function loadApiKey({ config }) {
 
   if (!aiApiKey) {
     throw new Error(
-      `API Key for ${config.aiProvider}  not found. Please add API_KEY in your .env file and try again :)`
+      `API Key for ${config.aiProvider}  not found. Please add AI_API_KEY in your .env file and try again :)`
     );
   }
 

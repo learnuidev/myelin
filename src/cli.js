@@ -8,6 +8,7 @@ const { Command } = require("commander"); // add this line
 const { listDirectoryNames } = require("./actions/list-directory-names");
 const { getComponent } = require("./actions/get-component");
 const { addComponent } = require("./actions/add-component");
+const { translate } = require("./actions/translate/translate");
 
 //add the following line
 const program = new Command();
@@ -19,9 +20,18 @@ program
   .option("-c, --c <value> <value-2>", "Get component")
   .option("-a, --add <name>", "Add a component")
   .option("-t, --touch <value>", "Create a file")
+  .option("-tr, --translate", "Translate")
   .parse(process.argv);
 
 const options = program.opts();
+
+console.log("OPTIONS", options);
+
+if (options.translate) {
+  translate().then(() => {
+    console.log("DONE!!");
+  });
+}
 
 if (options.ls) {
   const filepath = typeof options.ls === "string" ? options.ls : __dirname;

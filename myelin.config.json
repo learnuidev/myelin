@@ -1,0 +1,9 @@
+{
+  "aiProvider": "openai",
+  "aiModel": "gpt-4o-mini",
+  "locale": {
+    "location": "locales",
+    "sourceLanguage": "en",
+    "targetLanguages": ["es", "fr", "zh"]
+  }
+}

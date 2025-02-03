@@ -14,8 +14,6 @@ const smartTranslateAndSave = async ({
   targetLanguage,
   fileName,
 }) => {
-  // const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
-
   // 1. First check if existing translations exist
   const existingTranslation = await loadTranslation(fileLocation);
 
@@ -44,6 +42,11 @@ const smartTranslateAndSave = async ({
     return null;
   }
 
+  console.log(
+    `Translating the following for: ${targetLanguage}.`,
+    newSourceTranslation
+  );
+
   // 5: Otherwise translate new translations and save new translations with
   const translation = await translateText({
     sourceTranslation: newSourceTranslation,
@@ -57,8 +60,8 @@ const smartTranslateAndSave = async ({
   };
 
   console.log(
-    `New source translation found for: for ${targetLanguage}. Saving it in the path: ${fileLocation}`,
-    newSourceTranslation
+    `🎉 - Successfully translated for: ${targetLanguage}. Saving it in the path: ${fileLocation}`,
+    newTranslation
   );
 
   await writeJsonFile(fileLocation, newTranslation);

@@ -71,6 +71,7 @@ const translateAndSave = async ({ config }) => {
 
   const _isFolder = await isFolder(`./${localeLocation}/${sourceLanguage}`);
 
+  // Flow for folder level translation
   if (_isFolder) {
     const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath);
     console.log("HANDLE FOLDER LEVEL TRANSLATION", sourceTranslations);
@@ -106,7 +107,18 @@ const translateAndSave = async ({ config }) => {
   }
 
   // Flow for file level translation
-  const sourceTranslation = await loadSourceTranslation({ config });
+  let sourceTranslation;
+
+  try {
+    sourceTranslation = await loadSourceTranslation({ config });
+    // eslint-disable-next-line no-unused-vars
+  } catch (err) {
+    sourceTranslation = null;
+  }
+
+  if (!sourceTranslation) {
+    return null;
+  }
 
   await Promise.all(
     config.locale.targetLanguages.map(async (targetLanguage) => {

@@ -1,5 +1,7 @@
 {
   "title": "Ey",
   "titleInformal": "¡Hey, qué tal!",
-  "description": "Aprende cualquier cosa."
+  "description": "Aprende cualquier cosa.",
+  "cta.button": "Comienza aquí",
+  "cta.cancel": "Cancelar"
 }

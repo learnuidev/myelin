@@ -8,7 +8,7 @@ async function loadSourceTranslation({ config }) {
   );
 
   if (!sourceTranslation) {
-    throw new Error(`Translation not found`);
+    throw new Error(`Source translation not found`);
   }
 
   return JSON.parse(sourceTranslation);

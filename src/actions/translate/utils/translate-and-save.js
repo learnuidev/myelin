@@ -36,9 +36,42 @@ const smartTranslateAndSave = async ({
       return !existingTranslation?.[translationKey];
     })
   );
+
+  // 3.5. Handle deletion of keys
+  const existingTranslationWithRemovedKeys = Object.fromEntries(
+    Object.entries(existingTranslation).filter((translationKeyAndValue) => {
+      const [translationKey] = translationKeyAndValue;
+      return !sourceTranslation?.[translationKey];
+    })
+  );
+
   // 4. If there is no need to translate then, log saying: nothing to translate
   if (!Object.keys(newSourceTranslation)?.length) {
     console.log(`Nothing to translate in: ${fileName} [${targetLanguage}] 😪`);
+
+    if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
+      console.log(
+        "existingTranslationWithRemovedKeys",
+        existingTranslationWithRemovedKeys
+      );
+
+      // TODO REMOVE KEYS
+      const newExistingKey = Object.fromEntries(
+        Object.entries(existingTranslation).filter((translationKeyAndValue) => {
+          const [translationKey] = translationKeyAndValue;
+          return sourceTranslation?.[translationKey];
+        })
+      );
+
+      console.log(
+        `🎉 - Successfully removed the keys ${Object.keys(existingTranslationWithRemovedKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
+      );
+
+      await writeJsonFile(fileLocation, newExistingKey);
+
+      console.log("TODO SAVE THIS", newExistingKey);
+    }
+
     return null;
   }
 
@@ -59,9 +92,16 @@ const smartTranslateAndSave = async ({
     ...translation,
   };
 
+  const newExistingTranslation = Object.fromEntries(
+    Object.entries(newTranslation).filter((translationKeyAndValue) => {
+      const [translationKey] = translationKeyAndValue;
+      return sourceTranslation?.[translationKey];
+    })
+  );
+
   console.log(
     `🎉 - Successfully translated for: ${targetLanguage}. Saving it in the path: ${fileLocation}`,
-    newTranslation
+    newExistingTranslation
   );
 
   await writeJsonFile(fileLocation, newTranslation);
@@ -80,7 +120,6 @@ const translateAndSave = async ({ config }) => {
   // Flow for folder level translation
   if (_isFolder) {
     const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath);
-    console.log("HANDLE FOLDER LEVEL TRANSLATION", sourceTranslations);
 
     await Promise.all(
       config.locale.targetLanguages.map(async (targetLanguage) => {

@@ -25,8 +25,6 @@ program
 
 const options = program.opts();
 
-console.log("OPTIONS", options);
-
 if (options.translate) {
   translate().then(() => {
     console.log("DONE!!");

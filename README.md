@@ -27,3 +27,11 @@ npx myelino --add animated-pill
 ```
 npx myelino --add the-dock
 ```
+
+## Localization Infrastructure
+
+1. Translate
+
+```
+npx myelino --translate
+```

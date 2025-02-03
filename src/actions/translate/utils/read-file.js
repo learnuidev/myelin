@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 const fs = require("fs/promises");
 
 async function readFile(filePath) {
@@ -5,7 +6,7 @@ async function readFile(filePath) {
     const data = await fs.readFile(filePath, "utf8");
     return data;
   } catch (err) {
-    console.error("Error reading file:", err);
+    throw err;
   }
 }
 

@@ -69,7 +69,7 @@ const translateAndSave = async ({ config }) => {
 
   const sourceFolderPath = `./${localeLocation}/${sourceLanguage}`;
 
-  const _isFolder = await isFolder(`./${localeLocation}/${sourceLanguage}`);
+  const _isFolder = await isFolder(sourceFolderPath);
 
   // Flow for folder level translation
   if (_isFolder) {
@@ -102,8 +102,6 @@ const translateAndSave = async ({ config }) => {
     console.log(
       `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
     );
-
-    // return true;
   }
 
   // Flow for file level translation

@@ -4,6 +4,6 @@
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["es", "fr", "zh", "ja", "zh-TW"]
+    "targetLanguages": ["es", "fr", "zh", "ja", "zh-TW", "ar"]
   }
 }

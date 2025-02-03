@@ -43,7 +43,7 @@ const smartTranslateAndSave = async ({
   }
 
   console.log(
-    `Translating the following for: ${targetLanguage}.`,
+    `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `,
     newSourceTranslation
   );
 

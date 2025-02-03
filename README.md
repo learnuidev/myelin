@@ -4,7 +4,7 @@
 
 ---
 
-myelino is a small chadn library but for framer-motion animations
+myelino - chadcn library on steriods
 
 ## Components
 

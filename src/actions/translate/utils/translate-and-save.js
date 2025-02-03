@@ -5,6 +5,62 @@ const { writeJsonFile } = require("./write-json-file");
 const { loadSourceTranslation } = require("./load-source-translation");
 
 const { translateText } = require("./translate-text");
+const { loadTranslation } = require("./load-translation");
+
+const smartTranslate = async ({
+  fileLocation,
+  sourceTranslation,
+  config,
+  targetLanguage,
+  fileName,
+}) => {
+  // const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
+
+  // 1. First check if existing translations exist
+  const existingTranslation = await loadTranslation(fileLocation);
+
+  // 2. If not found then proceed with normal translation
+  if (!existingTranslation) {
+    const translation = await translateText({
+      sourceTranslation,
+      config,
+      targetLanguage,
+    });
+
+    await writeJsonFile(fileLocation, translation);
+    return true;
+  }
+
+  // 3. If found, then create a new source translation by filtering out the already existing ones
+  const newSourceTranslation = Object.fromEntries(
+    Object.entries(sourceTranslation).filter((translationKeyAndValue) => {
+      const [translationKey] = translationKeyAndValue;
+      return !existingTranslation?.[translationKey];
+    })
+  );
+  // 4. If there is no need to translate then, log saying: nothing to translate
+  if (!Object.keys(newSourceTranslation)?.length) {
+    console.log(`Nothing to translate in: ${fileName} [${targetLanguage}] 😪`);
+    return null;
+  }
+
+  // 5: Otherwise translate new translations and save new translations with
+  const translation = await translateText({
+    sourceTranslation: newSourceTranslation,
+    config,
+    targetLanguage,
+  });
+
+  const newTranslation = {
+    ...existingTranslation,
+    ...translation,
+  };
+
+  console.log("NEW SOURCE TRANSLATION", newSourceTranslation);
+
+  await writeJsonFile(fileLocation, newTranslation);
+  return true;
+};
 
 const translateAndSave = async ({ config }) => {
   // Flow for folder level
@@ -25,17 +81,55 @@ const translateAndSave = async ({ config }) => {
           sourceTranslations?.map(async (sourceTranslationAndFileName) => {
             const { fileName, sourceTranslation } =
               sourceTranslationAndFileName;
+            const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 
+            // 1. First check if existing translations exist
+            const existingTranslation = await loadTranslation(fileLocation);
+
+            // 2. If not found then proceed with normal translation
+            if (!existingTranslation) {
+              const translation = await translateText({
+                sourceTranslation,
+                config,
+                targetLanguage,
+              });
+
+              await writeJsonFile(fileLocation, translation);
+              return true;
+            }
+
+            // 3. If found, then create a new source translation by filtering out the already existing ones
+            const newSourceTranslation = Object.fromEntries(
+              Object.entries(sourceTranslation).filter(
+                (translationKeyAndValue) => {
+                  const [translationKey] = translationKeyAndValue;
+                  return !existingTranslation?.[translationKey];
+                }
+              )
+            );
+            // 4. If there is no need to translate then, log saying: nothing to translate
+            if (!Object.keys(newSourceTranslation)?.length) {
+              console.log(
+                `Nothing to translate in: ${fileName} [${targetLanguage}] 😪`
+              );
+              return null;
+            }
+
+            // 5: Otherwise translate new translations and save new translations with
             const translation = await translateText({
-              sourceTranslation,
+              sourceTranslation: newSourceTranslation,
               config,
               targetLanguage,
             });
 
-            await writeJsonFile(
-              `./${localeLocation}/${targetLanguage}/${fileName}`,
-              translation
-            );
+            const newTranslation = {
+              ...existingTranslation,
+              ...translation,
+            };
+
+            console.log("NEW SOURCE TRANSLATION", newSourceTranslation);
+
+            await writeJsonFile(fileLocation, newTranslation);
             return true;
           })
         );

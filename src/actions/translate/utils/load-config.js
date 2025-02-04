@@ -23,15 +23,15 @@ async function loadConfig() {
   const configPath = "myelin.config.json";
   try {
     let config;
-    config = await readFile(configPath);
 
-    if (!config) {
+    try {
+      config = await readFile(configPath);
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
       console.log(`${configPath} not found. Writing a default one`);
       await fs.writeFile(configPath, JSON.stringify(defaultConfig));
 
       console.log(`${name}: successfully installed`);
-
-      // throw new Error(errorMessage);
     }
 
     config = await readFile(configPath);

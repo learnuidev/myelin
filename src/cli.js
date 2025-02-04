@@ -26,9 +26,13 @@ program
 const options = program.opts();
 
 if (options.translate) {
-  translate().then(() => {
-    console.log("DONE!!");
-  });
+  translate()
+    .then(() => {
+      console.log("DONE!!");
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
 }
 
 if (options.ls) {

@@ -2,6 +2,8 @@ const { readFile } = require("./read-file");
 
 const fs = require("fs").promises;
 
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const defaultConfig = {
   aiProvider: "openai",
   aiModel: "gpt-4o-mini",
@@ -24,17 +26,17 @@ async function loadConfig() {
   try {
     let config;
 
-    try {
-      config = await readFile(configPath);
-      // eslint-disable-next-line no-unused-vars
-    } catch (err) {
+    config = await readFile(configPath, { throw: false });
+
+    if (!config) {
       console.log(`${configPath} not found. Writing a default one`);
       await fs.writeFile(configPath, JSON.stringify(defaultConfig));
 
       console.log(`${name}: successfully installed`);
-
-      config = await readFile(configPath);
     }
+
+    await delay(1000); /// waiting 1 second.
+    config = await readFile(configPath);
 
     return JSON.parse(config);
     // eslint-disable-next-line no-unused-vars

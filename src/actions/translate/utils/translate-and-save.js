@@ -77,8 +77,8 @@ const smartTranslateAndSave = async ({
         {}
       );
 
-      console.log("EDITED", editedSourceTranslation);
-      console.log("LOCATION", fileLocation);
+      // console.log("EDITED", editedSourceTranslation);
+      // console.log("LOCATION", fileLocation);
 
       const edited = await translateText({
         sourceTranslation: editedSourceTranslation,
@@ -99,6 +99,52 @@ const smartTranslateAndSave = async ({
       // console.log("FILE CHANGED", changedFile);
       // const keysChanged = changedFile?.changes?.map((change) => change?.key);
       // console.log("KEYS CHANGED", keysChanged);
+    }
+
+    const changedFileStandAlone = _structuredDiff?.find((file) =>
+      file?.file?.includes(
+        `${config?.locale?.location}/${config?.locale?.sourceLanguage}.json`
+      )
+    );
+
+    if (changedFileStandAlone && fileLocation?.split("/")?.length === 3) {
+      const newKeys = changedFileStandAlone?.changes?.map(
+        (change) => change?.key
+      );
+      console.log(
+        `🧹 - Editing the following keys: ${JSON.stringify(newKeys)} for: ${targetLanguage} from: ${fileLocation}`,
+        existingTranslationWithRemovedKeys
+      );
+
+      const editedSourceTranslation = changedFileStandAlone?.changes?.reduce(
+        (acc, curr) => {
+          return {
+            ...acc,
+            [curr?.key]: curr?.newValue,
+          };
+        },
+        {}
+      );
+
+      console.log("EDITED", editedSourceTranslation);
+      console.log("LOCATION", fileLocation);
+
+      const edited = await translateText({
+        sourceTranslation: editedSourceTranslation,
+        config,
+        targetLanguage,
+      });
+
+      existingTranslation = {
+        ...existingTranslation,
+        ...edited,
+      };
+
+      console.log(
+        `🎉 - Successfully edited the keys  ${JSON.stringify(newKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
+      );
+
+      console.log(`Edited new keys`);
     }
 
     if (Object.keys(existingTranslationWithRemovedKeys)?.length) {

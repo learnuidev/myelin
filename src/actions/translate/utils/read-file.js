@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-catch */
 const fs = require("fs/promises");
 
-async function readFile(filePath, opts = { throw: false }) {
+async function readFile(filePath, opts = { throw: true }) {
   try {
     const data = await fs.readFile(filePath, "utf8");
     return data;

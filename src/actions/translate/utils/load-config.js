@@ -30,13 +30,12 @@ async function loadConfig() {
 
     if (!config) {
       console.log(`${configPath} not found. Writing a default one`);
-      await fs.writeFile(configPath, JSON.stringify(defaultConfig));
+      await fs.writeFile(configPath, JSON.stringify(defaultConfig, null, 4));
 
       console.log(`${name}: successfully installed`);
     }
 
-    await delay(1000); /// waiting 1 second.
-    config = await readFile(configPath);
+    config = await defaultConfig;
 
     return JSON.parse(config);
     // eslint-disable-next-line no-unused-vars

@@ -1,10 +1,25 @@
+const { existsSync } = require("fs");
 const fs = require("fs").promises;
 const path = require("path");
 const { components } = require("../components");
-const { importAsString } = require("../utils/import-as-string");
 
-const url =
-  "https://raw.githubusercontent.com/learnuidev/myelin/refs/heads/main/src/components";
+const { exec } = require("child_process");
+const { promisify } = require("util");
+const execAsync = promisify(exec);
+
+async function installDependencies(deps) {
+  const script = `npm install ${deps?.join(" ")}`;
+
+  console.log("SCRIPT", script);
+  try {
+    await execAsync(script);
+    console.log("Dependencies installed successfully!");
+    // eslint-disable-next-line no-unused-vars
+  } catch (error) {
+    throw new Error(error);
+    // console.error("Installation failed:", error.stderr || error.message);
+  }
+}
 
 const addComponent = async (name) => {
   const component = components[name];
@@ -20,6 +35,31 @@ const addComponent = async (name) => {
 
   let pathName;
 
+  if (name === "next-i18n") {
+    // install dependencies
+    await installDependencies(component.dependencies);
+
+    // add codes
+    if (component.codes) {
+      await Promise.all(
+        component.codes.map(async (code) => {
+          const codeRaw = await fetch(code.codeUrl);
+          const codeRawStr = await codeRaw.text();
+
+          if (!existsSync(code.targetDir)) {
+            await fs.mkdir(code.targetDir, { recursive: true });
+          }
+
+          fs.writeFile(code.path, codeRawStr).then(() => {
+            console.log(`${name}: successfully installed`);
+          });
+        })
+      );
+    }
+
+    return null;
+  }
+
   if (name === "leitner") {
     pathName = path.resolve(`./components/${name}.js`);
   } else {
@@ -29,45 +69,6 @@ const addComponent = async (name) => {
   fs.writeFile(pathName, component?.code).then(() => {
     console.log(`${name}: successfully installed`);
   });
-
-  // try {
-  //   const resp = await fetch(`${url}/${component?.path}`);
-  //   const code = await resp.text();
-
-  //   fs.writeFile(pathName, code).then(() => {
-  //     console.log(`${name}: successfully installed from cloud`);
-  //   });
-  // } catch (err) {
-  //   fs.writeFile(pathName, component?.code).then(() => {
-  //     console.log(`${name}: successfully installed`);
-  //   });
-  // }
-
-  // try {
-  //   // try importing locally
-  //   const code = await importAsString(`../components/${component?.path}`);
-
-  //   fs.writeFile(pathName, code)
-  //     .then(() => {
-  //       console.log(`${name}: successfully installed from locally`);
-  //     })
-  //     .catch((err) => {
-  //       throw err;
-  //     });
-  // } catch (err) {
-  //   try {
-  //     const resp = await fetch(`${url}/${component?.path}`);
-  //     const code = await resp.text();
-
-  //     fs.writeFile(pathName, code).then(() => {
-  //       console.log(`${name}: successfully installed from cloud`);
-  //     });
-  //   } catch (err) {
-  //     fs.writeFile(pathName, component?.code).then(() => {
-  //       console.log(`${name}: successfully installed`);
-  //     });
-  //   }
-  // }
 };
 
 module.exports.addComponent = addComponent;

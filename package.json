@@ -17,10 +17,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@tandil/diffparse": "^0.2.0",
     "commander": "^12.1.0",
     "dotenv": "^16.4.7",
     "figlet": "^1.7.0",
-    "openai": "^4.82.0"
+    "openai": "^4.82.0",
+    "simple-git": "^3.27.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

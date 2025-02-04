@@ -88,6 +88,3 @@ npx myelino --translate
 **Bring Your Own Model**: Custom providers can be integrated via the open-source codebase.
 
 ---
-
-**Empower global users without compromising privacy.**  
-[Explore the code →](https://github.com/your-repo-link)

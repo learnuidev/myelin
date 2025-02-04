@@ -32,9 +32,9 @@ async function loadConfig() {
       await fs.writeFile(configPath, JSON.stringify(defaultConfig));
 
       console.log(`${name}: successfully installed`);
-    }
 
-    config = await readFile(configPath);
+      config = await readFile(configPath);
+    }
 
     return JSON.parse(config);
     // eslint-disable-next-line no-unused-vars

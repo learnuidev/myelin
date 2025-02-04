@@ -39,8 +39,13 @@ const nextI8n = {
     },
     {
       targetDir: "libs/i18n-next/",
-      path: "libs/i18n-next/get-locale-and-direction.ts",
-      codeUrl: `https://raw.githubusercontent.com/learnuidev/myelin.dev/refs/heads/main/libs/i18n-next/get-locale-and-direction.ts`,
+      path: "libs/i18n-next/get-lang-and-direction.ts",
+      codeUrl: `https://raw.githubusercontent.com/learnuidev/myelin.dev/refs/heads/main/libs/i18n-next/get-lang-and-direction.ts`,
+    },
+    {
+      targetDir: "libs/i18n-next/",
+      path: "libs/i18n-next/i18n-next-html-provider.tsx",
+      codeUrl: `https://raw.githubusercontent.com/learnuidev/myelin.dev/refs/heads/main/libs/i18n-next/i18n-next-html-provider.tsx`,
     },
     {
       targetDir: ".",

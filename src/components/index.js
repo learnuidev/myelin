@@ -4,7 +4,8 @@ const { animatedPill } = require("./animated-pill");
 const { copyTextToClipboard } = require("./copy-text-to-clipboard");
 const { copyToClipboardButton } = require("./copy-text-to-clipboard-button");
 const { leitner, leitnerTs } = require("./leitner");
-const { nextI8n } = require("./next-i18n");
+const { i18next } = require("./i18next");
+
 const { theDock } = require("./the-dock");
 
 const components = {
@@ -14,7 +15,7 @@ const components = {
   "the-dock": theDock,
   leitner: leitner,
   "leitner-ts": leitnerTs,
-  "next-i18n": nextI8n,
+  ...i18next,
   "copy-text-to-clipboard": copyTextToClipboard,
   ...copyToClipboardButton,
 };

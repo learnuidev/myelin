@@ -1,5 +1,5 @@
-const nextI8n = {
-  id: "next-i18n",
+const i18next = {
+  id: "i18-next",
   version: 2,
   dependencies: [
     "i18next",
@@ -57,4 +57,6 @@ const nextI8n = {
   ],
 };
 
-module.exports.nextI8n = nextI8n;
+module.exports = {
+  i18next,
+};

@@ -2,6 +2,7 @@ const { animatedLoadingText } = require("./animated-loading-text");
 const { animatedNavbar } = require("./animated-navbar");
 const { animatedPill } = require("./animated-pill");
 const { copyTextToClipboard } = require("./copy-text-to-clipboard");
+const { copyToClipboardButton } = require("./copy-text-to-clipboard-button");
 const { leitner, leitnerTs } = require("./leitner");
 const { nextI8n } = require("./next-i18n");
 const { theDock } = require("./the-dock");
@@ -15,6 +16,7 @@ const components = {
   "leitner-ts": leitnerTs,
   "next-i18n": nextI8n,
   "copy-text-to-clipboard": copyTextToClipboard,
+  ...copyToClipboardButton,
 };
 
 module.exports.components = components;

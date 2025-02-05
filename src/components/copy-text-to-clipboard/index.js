@@ -1,5 +1,6 @@
 const copyTextToClipboard = {
   id: "copy-text-to-clipboard",
+  version: 2,
   codes: [
     {
       targetDir: "libs/misc/",

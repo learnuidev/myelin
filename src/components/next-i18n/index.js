@@ -1,5 +1,6 @@
 const nextI8n = {
   id: "next-i18n",
+  version: 2,
   dependencies: [
     "i18next",
     "i18next-browser-languagedetector",

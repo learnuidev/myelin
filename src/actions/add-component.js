@@ -34,7 +34,7 @@ const addComponent = async (name) => {
 
   let pathName;
 
-  if (["next-i18n", "copy-text-to-clipboard"]?.includes(name)) {
+  if (component.version === 2) {
     // install dependencies
     if (component.dependencies) {
       await installDependencies(component.dependencies);

@@ -7,6 +7,7 @@ const { loadSourceTranslation } = require("./load-source-translation");
 const { translateText } = require("./translate-text");
 const { loadTranslation } = require("./load-translation");
 const { structuredDiff } = require("./git/structured-diff");
+const { getSourceFolderPath } = require("./get-source-folder-path");
 
 const smartTranslateAndSave = async ({
   fileLocation,
@@ -210,9 +211,8 @@ const smartTranslateAndSave = async ({
 const translateAndSave = async ({ config }) => {
   // Flow for folder level
   const localeLocation = config.locale.location;
-  const sourceLanguage = config.locale.sourceLanguage;
 
-  const sourceFolderPath = `./${localeLocation}/${sourceLanguage}`;
+  const sourceFolderPath = getSourceFolderPath({ config });
 
   const _isFolder = await isFolder(sourceFolderPath);
 

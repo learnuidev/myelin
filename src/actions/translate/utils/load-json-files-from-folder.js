@@ -16,6 +16,7 @@ async function loadJsonFilesFromFolder(folderPath) {
       const filePath = path.join(folderPath, file);
       const fileContent = await fs.readFile(filePath, "utf-8");
       return {
+        baseFileName: file?.split(".")?.[0],
         fileName: file,
         sourceTranslation: JSON.parse(fileContent),
       };

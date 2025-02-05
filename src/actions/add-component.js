@@ -10,7 +10,6 @@ const execAsync = promisify(exec);
 async function installDependencies(deps) {
   const script = `npm install ${deps?.join(" ")}`;
 
-  console.log("SCRIPT", script);
   try {
     await execAsync(script);
     console.log("Dependencies installed successfully!");
@@ -35,9 +34,11 @@ const addComponent = async (name) => {
 
   let pathName;
 
-  if (name === "next-i18n") {
+  if (["next-i18n", "copy-text-to-clipboard"]?.includes(name)) {
     // install dependencies
-    await installDependencies(component.dependencies);
+    if (component.dependencies) {
+      await installDependencies(component.dependencies);
+    }
 
     // add codes
     if (component.codes) {

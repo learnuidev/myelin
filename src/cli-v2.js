@@ -12,6 +12,9 @@ const {
 
 const { addComponent, translate, upsertComponent, init } = require("./actions");
 const { myelin } = require("./constants/myelin");
+const {
+  addCloudProvider,
+} = require("./actions/add-cloud-provider/add-cloud-provider");
 
 async function main() {
   let action;
@@ -46,6 +49,11 @@ async function main() {
     switch (action) {
       case "init": {
         await init();
+        break;
+      }
+
+      case "add-cloud": {
+        await addCloudProvider();
         break;
       }
 

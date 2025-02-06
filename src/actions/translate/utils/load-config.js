@@ -14,7 +14,7 @@ const defaultConfig = JSON.stringify(
   4
 );
 
-async function loadConfig() {
+async function loadConfig(options = { throw: false }) {
   // step 1: read config
 
   const errorMessage = `config not found. Please create a file called: myelin.config.json in root directory and fill in this info:
@@ -24,7 +24,7 @@ async function loadConfig() {
 
   const configPath = "myelin.config.json";
   try {
-    const config = await readFile(configPath, { throw: false });
+    const config = await readFile(configPath, options);
 
     if (!config) {
       return;

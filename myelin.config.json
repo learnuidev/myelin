@@ -4,12 +4,7 @@
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": [
-      "fr",
-      "es",
-      "zh",
-      "ko",
-      "ja"
-    ]
-  }
+    "targetLanguages": ["fr", "es", "zh", "ko", "ja"]
+  },
+  "cloudProvider": "aws"
 }

@@ -1,5 +1,6 @@
 {
   "ok": "D'accord patron",
   "cancel": "Annuler cette chose",
-  "description": "une infrastructure de traduction qui provoque de la joie"
+  "description": "une infrastructure de traduction qui provoque de la joie",
+  "name": "bonjour"
 }

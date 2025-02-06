@@ -1,3 +1,4 @@
+const { log } = require("@clack/prompts");
 const {
   getSourceFolderPath,
 } = require("../../../translate/utils/get-source-folder-path");
@@ -19,6 +20,8 @@ const upserti18Next = async (name = "i18next.d.ts") => {
 
     await writeFile(`./types/${name}`, code);
   }
+
+  log.success(`${name}: successfully upserted`);
 
   return true;
 };

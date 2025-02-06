@@ -4,31 +4,19 @@ const {
   intro,
   outro,
   select,
-  text,
   isCancel,
   note,
+
   log,
 } = require("@clack/prompts");
-const picocolors = require("picocolors");
-const {
-  listDirectoryNames,
-  getComponent,
-  addComponent,
-  translate,
-  upsertComponent,
-} = require("./actions");
-const { myelin } = require("./constants/myelin");
-const { loadConfig } = require("./actions/translate/utils/load-config");
 
-// Import other required modules if needed
+const { addComponent, translate, upsertComponent, init } = require("./actions");
+const { myelin } = require("./constants/myelin");
 
 async function main() {
   let action;
 
   const [mainCommand, subCommand, ...args] = process.argv.slice(2);
-
-  // console.log("main command", mainCommand);
-  // console.log("SUB COMMAND", subCommand);
 
   if (mainCommand) {
     action = mainCommand;
@@ -40,7 +28,7 @@ async function main() {
       message: "What would you like to do?",
       options: [
         { value: "init", label: "Initialize a new Myelin configuration" },
-        { value: "translate", label: "Translate files" },
+        { value: "translate", label: "Translate" },
         // { value: "list", label: "List directory contents" },
         // { value: "get", label: "Get a component" },
         { value: "add", label: "Add a component" },
@@ -57,176 +45,7 @@ async function main() {
   try {
     switch (action) {
       case "init": {
-        const configExists = await loadConfig();
-
-        let confirm;
-
-        if (configExists) {
-          confirm = await select({
-            message:
-              "Config already exists, are you sure you want to continue. Continuing will overwrite the old version!",
-            options: [
-              { value: "yes", label: "Yes" },
-              { value: "no", label: "No" },
-            ],
-          });
-        }
-
-        if (confirm === "no") {
-          note("Goodbye");
-          return;
-        }
-        const sourceLanguage = await select({
-          message: "Enter your source language",
-          placeholder: "en",
-          options: [
-            { value: "en", label: "English" },
-            { value: "ro", label: "French" },
-            { value: "es", label: "Spanish" },
-            { value: "zh", label: "Chinese (Mainland)" },
-            { value: "ro", label: "Romanian" },
-          ],
-        });
-
-        const targetLanguages = await text({
-          message: "Enter your target languages",
-          placeholder: "fr, es, zh",
-          validate: (value) => {
-            if (!value) return "Please select at least one language";
-            return;
-          },
-        });
-        const localeLocation = await text({
-          message: "Enter your locales location",
-          placeholder: "locales",
-          value: "locales",
-          validate: (value) => {
-            if (!value) return "Location cannot be empty";
-            return;
-          },
-        });
-
-        const aiProvider = await select({
-          message: "Enter your ai provider",
-          placeholder: "deepseek",
-          options: [
-            { value: "openai", label: "Openai" },
-            { value: "deepseek", label: "Deepseek" },
-            { value: "qwen", label: "Qwen" },
-            { value: "moonshot", label: "Moonshot" },
-          ],
-        });
-
-        const getPlaceholderModel = (aiProvider) => {
-          switch (aiProvider) {
-            case "openai":
-            default:
-              return "gpt-4o-mini";
-            case "deepseek":
-              return "deekseek-chat";
-            case "moonshot":
-              return "moonshot-v1-auto";
-            case "qwen":
-              return "qwen-plus";
-          }
-        };
-
-        const getProviderModelOptions = (aiProvider) => {
-          switch (aiProvider) {
-            case "openai":
-            default:
-              return [
-                { value: "o3-mini", label: "o3 Mini" },
-                { value: "o1", label: "o1" },
-                { value: "o1-mini", label: "o1 Mini" },
-                { value: "gpt-4o", label: "GTP 4o" },
-                { value: "gpt-4o-mini", label: "GTP 4o Mini" },
-                { value: "gpt-3.5-turbo", label: "GPT 3.5 Turbo" },
-              ];
-            case "deepseek":
-              return [{ value: "deepseek-chat", label: "Deepseek Chat" }];
-            case "moonshot":
-              return [
-                { value: "moonshot-v1-8k", label: "Moonshot 8k" },
-                { value: "moonshot-v1-32k", label: "Moonshot 32k" },
-                { value: "moonshot-v1-128k", label: "Moonshot 128k" },
-                { value: "moonshot-v1-audi", label: "Moonshot Auto" },
-              ];
-            case "qwen":
-              return [{ value: "qwen-plus", label: "Openai" }];
-          }
-        };
-
-        let aiModel = await select({
-          message: "Enter your preferred ai model",
-          placeholder: getPlaceholderModel(aiProvider),
-          options: getProviderModelOptions(aiProvider),
-        });
-
-        const fs = await require("node:fs/promises");
-
-        const config = {
-          aiProvider,
-          aiModel,
-          locale: {
-            location: localeLocation,
-            sourceLanguage,
-            targetLanguages: targetLanguages?.split(", "),
-          },
-        };
-
-        await fs.writeFile(
-          "myelin.config.json",
-          JSON.stringify(config, null, 2),
-          "utf-8"
-        );
-
-        outro(picocolors.green("Configuration file created successfully!"));
-
-        note(
-          `Run 'npx myelino translate' to start translating your files`,
-          "Next: "
-        );
-
-        break;
-      }
-      case "list": {
-        const dirPath = await text({
-          message: "Enter directory path:",
-          placeholder: process.cwd(),
-        });
-
-        if (isCancel(dirPath)) {
-          outro("Operation cancelled");
-          return process.exit(0);
-        }
-
-        const names = await listDirectoryNames(dirPath || process.cwd());
-        console.log("\nDirectory contents:", names.join("\n"));
-        break;
-      }
-
-      case "get": {
-        const directoryPath = await text({
-          message: "Enter directory path:",
-          placeholder: "components",
-        });
-
-        const name = await text({
-          message: "Enter component name:",
-          placeholder: "no-lesson-view.tsx",
-        });
-
-        if (isCancel(directoryPath) || isCancel(name)) {
-          outro("Operation cancelled");
-          return process.exit(0);
-        }
-
-        const component = await getComponent({
-          directoryPath: directoryPath || "components",
-          name: name || "no-lesson-view.tsx",
-        });
-        console.log("\nComponent code:\n", component);
+        await init();
         break;
       }
 
@@ -270,7 +89,6 @@ async function main() {
         }
 
         await addComponent(name);
-        console.log(`\nComponent ${name} added successfully!`);
         break;
       }
 
@@ -309,7 +127,6 @@ async function main() {
         }
 
         await upsertComponent(name);
-        console.log(`\nComponent ${name} upserted successfully!`);
         break;
       }
 

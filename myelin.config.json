@@ -1,13 +1,15 @@
 {
   "aiProvider": "openai",
-  "aiModel": "gpt-4o-mini",
+  "aiModel": "o3-mini",
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
     "targetLanguages": [
       "fr",
       "es",
-      "zh"
+      "zh",
+      "ko",
+      "ja"
     ]
   }
 }

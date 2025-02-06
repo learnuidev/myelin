@@ -1,3 +1,4 @@
+const { log } = require("@clack/prompts");
 const { upserti18Next } = require("./actions/upsert-i18next/upsert-i18next");
 
 const upsertComponent = async (name) => {
@@ -7,7 +8,7 @@ const upsertComponent = async (name) => {
     return null;
   }
 
-  console.log("Currently not supported");
+  log.error("Currently not supported");
 };
 
 module.exports.upsertComponent = upsertComponent;

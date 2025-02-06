@@ -121,7 +121,7 @@ const smartTranslateAndSave = async ({
 
     if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
       log.info(
-        `🧹 - Removing the following keys for: ${targetLanguage} from: ${fileLocation}`,
+        `🧹 - Removing ${Object.keys(existingTranslationWithRemovedKeys)?.length} keys for: ${targetLanguage} from: ${fileLocation}`,
         existingTranslationWithRemovedKeys
       );
 

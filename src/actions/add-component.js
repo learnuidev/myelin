@@ -5,14 +5,19 @@ const { components } = require("../components");
 
 const { exec } = require("child_process");
 const { promisify } = require("util");
+const { log, spinner } = require("@clack/prompts");
 const execAsync = promisify(exec);
 
 async function installDependencies(deps) {
   const script = `npm install ${deps?.join(" ")}`;
 
+  const s = spinner();
+
   try {
+    s.start(`Installing dependencies...`);
+
     await execAsync(script);
-    console.log("Dependencies installed successfully!");
+    s.stop("Dependencies installed successfully!");
     // eslint-disable-next-line no-unused-vars
   } catch (error) {
     throw new Error(error);
@@ -23,14 +28,14 @@ async function installDependencies(deps) {
 const addComponent = async (name) => {
   const component = components[name];
   if (!component) {
-    console.log(`Component: ${name} does not exist`);
-    console.log(
+    log.error(`Component: ${name} does not exist`);
+    log.info(
       `The following components are currently supported: ${JSON.stringify(Object.keys(components))}`
     );
     return null;
   }
 
-  console.log(`Installing: ${name}... please wait`);
+  log.info(`Installing: ${name}... please wait`);
 
   let pathName;
 
@@ -52,7 +57,7 @@ const addComponent = async (name) => {
           }
 
           fs.writeFile(code.path, codeRawStr).then(() => {
-            console.log(`${name}: successfully installed`);
+            log.success(`${name}: successfully installed`);
           });
         })
       );
@@ -68,7 +73,7 @@ const addComponent = async (name) => {
   }
 
   fs.writeFile(pathName, component?.code).then(() => {
-    console.log(`${name}: successfully installed`);
+    log.success(`${name}: successfully installed`);
   });
 };
 

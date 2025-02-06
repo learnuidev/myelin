@@ -95,26 +95,28 @@ const smartTranslateAndSave = async ({
         }
       }, []);
 
-      s.start(
-        `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `
-      );
+      if (Object.keys(newContent)?.length) {
+        s.start(
+          `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `
+        );
 
-      const edited = await translateText({
-        sourceTranslation: newContent,
-        config,
-        targetLanguage,
-      });
+        const edited = await translateText({
+          sourceTranslation: newContent,
+          config,
+          targetLanguage,
+        });
 
-      const newKeys = Object.keys(edited);
+        const newKeys = Object.keys(edited);
 
-      existingTranslation = {
-        ...existingTranslation,
-        ...edited,
-      };
+        existingTranslation = {
+          ...existingTranslation,
+          ...edited,
+        };
 
-      s.stop(
-        `🎉 - Successfully translated edited the ${newKeys?.length} keys for: ${targetLanguage}. Saving it path: ${fileLocation}.`
-      );
+        s.stop(
+          `🎉 - Successfully translated edited the ${newKeys?.length} keys for: ${targetLanguage}. Saving it path: ${fileLocation}.`
+        );
+      }
     }
 
     if (Object.keys(existingTranslationWithRemovedKeys)?.length) {

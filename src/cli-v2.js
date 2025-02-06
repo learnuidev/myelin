@@ -217,8 +217,28 @@ async function main() {
         if (subCommand) {
           name = subCommand;
         } else {
-          name = await text({
-            message: "Enter component name:",
+          name = await select({
+            message: "Add a component:",
+            options: [
+              { value: "animated-navbar", label: "animated-navbar" },
+              { value: "animated-pill", label: "animated-pill" },
+              {
+                value: "animated-loading-text",
+                label: "animated-loading-text",
+              },
+              { value: "the-dock", label: "the-dock" },
+              { value: "leitner", label: "leitner" },
+              { value: "leitner-ts", label: "leitner-ts" },
+              {
+                value: "copy-text-to-clipboard",
+                label: "copy-text-to-clipboard",
+              },
+              {
+                value: "copy-to-clipboard-button",
+                label: "copy-to-clipboard-button",
+              },
+              {},
+            ],
             validate: (value) => {
               if (!value) return "Component name is required!";
             },

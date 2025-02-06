@@ -7,8 +7,9 @@ const { loadSourceTranslation } = require("./load-source-translation");
 
 const { translateText } = require("./translate-text");
 const { loadTranslation } = require("./load-translation");
-const { structuredDiff } = require("./git/structured-diff");
+
 const { getSourceFolderPath } = require("./get-source-folder-path");
+const { getUncommittedChanges } = require("./git/get-uncommited-changes");
 
 const s = spinner();
 
@@ -18,6 +19,7 @@ const smartTranslateAndSave = async ({
   config,
   targetLanguage,
   fileName,
+  namespaced,
 }) => {
   const s = spinner();
 
@@ -60,107 +62,63 @@ const smartTranslateAndSave = async ({
 
   // 4. If there is no need to translate then, log saying: nothing to translate
   if (!Object.keys(newSourceTranslation)?.length) {
-    log.info(
-      `Nothing to translate for ${config.locale.location}/${targetLanguage}/${fileName}`
+    const structuredDiff = await getUncommittedChanges(
+      config?.locale?.location
     );
 
-    const _structuredDiff = await structuredDiff();
+    const key = namespaced
+      ? `${config?.locale?.location}/${config?.locale?.sourceLanguage}/${fileName}`
+      : `${config?.locale?.location}/${config?.locale?.sourceLanguage}.json`;
 
-    const changedFile = _structuredDiff?.find((file) =>
-      file?.file?.includes(
-        `${config?.locale?.location}/${config?.locale?.sourceLanguage}/${fileName}`
-      )
+    const changedFile = structuredDiff?.find((file) =>
+      file?.path?.includes(key)
     );
 
-    if (changedFile) {
-      const newKeys = changedFile?.changes?.map((change) => change?.key);
-      console.log(
-        `🧹 - Editing the following keys: ${JSON.stringify(newKeys)} for: ${targetLanguage} from: ${fileLocation}`,
-        existingTranslationWithRemovedKeys
-      );
-
-      const editedSourceTranslation = changedFile?.changes?.reduce(
-        (acc, curr) => {
-          return {
-            ...acc,
-            [curr?.key]: curr?.newValue,
-          };
-        },
-        {}
-      );
-
-      // console.log("EDITED", editedSourceTranslation);
-      // console.log("LOCATION", fileLocation);
-
-      const edited = await translateText({
-        sourceTranslation: editedSourceTranslation,
-        config,
-        targetLanguage,
-      });
-
-      existingTranslation = {
-        ...existingTranslation,
-        ...edited,
-      };
-
-      console.log(
-        `🎉 - Successfully edited the keys  ${JSON.stringify(newKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
-      );
-
-      console.log(`Edited new keys`);
-      // console.log("FILE CHANGED", changedFile);
-      // const keysChanged = changedFile?.changes?.map((change) => change?.key);
-      // console.log("KEYS CHANGED", keysChanged);
+    if (!changedFile) {
+      log.info(`Nothing to translate for ${key}`);
+      return true;
     }
 
-    const changedFileStandAlone = _structuredDiff?.find((file) =>
-      file?.file?.includes(
-        `${config?.locale?.location}/${config?.locale?.sourceLanguage}.json`
-      )
-    );
+    if (changedFile) {
+      const { lastContent, currentContent } = changedFile;
 
-    if (changedFileStandAlone && fileLocation?.split("/")?.length === 3) {
-      const newKeys = changedFileStandAlone?.changes?.map(
-        (change) => change?.key
-      );
-      console.log(
-        `🧹 - Editing the following keys: ${JSON.stringify(newKeys)} for: ${targetLanguage} from: ${fileLocation}`,
-        existingTranslationWithRemovedKeys
-      );
+      const newContent = Object.entries(currentContent).reduce((acc, curr) => {
+        const [key, val] = curr;
 
-      const editedSourceTranslation = changedFileStandAlone?.changes?.reduce(
-        (acc, curr) => {
+        if (val === lastContent?.[key]) {
+          return acc;
+        } else {
           return {
             ...acc,
-            [curr?.key]: curr?.newValue,
+            [key]: val,
           };
-        },
-        {}
+        }
+      }, []);
+
+      s.start(
+        `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `
       );
 
-      console.log("EDITED", editedSourceTranslation);
-      console.log("LOCATION", fileLocation);
-
       const edited = await translateText({
-        sourceTranslation: editedSourceTranslation,
+        sourceTranslation: newContent,
         config,
         targetLanguage,
       });
+
+      const newKeys = Object.keys(edited);
 
       existingTranslation = {
         ...existingTranslation,
         ...edited,
       };
 
-      console.log(
-        `🎉 - Successfully edited the keys  ${JSON.stringify(newKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
+      s.stop(
+        `🎉 - Successfully translated edited the ${newKeys?.length} keys for: ${targetLanguage}. Saving it path: ${fileLocation}.`
       );
-
-      console.log(`Edited new keys`);
     }
 
     if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
-      console.log(
+      log.info(
         `🧹 - Removing the following keys for: ${targetLanguage} from: ${fileLocation}`,
         existingTranslationWithRemovedKeys
       );
@@ -172,7 +130,7 @@ const smartTranslateAndSave = async ({
         })
       );
 
-      console.log(
+      log.success(
         `🎉 - Successfully removed the keys ${Object.keys(existingTranslationWithRemovedKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
       );
 
@@ -250,6 +208,7 @@ const translateAndSave = async ({ config }) => {
           config,
           targetLanguage,
           fileName,
+          namespaced: true,
         });
       }
     }
@@ -305,6 +264,7 @@ const translateAndSave = async ({ config }) => {
       config,
       targetLanguage,
       fileName: targetLanguage,
+      namespaced: false,
     });
   }
 

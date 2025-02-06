@@ -220,6 +220,7 @@ async function main() {
           name = await select({
             message: "Add a component:",
             options: [
+              { value: "i18next", label: "i18next" },
               { value: "animated-navbar", label: "animated-navbar" },
               { value: "animated-pill", label: "animated-pill" },
               {

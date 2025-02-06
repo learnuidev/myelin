@@ -15,7 +15,6 @@ const {
   getComponent,
   addComponent,
   translate,
-  updateComponent,
   upsertComponent,
 } = require("./actions");
 const { myelin } = require("./constants/myelin");
@@ -231,8 +230,8 @@ async function main() {
               { value: "leitner", label: "leitner" },
               { value: "leitner-ts", label: "leitner-ts" },
               {
-                value: "copy-text-to-clipboard",
-                label: "copy-text-to-clipboard",
+                value: "copy-to-clipboard",
+                label: "copy-to-clipboard",
               },
               {
                 value: "copy-to-clipboard-button",
@@ -252,41 +251,6 @@ async function main() {
 
         await addComponent(name);
         console.log(`\nComponent ${name} added successfully!`);
-        break;
-      }
-
-      case "update": {
-        const name = await select({
-          message: "Enter component name to update:",
-          options: [
-            { value: "animated-navbar", label: "animated-navbar" },
-            { value: "animated-pill", label: "animated-pill" },
-            { value: "animated-loading-text", label: "animated-loading-text" },
-            { value: "the-dock", label: "the-dock" },
-            { value: "leitner", label: "leitner" },
-            { value: "leitner-ts", label: "leitner-ts" },
-            {
-              value: "copy-text-to-clipboard",
-              label: "copy-text-to-clipboard",
-            },
-            {
-              value: "copy-to-clipboard-button",
-              label: "copy-to-clipboard-button",
-            },
-            {},
-          ],
-          validate: (value) => {
-            if (!value) return "Component name is required!";
-          },
-        });
-
-        if (isCancel(name)) {
-          outro("Operation cancelled");
-          return process.exit(0);
-        }
-
-        await updateComponent(name);
-        console.log(`\nComponent ${name} updated successfully!`);
         break;
       }
 

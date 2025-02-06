@@ -1,6 +1,6 @@
 {
   "name": "myelino",
-  "version": "06.02.252156",
+  "version": "06.02.252157",
   "main": "src/index.js",
   "bin": {
     "myelino": "src/cli-v2.js"

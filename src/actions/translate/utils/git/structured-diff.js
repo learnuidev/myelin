@@ -28,7 +28,8 @@ function parseGitDiff(diffInput) {
     const fileNameMatch = header.match(/^([^\s]+)/);
     if (!fileNameMatch) continue;
     const fileName = fileNameMatch[1];
-    if (!fileName.endsWith(".json")) continue;
+    if (!fileName.endsWith(".json") || fileName === "package-lock.json")
+      continue;
 
     let changes = resultMap.get(fileName) || [];
 

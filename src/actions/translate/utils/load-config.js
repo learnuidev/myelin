@@ -1,3 +1,4 @@
+const { note } = require("@clack/prompts");
 const { readFile } = require("./read-file");
 
 const fs = require("fs").promises;
@@ -32,15 +33,13 @@ async function loadConfig() {
 
     config = await readFile(configPath, { throw: false });
 
-    if (config) {
-      console.log("Config found");
-    }
-
     if (!config) {
-      console.log(`${configPath} not found. Writing a default one`);
-      await fs.writeFile(configPath, defaultConfig);
+      note(
+        "myelin.config.json not found. Please run `npx myelino` to create one",
+        "Error"
+      );
 
-      config = defaultConfig;
+      return;
     }
 
     if (config) {

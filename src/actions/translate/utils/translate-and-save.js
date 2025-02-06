@@ -1,6 +1,7 @@
 const { loadJsonFilesFromFolder } = require("./load-json-files-from-folder");
 const { isFolder } = require("./is-folder");
 const { writeJsonFile } = require("./write-json-file");
+const { note, outro, spinner, text, log } = require("@clack/prompts");
 
 const { loadSourceTranslation } = require("./load-source-translation");
 
@@ -9,6 +10,8 @@ const { loadTranslation } = require("./load-translation");
 const { structuredDiff } = require("./git/structured-diff");
 const { getSourceFolderPath } = require("./get-source-folder-path");
 
+const s = spinner();
+
 const smartTranslateAndSave = async ({
   fileLocation,
   sourceTranslation,
@@ -16,11 +19,15 @@ const smartTranslateAndSave = async ({
   targetLanguage,
   fileName,
 }) => {
+  const s = spinner();
+
   // 1. First check if existing translations exist
-  let existingTranslation = await loadTranslation(fileLocation);
+  let originalExistingTranslation = await loadTranslation(fileLocation);
+  let existingTranslation = { ...originalExistingTranslation };
 
   // 2. If not found then proceed with normal translation
   if (!existingTranslation) {
+    s.start("Starting translation...");
     const translation = await translateText({
       sourceTranslation,
       config,
@@ -28,6 +35,10 @@ const smartTranslateAndSave = async ({
     });
 
     await writeJsonFile(fileLocation, translation);
+
+    s.stop(
+      `Succcessfully translated the following: ${JSON.stringify(targetLanguage)}`
+    );
     return true;
   }
 
@@ -49,11 +60,11 @@ const smartTranslateAndSave = async ({
 
   // 4. If there is no need to translate then, log saying: nothing to translate
   if (!Object.keys(newSourceTranslation)?.length) {
-    console.log(`Nothing to translate in: ${fileName} [${targetLanguage}] 😪`);
+    log.info(
+      `Nothing to translate for ${config.locale.location}/${targetLanguage}/${fileName}`
+    );
 
     const _structuredDiff = await structuredDiff();
-
-    // console.log("STRUCTURED", JSON.stringify(_structuredDiff, null, 4));
 
     const changedFile = _structuredDiff?.find((file) =>
       file?.file?.includes(
@@ -166,18 +177,25 @@ const smartTranslateAndSave = async ({
       );
 
       await writeJsonFile(fileLocation, newExistingKey);
-
-      console.log("TODO SAVE THIS", newExistingKey);
     } else {
-      await writeJsonFile(fileLocation, existingTranslation);
+      if (
+        JSON.stringify(existingTranslation) !==
+        JSON.stringify(originalExistingTranslation)
+      ) {
+        await writeJsonFile(fileLocation, existingTranslation);
+      }
+      return null;
     }
 
     return null;
   }
 
-  console.log(
-    `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `,
-    newSourceTranslation
+  const totalKeys = Object.keys(newSourceTranslation)?.length;
+
+  log.info(`${totalKeys} new ${totalKeys?.length > 1 ? "keys" : "key"} found`);
+
+  s.start(
+    `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `
   );
 
   // 5: Otherwise translate new translations and save new translations with
@@ -199,7 +217,7 @@ const smartTranslateAndSave = async ({
     })
   );
 
-  console.log(
+  s.stop(
     `🎉 - Successfully translated for: ${targetLanguage}. Saving it in the path: ${fileLocation}`,
     newExistingTranslation
   );
@@ -220,32 +238,48 @@ const translateAndSave = async ({ config }) => {
   if (_isFolder) {
     const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath);
 
-    await Promise.all(
-      config.locale.targetLanguages.map(async (targetLanguage) => {
-        await Promise.all(
-          sourceTranslations?.map(async (sourceTranslationAndFileName) => {
-            const { fileName, sourceTranslation } =
-              sourceTranslationAndFileName;
-            const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
+    for (let targetLanguage of config.locale.targetLanguages) {
+      for (let sourceTranslationAndFileName of sourceTranslations || []) {
+        const { fileName, sourceTranslation } = sourceTranslationAndFileName;
+        const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 
-            // await writeJsonFile(fileLocation, newTranslation);
-            await smartTranslateAndSave({
-              fileLocation,
-              sourceTranslation,
-              config,
-              targetLanguage,
-              fileName,
-            });
+        // await writeJsonFile(fileLocation, newTranslation);
+        await smartTranslateAndSave({
+          fileLocation,
+          sourceTranslation,
+          config,
+          targetLanguage,
+          fileName,
+        });
+      }
+    }
 
-            return true;
-          })
-        );
-      })
-    );
+    // await Promise.all(
+    //   config.locale.targetLanguages.map(async (targetLanguage) => {
+    //     await Promise.all(
+    //       sourceTranslations?.map(async (sourceTranslationAndFileName) => {
+    //         const { fileName, sourceTranslation } =
+    //           sourceTranslationAndFileName;
+    //         const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 
-    console.log(
-      `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
-    );
+    //         // await writeJsonFile(fileLocation, newTranslation);
+    //         await smartTranslateAndSave({
+    //           fileLocation,
+    //           sourceTranslation,
+    //           config,
+    //           targetLanguage,
+    //           fileName,
+    //         });
+
+    //         return true;
+    //       })
+    //     );
+    //   })
+    // );
+
+    // outro(
+    //   `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
+    // );
   }
 
   // Flow for file level translation
@@ -262,25 +296,37 @@ const translateAndSave = async ({ config }) => {
     return null;
   }
 
-  await Promise.all(
-    config.locale.targetLanguages.map(async (targetLanguage) => {
-      const fileLocation = `./${localeLocation}/${targetLanguage}.json`;
+  for (let targetLanguage of config.locale.targetLanguages) {
+    const fileLocation = `./${localeLocation}/${targetLanguage}.json`;
 
-      await smartTranslateAndSave({
-        fileLocation,
-        sourceTranslation,
-        config,
-        targetLanguage,
-        fileName: targetLanguage,
-      });
+    await smartTranslateAndSave({
+      fileLocation,
+      sourceTranslation,
+      config,
+      targetLanguage,
+      fileName: targetLanguage,
+    });
+  }
 
-      return true;
-    })
-  );
+  // await Promise.all(
+  //   config.locale.targetLanguages.map(async (targetLanguage) => {
+  //     const fileLocation = `./${localeLocation}/${targetLanguage}.json`;
 
-  console.log(
-    `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
-  );
+  //     await smartTranslateAndSave({
+  //       fileLocation,
+  //       sourceTranslation,
+  //       config,
+  //       targetLanguage,
+  //       fileName: targetLanguage,
+  //     });
+
+  //     return true;
+  //   })
+  // );
+
+  // outro(
+  //   `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
+  // );
 };
 
 module.exports = {

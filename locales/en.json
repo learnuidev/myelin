@@ -4,5 +4,6 @@
   "description": "Learn Anything",
   "cta.button": "Start here",
   "cta.cancel": "Cancel",
-  "banner": "Victoria is awesome"
+  "banner": "Victoria is awesome",
+  "banner.description": "This banner is awesome"
 }

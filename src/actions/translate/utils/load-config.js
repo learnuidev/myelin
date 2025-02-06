@@ -1,9 +1,4 @@
-const { note } = require("@clack/prompts");
 const { readFile } = require("./read-file");
-
-const fs = require("fs").promises;
-
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const defaultConfig = JSON.stringify(
   {
@@ -29,24 +24,13 @@ async function loadConfig() {
 
   const configPath = "myelin.config.json";
   try {
-    let config;
-
-    config = await readFile(configPath, { throw: false });
+    const config = await readFile(configPath, { throw: false });
 
     if (!config) {
-      note(
-        "myelin.config.json not found. Please run `npx myelino` to create one",
-        "Error"
-      );
-
       return;
     }
 
-    if (config) {
-      return JSON.parse(config);
-    } else {
-      return JSON.parse(defaultConfig);
-    }
+    return JSON.parse(config);
 
     // eslint-disable-next-line no-unused-vars
   } catch (err) {

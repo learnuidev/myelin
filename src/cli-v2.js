@@ -18,6 +18,7 @@ const {
   upsertComponent,
 } = require("./actions");
 const { myelin } = require("./constants/myelin");
+const { loadConfig } = require("./actions/translate/utils/load-config");
 
 // Import other required modules if needed
 
@@ -56,6 +57,25 @@ async function main() {
   try {
     switch (action) {
       case "init": {
+        const configExists = await loadConfig();
+
+        let confirm;
+
+        if (configExists) {
+          confirm = await select({
+            message:
+              "Config already exists, are you sure you want to continue. Continuing will overwrite the old version!",
+            options: [
+              { value: "yes", label: "Yes" },
+              { value: "no", label: "No" },
+            ],
+          });
+        }
+
+        if (confirm === "no") {
+          note("Goodbye");
+          return;
+        }
         const sourceLanguage = await select({
           message: "Enter your source language",
           placeholder: "en",

@@ -2,5 +2,6 @@
   "ok": "D'accord patron",
   "cancel": "Annuler cette chose",
   "description": "une infrastructure de traduction qui provoque de la joie",
-  "name": "bonjour"
+  "name": "bonjour le monde",
+  "context": "123"
 }

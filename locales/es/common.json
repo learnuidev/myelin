@@ -2,5 +2,6 @@
   "ok": "Está bien, jefe",
   "cancel": "Cancelar esta cosa",
   "description": "infra de traducción que inspira alegría",
-  "name": "hola"
+  "name": "hola mundo",
+  "context": "123"
 }

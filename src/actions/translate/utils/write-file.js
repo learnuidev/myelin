@@ -1,3 +1,4 @@
+const { log } = require("@clack/prompts");
 const fs = require("fs/promises");
 const path = require("path");
 
@@ -11,7 +12,7 @@ async function writeFile(filePath, data) {
   // Write the JSON string to the file
   await fs.writeFile(filePath, data);
 
-  console.log(`File written successfully to ${filePath}`);
+  log.success(`File written successfully to ${filePath}`);
 }
 
 module.exports = {

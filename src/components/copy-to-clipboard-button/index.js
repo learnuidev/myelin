@@ -6,7 +6,7 @@ const copyToClipboardButton = {
     codes: [
       {
         targetDir: "components/copy-to-clipboard-button/",
-        path: "components/copy-to-clipboard-button/copy-to-clipboard-button.ts",
+        path: "components/copy-to-clipboard-button/copy-to-clipboard-button.tsx",
         codeUrl: `https://raw.githubusercontent.com/learnuidev/myelin.dev/refs/heads/main/components/copy-to-clipboard-button/copy-to-clipboard-button.tsx`,
       },
     ],

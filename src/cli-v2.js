@@ -291,13 +291,33 @@ async function main() {
       }
 
       case "upsert": {
-        const name = await select({
-          message: "Enter component name to upsert:",
-          options: [{ value: "i18next.d.ts", label: "i18next.d.ts" }],
-          validate: (value) => {
-            if (!value) return "Component name is required!";
-          },
-        });
+        let name;
+
+        const upsertOptions = [
+          { value: "i18next.d.ts", label: "i18next.d.ts" },
+        ];
+
+        const upsertValidationFn = (value) => {
+          if (!value) return "Component name is required!";
+        };
+
+        if (subCommand) {
+          name = subCommand;
+        } else {
+          name = await select({
+            message: "Enter component name to upsert:",
+            options: upsertOptions,
+            validate: upsertValidationFn,
+          });
+        }
+
+        if (!["i18next.d.ts"]?.includes(name)) {
+          name = await select({
+            message: "Invalid name. Please select one of the following: ",
+            options: upsertOptions,
+            validate: upsertValidationFn,
+          });
+        }
 
         if (isCancel(name)) {
           outro("Operation cancelled");

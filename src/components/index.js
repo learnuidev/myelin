@@ -16,6 +16,7 @@ const components = {
   leitner: leitner,
   "leitner-ts": leitnerTs,
   ...i18next,
+  "next-i18n": i18next.i18next,
   "copy-text-to-clipboard": copyTextToClipboard,
   ...copyToClipboardButton,
 };

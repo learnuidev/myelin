@@ -4,7 +4,7 @@ const { writeFile } = require("./write-file");
 
 async function writeJsonFile(filePath, data) {
   // Get the directory path from the file path
-  await writeFile(filePath, JSON.stringify(data, null, 2));
+  await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
 }
 
 module.exports = {

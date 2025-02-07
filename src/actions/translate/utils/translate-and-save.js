@@ -1,7 +1,7 @@
 const { loadJsonFilesFromFolder } = require("./load-json-files-from-folder");
 const { isFolder } = require("./is-folder");
 const { writeJsonFile } = require("./write-json-file");
-const { note, outro, spinner, text, log } = require("@clack/prompts");
+const { spinner, log } = require("@clack/prompts");
 
 const { loadSourceTranslation } = require("./load-source-translation");
 
@@ -10,8 +10,6 @@ const { loadTranslation } = require("./load-translation");
 
 const { getSourceFolderPath } = require("./get-source-folder-path");
 const { getUncommittedChanges } = require("./git/get-uncommited-changes");
-
-const s = spinner();
 
 const smartTranslateAndSave = async ({
   fileLocation,
@@ -214,44 +212,10 @@ const translateAndSave = async ({ config }) => {
         });
       }
     }
-
-    // await Promise.all(
-    //   config.locale.targetLanguages.map(async (targetLanguage) => {
-    //     await Promise.all(
-    //       sourceTranslations?.map(async (sourceTranslationAndFileName) => {
-    //         const { fileName, sourceTranslation } =
-    //           sourceTranslationAndFileName;
-    //         const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
-
-    //         // await writeJsonFile(fileLocation, newTranslation);
-    //         await smartTranslateAndSave({
-    //           fileLocation,
-    //           sourceTranslation,
-    //           config,
-    //           targetLanguage,
-    //           fileName,
-    //         });
-
-    //         return true;
-    //       })
-    //     );
-    //   })
-    // );
-
-    // outro(
-    //   `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
-    // );
   }
 
   // Flow for file level translation
-  let sourceTranslation;
-
-  try {
-    sourceTranslation = await loadSourceTranslation({ config });
-    // eslint-disable-next-line no-unused-vars
-  } catch (err) {
-    sourceTranslation = null;
-  }
+  const sourceTranslation = await loadSourceTranslation({ config });
 
   if (!sourceTranslation) {
     return null;
@@ -269,26 +233,6 @@ const translateAndSave = async ({ config }) => {
       namespaced: false,
     });
   }
-
-  // await Promise.all(
-  //   config.locale.targetLanguages.map(async (targetLanguage) => {
-  //     const fileLocation = `./${localeLocation}/${targetLanguage}.json`;
-
-  //     await smartTranslateAndSave({
-  //       fileLocation,
-  //       sourceTranslation,
-  //       config,
-  //       targetLanguage,
-  //       fileName: targetLanguage,
-  //     });
-
-  //     return true;
-  //   })
-  // );
-
-  // outro(
-  //   `Succcessfully translated the following languages: ${JSON.stringify(config.locale.targetLanguages)}`
-  // );
 };
 
 module.exports = {

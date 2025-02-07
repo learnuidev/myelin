@@ -6,16 +6,19 @@ const {
 } = require("../../add-cloud-provider/aws/utils/dynamodb/get-item");
 const { readFile } = require("./read-file");
 
-const sourceTranslation = {
-  titleInformal: "Yo whats good!",
-  description: "Learn Anything",
-  "cta.button": "Start here",
-  "cta.cancel": "Cancel",
-  banner: "Victoria is awesome",
-  "banner.description": "This banner is awesome my friends",
-};
+// const sourceTranslation = {
+//   titleInformal: "Yo whats good!",
+//   description: "Learn Anything",
+//   "cta.button": "Start here",
+//   "cta.cancel": "Cancel",
+//   banner: "Victoria is awesome",
+//   "banner.description": "This banner is awesome my friends",
+// };
 
-async function loadSourceTranslation({ config }, { remote }) {
+async function loadSourceTranslation(
+  { config },
+  { remote } = { remote: false }
+) {
   const localeLocation = config.locale.location;
   const sourceTranslationKey = `./${localeLocation}/${config.locale.sourceLanguage}.json`;
 
@@ -38,7 +41,7 @@ async function loadSourceTranslation({ config }, { remote }) {
   const sourceTranslation = await readFile(sourceTranslationKey);
 
   if (!sourceTranslation) {
-    throw new Error(`Source translation not found`);
+    return null;
   }
 
   return JSON.parse(sourceTranslation);

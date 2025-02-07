@@ -1,10 +1,8 @@
-const { log, spinner } = require("@clack/prompts");
+const { log } = require("@clack/prompts");
 const { loadConfig } = require("../translate/utils/load-config");
 const {
   addStorageProvider,
 } = require("../add-storage-provider/add-storage-provider");
-const {} = require("../add-cloud-provider/aws/utils/dynamodb/check-if-dynamo-table-exists");
-const {} = require("../add-cloud-provider/aws/utils/dynamodb/create-and-wait-for-table");
 const {
   translationsTableOptions,
   translationsTableName,
@@ -16,7 +14,7 @@ const {
 const {
   createTableIfDoesntExist,
 } = require("../add-cloud-provider/aws/utils/dynamodb/create-table-if-doesnt-exist");
-const { addProject } = require("../add-project/add-project");
+
 const {
   getSourceFolderPath,
 } = require("../translate/utils/get-source-folder-path");
@@ -80,8 +78,6 @@ const syncDown = async ({ fileLocation, projectId }) => {
 const sync = async (step) => {
   const config = await loadConfig();
 
-  const s = spinner();
-
   let storageProvider = config.storageProvider;
 
   // check if storage provider exists
@@ -104,12 +100,8 @@ const sync = async (step) => {
     let projectId = config?.projectId;
 
     if (!projectId) {
-      log.info(`Project doesnt exist, creating a new one`);
-
-      projectId = await addProject();
-
-      log.info(
-        `Syncing into ${translationsTableName} using for the project: ${projectId}`
+      throw new Error(
+        "Project Id doesnt exist, please run `add-project` to create one"
       );
     } else {
       log.info(
@@ -119,40 +111,27 @@ const sync = async (step) => {
 
     const localeLocation = config.locale.location;
 
-    const sourceFolderPath = getSourceFolderPath({ config });
-
-    const _isFolder = await isFolder(sourceFolderPath, {
-      remote: true,
-    });
-    const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath, {
-      remote: true,
-    });
-
     const allLanguages = [
       config.locale.sourceLanguage,
       ...config.locale.targetLanguages,
     ];
 
-    let sourceTranslation;
-
-    try {
-      sourceTranslation = await loadSourceTranslation(
-        { config },
-        { remote: true }
-      );
-      // eslint-disable-next-line no-unused-vars
-    } catch (err) {
-      sourceTranslation = null;
-    }
-
     if (step === "up") {
+      const sourceFolderPath = getSourceFolderPath({ config });
+
+      const _isFolder = await isFolder(sourceFolderPath);
+
+      const sourceTranslations =
+        await loadJsonFilesFromFolder(sourceFolderPath);
+
+      const sourceTranslation = await loadSourceTranslation({ config });
+
       if (_isFolder) {
         log.info(`Handle folder level sync`);
 
         for (let targetLanguage of allLanguages) {
           for (let sourceTranslationAndFileName of sourceTranslations || []) {
-            const { fileName, sourceTranslation } =
-              sourceTranslationAndFileName;
+            const { fileName } = sourceTranslationAndFileName;
             const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 
             await syncUp({
@@ -183,7 +162,7 @@ const sync = async (step) => {
           projectId,
           metadata: {
             fileLocation,
-            lang,
+            lang: language,
             type: "file",
           },
         });
@@ -193,6 +172,18 @@ const sync = async (step) => {
     }
 
     if (step === "down") {
+      const sourceFolderPath = getSourceFolderPath({ config });
+
+      const _isFolder = await isFolder(sourceFolderPath, {
+        remote: true,
+      });
+      const sourceTranslations = await loadJsonFilesFromFolder(
+        sourceFolderPath,
+        {
+          remote: true,
+        }
+      );
+
       if (_isFolder) {
         for (let targetLanguage of allLanguages) {
           for (let sourceTranslationAndFileName of sourceTranslations || []) {
@@ -208,6 +199,11 @@ const sync = async (step) => {
 
         log.success(`Successfully downloaded translations for: ${projectId}`);
       }
+
+      const sourceTranslation = await loadSourceTranslation(
+        { config },
+        { remote: true }
+      );
 
       if (!sourceTranslation) {
         return null;

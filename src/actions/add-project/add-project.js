@@ -11,6 +11,13 @@ const { updateConfig } = require("../translate/utils/update-config");
 const {
   checkIfDynamoDBTableExists,
 } = require("../add-cloud-provider/aws/utils/dynamodb/check-if-dynamo-table-exists");
+const { listProjects } = require("../translate/utils/list-projects");
+
+const { formatDistanceToNow } = require("date-fns");
+
+function timeAgo(timestamp) {
+  return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+}
 
 const addProject = async () => {
   const config = await loadConfig();
@@ -22,6 +29,39 @@ const addProject = async () => {
   }
 
   let confirm;
+  let projectId;
+
+  if (!config.projectId) {
+    const projects = await listProjects();
+
+    if (projects?.length > 0) {
+      log.info(`Checking if remote projects exist...`);
+      projectId = await select({
+        message:
+          "Looks like you have already created projects, would you like to use an existing project?",
+        options: projects
+          ?.map((item) => {
+            return {
+              value: item?.id,
+              label: `${item?.id} - [Created ${timeAgo(item?.createdAt)}]`,
+            };
+          })
+          .concat({
+            value: null,
+            label: "No thanks, create a new one",
+          }),
+      });
+    }
+  }
+
+  if (projectId) {
+    await updateConfig({
+      projectId: projectId,
+    });
+
+    log.success(`Updated the project with the following project: ${projectId}`);
+    return;
+  }
 
   if (config.projectId) {
     confirm = await select({
@@ -39,13 +79,17 @@ const addProject = async () => {
     return;
   }
 
-  const { projectId, ...rest } = config;
+  const { customAiUrl, aiProvider, locale, cloud, storageProvider } = config;
 
   const newProjectId = crypto.randomUUID();
 
   const newProject = {
     id: crypto.randomUUID(),
-    ...rest,
+    customAiUrl,
+    aiProvider,
+    locale,
+    cloud,
+    storageProvider,
     createdAt: Date.now(),
   };
 

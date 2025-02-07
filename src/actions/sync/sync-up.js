@@ -32,7 +32,7 @@ const _syncUp = async ({ fileLocation, projectId, metadata }) => {
   await upsertItem({
     tableName: translationsTableName,
     partitionKey: {
-      id: fileLocation,
+      id: `${projectId}#${fileLocation}`,
     },
     sortKey: {
       projectId,

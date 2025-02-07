@@ -46,6 +46,7 @@ const addProject = async () => {
   const newProject = {
     id: crypto.randomUUID(),
     ...rest,
+    createdAt: Date.now(),
   };
 
   await addItem({ tableName: projectsTableName, item: newProject });

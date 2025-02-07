@@ -41,7 +41,7 @@ async function main() {
       { value: "upsert", label: "Upsert a component" },
     ];
 
-    if (config.storageProvider) {
+    if (config.storageProvider && config.cloud) {
       mainOptions.push({ value: "add-project", label: "Add a new project" });
 
       if (!config.projectId) {

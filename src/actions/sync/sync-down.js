@@ -30,7 +30,7 @@ const _syncDown = async ({ fileLocation, projectId }) => {
   let item = await getItem({
     tableName: translationsTableName,
     partitionKey: {
-      id: fileLocation,
+      id: `${projectId}#${fileLocation}`,
     },
     sortKey: {
       projectId,
@@ -58,7 +58,7 @@ const syncDown = async (projectId) => {
       );
     } else {
       log.info(
-        `Syncing into ${translationsTableName} using for the project: ${projectId}`
+        `Downloading from ${translationsTableName} using for the project: ${projectId}`
       );
     }
 

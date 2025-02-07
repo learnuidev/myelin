@@ -59,7 +59,7 @@ const syncUp = async (projectId) => {
       );
     } else {
       log.info(
-        `Syncing into ${translationsTableName} using for the project: ${projectId}`
+        `Uploading into ${translationsTableName} using for the project: ${projectId}`
       );
     }
 

@@ -1,6 +1,12 @@
 const fs = require("fs/promises");
+const { loadRemoteSourceFiles } = require("./load-remote-source-files");
 
-async function isFolder(path) {
+async function isFolder(path, { remote }) {
+  if (remote) {
+    const items = await loadRemoteSourceFiles();
+    return items?.length > 0;
+  }
+
   try {
     const stats = await fs.stat(path);
     return stats.isDirectory();

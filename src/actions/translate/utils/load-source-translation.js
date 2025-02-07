@@ -1,11 +1,41 @@
+const {
+  translationsTableName,
+} = require("../../../../storage/dynamodb/translations-table");
+const {
+  getItem,
+} = require("../../add-cloud-provider/aws/utils/dynamodb/get-item");
 const { readFile } = require("./read-file");
 
-async function loadSourceTranslation({ config }) {
-  const localeLocation = config.locale.location;
+const sourceTranslation = {
+  titleInformal: "Yo whats good!",
+  description: "Learn Anything",
+  "cta.button": "Start here",
+  "cta.cancel": "Cancel",
+  banner: "Victoria is awesome",
+  "banner.description": "This banner is awesome my friends",
+};
 
-  const sourceTranslation = await readFile(
-    `./${localeLocation}/${config.locale.sourceLanguage}.json`
-  );
+async function loadSourceTranslation({ config }, { remote }) {
+  const localeLocation = config.locale.location;
+  const sourceTranslationKey = `./${localeLocation}/${config.locale.sourceLanguage}.json`;
+
+  if (remote) {
+    const sourceTranslationRemote = await getItem({
+      tableName: translationsTableName,
+      partitionKey: {
+        id: sourceTranslationKey,
+      },
+      sortKey: {
+        projectId: config.projectId,
+      },
+    });
+
+    const sourceTranslation = JSON.parse(sourceTranslationRemote?.translations);
+
+    return sourceTranslation;
+  }
+
+  const sourceTranslation = await readFile(sourceTranslationKey);
 
   if (!sourceTranslation) {
     throw new Error(`Source translation not found`);

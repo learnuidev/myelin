@@ -1,7 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
+const { loadRemoteSourceFiles } = require("./load-remote-source-files");
 
-async function loadJsonFilesFromFolder(folderPath) {
+async function loadJsonFilesFromFolder(folderPath, { remote }) {
+  if (remote) {
+    const items = await loadRemoteSourceFiles();
+    return items;
+  }
   // Read the contents of the directory
   const files = await fs.readdir(folderPath);
 

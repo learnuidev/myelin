@@ -36,7 +36,7 @@ const {
   loadSourceTranslation,
 } = require("../translate/utils/load-source-translation");
 
-const syncUp = async ({ fileLocation, projectId }) => {
+const syncUp = async ({ fileLocation, projectId, metadata }) => {
   let translations = await loadTranslation(fileLocation);
 
   log.info(`Syncing ${fileLocation}`);
@@ -50,7 +50,8 @@ const syncUp = async ({ fileLocation, projectId }) => {
       projectId,
     },
     data: {
-      translations,
+      translations: JSON.stringify(translations),
+      ...metadata,
       updatedAt: Date.now(),
     },
   });
@@ -69,7 +70,7 @@ const syncDown = async ({ fileLocation, projectId }) => {
     },
   });
 
-  const translations = item?.translations;
+  const translations = JSON.parse(item?.translations);
 
   if (translations) {
     await writeJsonFile(fileLocation, translations);
@@ -120,17 +121,29 @@ const sync = async (step) => {
 
     const sourceFolderPath = getSourceFolderPath({ config });
 
-    const _isFolder = await isFolder(sourceFolderPath);
+    const _isFolder = await isFolder(sourceFolderPath, {
+      remote: true,
+    });
     const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath, {
       remote: true,
     });
-
-    console.log("SOURCE TRANSLATIONS", sourceTranslations);
 
     const allLanguages = [
       config.locale.sourceLanguage,
       ...config.locale.targetLanguages,
     ];
+
+    let sourceTranslation;
+
+    try {
+      sourceTranslation = await loadSourceTranslation(
+        { config },
+        { remote: true }
+      );
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
+      sourceTranslation = null;
+    }
 
     if (step === "up") {
       if (_isFolder) {
@@ -145,21 +158,17 @@ const sync = async (step) => {
             await syncUp({
               fileLocation,
               projectId,
+              metadata: {
+                fileName,
+                fileLocation,
+                lang: targetLanguage,
+                type: "folder",
+              },
             });
           }
         }
 
-        log.success(`Syncing complete for: ${projectId}`);
-      }
-
-      // file level translation
-      let sourceTranslation;
-
-      try {
-        sourceTranslation = await loadSourceTranslation({ config });
-        // eslint-disable-next-line no-unused-vars
-      } catch (err) {
-        sourceTranslation = null;
+        log.success(`Syncing namespaces complete for: ${projectId}`);
       }
 
       if (!sourceTranslation) {
@@ -172,10 +181,15 @@ const sync = async (step) => {
         await syncUp({
           fileLocation,
           projectId,
+          metadata: {
+            fileLocation,
+            lang,
+            type: "file",
+          },
         });
       }
 
-      log.success(`Syncing file level complete for: ${projectId}`);
+      log.success(`Syncing files complete for: ${projectId}`);
     }
 
     if (step === "down") {
@@ -193,13 +207,6 @@ const sync = async (step) => {
         }
 
         log.success(`Successfully downloaded translations for: ${projectId}`);
-      }
-
-      try {
-        sourceTranslation = await loadSourceTranslation({ config });
-        // eslint-disable-next-line no-unused-vars
-      } catch (err) {
-        sourceTranslation = null;
       }
 
       if (!sourceTranslation) {

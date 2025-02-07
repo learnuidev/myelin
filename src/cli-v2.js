@@ -15,6 +15,7 @@ const { myelin } = require("./constants/myelin");
 const {
   addCloudProvider,
 } = require("./actions/add-cloud-provider/add-cloud-provider");
+const { sync } = require("./actions/sync/sync");
 
 async function main() {
   let action;
@@ -32,9 +33,9 @@ async function main() {
       options: [
         { value: "init", label: "Initialize a new Myelin configuration" },
         { value: "translate", label: "Translate" },
-        // { value: "list", label: "List directory contents" },
-        // { value: "get", label: "Get a component" },
+        { value: "sync", label: "Sync" },
         { value: "add", label: "Add a component" },
+        { value: "add-cloud", label: "Add a cloud provider" },
         { value: "upsert", label: "Upsert a component" },
       ],
     });
@@ -49,6 +50,10 @@ async function main() {
     switch (action) {
       case "init": {
         await init();
+        break;
+      }
+      case "sync": {
+        await sync();
         break;
       }
 

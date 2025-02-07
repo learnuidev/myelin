@@ -9,5 +9,11 @@
       "es",
       "zh"
     ]
-  }
+  },
+  "cloud": {
+    "provider": "aws",
+    "awsProfile": "yoserverless",
+    "awsRegion": "us-east-1"
+  },
+  "storageProvider": "dynamodb"
 }

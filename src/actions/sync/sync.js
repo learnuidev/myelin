@@ -20,13 +20,15 @@ const { syncUp } = require("./sync-up");
 const { addProject } = require("../add-project/add-project");
 
 const sync = async (step) => {
-  const config = await loadConfig();
+  let config = await loadConfig();
 
   let projectId = config.projectId;
 
   if (!projectId) {
     projectId = await addProject();
   }
+
+  config = await loadConfig();
 
   let storageProvider = config.storageProvider;
 

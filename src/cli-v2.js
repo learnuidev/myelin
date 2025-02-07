@@ -43,6 +43,10 @@ async function main() {
 
     if (config.storageProvider) {
       mainOptions.push({ value: "add-project", label: "Add a new project" });
+
+      if (!config.projectId) {
+        mainOptions.push({ value: "sync-project", label: "Sync a project" });
+      }
     }
 
     action = await select({
@@ -63,7 +67,7 @@ async function main() {
         break;
       }
       case "sync": {
-        await sync();
+        await sync(subCommand);
         break;
       }
 

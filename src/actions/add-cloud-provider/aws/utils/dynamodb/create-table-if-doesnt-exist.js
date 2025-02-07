@@ -19,7 +19,7 @@ const createTableIfDoesntExist = async ({ tableName, tableOptions }) => {
 
     s.stop(`${tableName} table created successfully!`);
   } else {
-    log.success(`${tableName} table already exist`);
+    log.success(`${tableName} table already exists`);
   }
 };
 

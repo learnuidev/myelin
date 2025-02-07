@@ -4,7 +4,11 @@
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["fr", "es", "zh"]
+    "targetLanguages": [
+      "fr",
+      "es",
+      "zh"
+    ]
   },
   "cloud": {
     "provider": "aws",
@@ -12,5 +16,5 @@
     "awsRegion": "us-east-1"
   },
   "storageProvider": "dynamodb",
-  "projectId": "5ce5a73c-f036-432b-85ca-173c5bd143f1"
+  "projectId": "292e2f39-4b6e-4b6f-b8ef-3fd6bb993328"
 }

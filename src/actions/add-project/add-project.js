@@ -44,7 +44,7 @@ const addProject = async () => {
           ?.map((item) => {
             return {
               value: item?.id,
-              label: `${item?.id} - [Created ${timeAgo(item?.createdAt)}]`,
+              label: `${item?.id} [${item?.name}] - [Created ${timeAgo(item?.createdAt)}]`,
             };
           })
           .concat({

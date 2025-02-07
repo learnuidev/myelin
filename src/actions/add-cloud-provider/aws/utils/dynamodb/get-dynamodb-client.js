@@ -1,7 +1,4 @@
-const {
-  DynamoDBClient,
-  DescribeTableCommand,
-} = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 
 const { loadConfig } = require("../../../../translate/utils/load-config");
 const { getAWSCredential } = require("../get-aws-credential");

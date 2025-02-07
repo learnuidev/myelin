@@ -4,6 +4,7 @@ const {
   UpdateCommand,
 } = require("@aws-sdk/lib-dynamodb");
 const { getDynamodbClient } = require("./get-dynamodb-client");
+const { log } = require("@clack/prompts");
 
 const getKeyFromObj = (obj) => Object.keys(obj)?.[0];
 const createAttriuteNotExists = (obj) =>
@@ -78,7 +79,7 @@ async function update({ tableName, partitionKey, sortKey, data: dataItems }) {
 
   try {
     await docClient.send(new UpdateCommand(params));
-    console.log("Item updated successfully");
+    log.success("Translation synced successfully");
   } catch (err) {
     console.error("Error updating item:", err);
     throw err;

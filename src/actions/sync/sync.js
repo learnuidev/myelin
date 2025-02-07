@@ -32,6 +32,49 @@ const {
   getItem,
 } = require("../add-cloud-provider/aws/utils/dynamodb/get-item");
 const { writeJsonFile } = require("../translate/utils/write-json-file");
+const {
+  loadSourceTranslation,
+} = require("../translate/utils/load-source-translation");
+
+const syncUp = async ({ fileLocation, projectId }) => {
+  let translations = await loadTranslation(fileLocation);
+
+  log.info(`Syncing ${fileLocation}`);
+
+  await upsertItem({
+    tableName: translationsTableName,
+    partitionKey: {
+      id: fileLocation,
+    },
+    sortKey: {
+      projectId,
+    },
+    data: {
+      translations,
+      updatedAt: Date.now(),
+    },
+  });
+};
+
+const syncDown = async ({ fileLocation, projectId }) => {
+  log.info(`Downloading ${fileLocation}`);
+
+  let item = await getItem({
+    tableName: translationsTableName,
+    partitionKey: {
+      id: fileLocation,
+    },
+    sortKey: {
+      projectId,
+    },
+  });
+
+  const translations = item?.translations;
+
+  if (translations) {
+    await writeJsonFile(fileLocation, translations);
+  }
+};
 
 const sync = async (step) => {
   const config = await loadConfig();
@@ -78,7 +121,11 @@ const sync = async (step) => {
     const sourceFolderPath = getSourceFolderPath({ config });
 
     const _isFolder = await isFolder(sourceFolderPath);
-    const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath);
+    const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath, {
+      remote: true,
+    });
+
+    console.log("SOURCE TRANSLATIONS", sourceTranslations);
 
     const allLanguages = [
       config.locale.sourceLanguage,
@@ -95,56 +142,80 @@ const sync = async (step) => {
               sourceTranslationAndFileName;
             const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 
-            log.info(`Syncing ${fileLocation}`);
-
-            let translations = await loadTranslation(fileLocation);
-
-            await upsertItem({
-              tableName: translationsTableName,
-              partitionKey: {
-                id: fileLocation,
-              },
-              sortKey: {
-                projectId,
-              },
-              data: {
-                translations,
-                updatedAt: Date.now(),
-              },
+            await syncUp({
+              fileLocation,
+              projectId,
             });
           }
         }
+
+        log.success(`Syncing complete for: ${projectId}`);
       }
-      log.success(`Syncing complete for: ${projectId}`);
+
+      // file level translation
+      let sourceTranslation;
+
+      try {
+        sourceTranslation = await loadSourceTranslation({ config });
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        sourceTranslation = null;
+      }
+
+      if (!sourceTranslation) {
+        return null;
+      }
+
+      for (let language of allLanguages) {
+        const fileLocation = `./${localeLocation}/${language}.json`;
+
+        await syncUp({
+          fileLocation,
+          projectId,
+        });
+      }
+
+      log.success(`Syncing file level complete for: ${projectId}`);
     }
 
     if (step === "down") {
-      for (let targetLanguage of allLanguages) {
-        for (let sourceTranslationAndFileName of sourceTranslations || []) {
-          const { fileName, sourceTranslation } = sourceTranslationAndFileName;
-          const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
+      if (_isFolder) {
+        for (let targetLanguage of allLanguages) {
+          for (let sourceTranslationAndFileName of sourceTranslations || []) {
+            const { fileName } = sourceTranslationAndFileName;
+            const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 
-          log.info(`Syncing ${fileLocation}`);
-
-          let item = await getItem({
-            tableName: translationsTableName,
-            partitionKey: {
-              id: fileLocation,
-            },
-            sortKey: {
+            await syncDown({
               projectId,
-            },
-          });
-
-          const translations = item?.translations;
-
-          if (translations) {
-            await writeJsonFile(fileLocation, translations);
+              fileLocation,
+            });
           }
         }
+
+        log.success(`Successfully downloaded translations for: ${projectId}`);
       }
 
-      log.success(`Successfully downloaded translations for: ${projectId}`);
+      try {
+        sourceTranslation = await loadSourceTranslation({ config });
+        // eslint-disable-next-line no-unused-vars
+      } catch (err) {
+        sourceTranslation = null;
+      }
+
+      if (!sourceTranslation) {
+        return null;
+      }
+
+      for (let language of allLanguages) {
+        const fileLocation = `./${localeLocation}/${language}.json`;
+
+        await syncDown({
+          projectId,
+          fileLocation,
+        });
+      }
+
+      log.success(`Downloading file level complete for: ${projectId}`);
     }
   }
 };

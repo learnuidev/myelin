@@ -7,7 +7,8 @@ const addStorageProvider = async () => {
   log.step("Adding storage provider...");
 
   if (config.storageProvider) {
-    throw new Error("Storage provider already exists");
+    log.warn("Storage provider already exists");
+    return;
   }
 
   const storageProvider = await select({

@@ -17,9 +17,16 @@ const {
 
 const { syncDown } = require("./sync-down");
 const { syncUp } = require("./sync-up");
+const { addProject } = require("../add-project/add-project");
 
 const sync = async (step) => {
   const config = await loadConfig();
+
+  let projectId = config.projectId;
+
+  if (!projectId) {
+    projectId = await addProject();
+  }
 
   let storageProvider = config.storageProvider;
 
@@ -39,18 +46,6 @@ const sync = async (step) => {
       tableName: translationsTableName,
       tableOptions: translationsTableOptions,
     });
-
-    let projectId = config?.projectId;
-
-    if (!projectId) {
-      throw new Error(
-        "Project Id doesnt exist, please run `add-project` to create one"
-      );
-    } else {
-      log.info(
-        `Syncing into ${translationsTableName} using for the project: ${config.projectId}`
-      );
-    }
 
     if (step === "up") {
       await syncUp(projectId);

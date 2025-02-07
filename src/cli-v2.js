@@ -65,7 +65,7 @@ async function main() {
         break;
       }
       case "sync": {
-        await sync(subCommand);
+        await sync(subCommand || "up");
         break;
       }
 

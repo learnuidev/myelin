@@ -68,7 +68,7 @@ const addProject = async () => {
     });
 
     log.success(`Updated the project with the following project: ${projectId}`);
-    return;
+    return projectId;
   }
 
   if (config.projectId) {

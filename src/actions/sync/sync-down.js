@@ -44,13 +44,13 @@ const _syncDown = async ({ fileLocation, projectId }) => {
   }
 };
 
-const syncDown = async () => {
+const syncDown = async (projectId) => {
   const config = await loadConfig();
 
   const storageProvider = await checkForDynamoDBStorageProvider();
 
   if (storageProvider === "dynamodb") {
-    let projectId = config?.projectId;
+    // let projectId = config?.projectId;
 
     if (!projectId) {
       throw new Error(

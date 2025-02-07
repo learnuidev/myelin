@@ -94,7 +94,7 @@ const addProject = async () => {
   const newProjectId = crypto.randomUUID();
 
   const newProject = {
-    id: crypto.randomUUID(),
+    id: newProjectId,
     name: `${name}`,
     customAiUrl,
     aiProvider,
@@ -110,7 +110,7 @@ const addProject = async () => {
     projectId: newProjectId,
   });
 
-  await syncUp();
+  await syncUp(newProjectId);
 
   log.info("Creating new project");
 

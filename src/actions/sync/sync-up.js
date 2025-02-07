@@ -45,13 +45,13 @@ const _syncUp = async ({ fileLocation, projectId, metadata }) => {
   });
 };
 
-const syncUp = async () => {
+const syncUp = async (projectId) => {
   const config = await loadConfig();
 
   const storageProvider = await checkForDynamoDBStorageProvider();
 
   if (storageProvider === "dynamodb") {
-    let projectId = config?.projectId;
+    // let projectId = config?.projectId;
 
     if (!projectId) {
       throw new Error(

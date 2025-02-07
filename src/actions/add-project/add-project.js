@@ -15,6 +15,9 @@ const { listProjects } = require("../translate/utils/list-projects");
 
 const { formatDistanceToNow } = require("date-fns");
 const { syncUp } = require("../sync/sync-up");
+const {
+  addCloudProvider,
+} = require("../add-cloud-provider/add-cloud-provider");
 
 function timeAgo(timestamp) {
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
@@ -22,6 +25,10 @@ function timeAgo(timestamp) {
 
 const addProject = async () => {
   const config = await loadConfig();
+
+  if (!config.cloud) {
+    await addCloudProvider();
+  }
 
   const table = await checkIfDynamoDBTableExists(projectsTableName);
 

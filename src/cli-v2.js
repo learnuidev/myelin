@@ -32,21 +32,19 @@ async function main() {
     note(myelin);
     intro(`Translate your app with Myelin AI.`);
 
-    const mainOptions = [
+    let mainOptions = [
       { value: "init", label: "Initialize a new Myelin configuration" },
-      { value: "translate", label: "Translate" },
-      { value: "sync", label: "Sync" },
       { value: "add", label: "Add a component" },
-      { value: "add-cloud", label: "Add a cloud provider" },
       { value: "upsert", label: "Upsert a component" },
     ];
 
-    if (config.storageProvider && config.cloud) {
-      mainOptions.push({ value: "add-project", label: "Add a new project" });
-
-      if (!config.projectId) {
-        mainOptions.push({ value: "sync-project", label: "Sync a project" });
-      }
+    if (config) {
+      mainOptions = [
+        { value: "translate", label: "Translate" },
+        { value: "sync", label: "Sync" },
+        { value: "add-project", label: "Add a new project" },
+        { value: "add-cloud", label: "Add a cloud provider" },
+      ].concat(mainOptions);
     }
 
     action = await select({

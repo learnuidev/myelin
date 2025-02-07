@@ -1,7 +1,9 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { loadAWSCredentials } = require("./load-aws-credentials");
 
 async function listAWSCredentials() {
+  const credits = await loadAWSCredentials();
   try {
     const credentialsPath = path.join(
       process.env.HOME || process.env.USERPROFILE,
@@ -31,9 +33,16 @@ async function listAWSCredentials() {
     }
 
     const credentials = Object.entries(profiles).map((item) => {
+      const creddentials = item[1];
+      const profileName = item[0];
       return {
-        id: item[0],
-        ...item[1],
+        id: profileName,
+        aws_access_key_id:
+          credits?.[profileName]?.aws_access_key_id ||
+          creddentials?.aws_access_key_id,
+        aws_secret_access_key:
+          credits?.[profileName]?.aws_secret_access_key ||
+          creddentials?.aws_secret_access_key,
       };
     });
 

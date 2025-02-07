@@ -16,7 +16,7 @@ const updateConfig = async (newData) => {
     "utf-8"
   );
 
-  return updateConfig;
+  return true;
 };
 
 module.exports = {

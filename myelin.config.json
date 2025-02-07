@@ -1,19 +1,16 @@
 {
-  "customAiUrl": "https://www.ai.obrizum.io",
+  "customAiUrl": "https://www.ai.myelin.io",
   "aiProvider": "custom",
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": [
-      "fr",
-      "es",
-      "zh"
-    ]
+    "targetLanguages": ["fr", "es", "zh"]
   },
   "cloud": {
     "provider": "aws",
     "awsProfile": "yoserverless",
     "awsRegion": "us-east-1"
   },
-  "storageProvider": "dynamodb"
+  "storageProvider": "dynamodb",
+  "projectId": "5ce5a73c-f036-432b-85ca-173c5bd143f1"
 }

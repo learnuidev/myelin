@@ -16,6 +16,7 @@ const {
 const {
   createTableIfDoesntExist,
 } = require("../add-cloud-provider/aws/utils/dynamodb/create-table-if-doesnt-exist");
+const { addProject } = require("../add-project/add-project");
 
 const sync = async () => {
   const config = await loadConfig();
@@ -40,6 +41,20 @@ const sync = async () => {
       tableName: translationsTableName,
       tableOptions: translationsTableOptions,
     });
+
+    if (!config.projectId) {
+      log.info(`Project doesnt exist, creating a new one`);
+
+      const projectId = await addProject();
+
+      log.info(
+        `Syncing into ${translationsTableName} using for the project: ${projectId}`
+      );
+    } else {
+      log.info(
+        `Syncing into ${translationsTableName} using for the project: ${config.projectId}`
+      );
+    }
 
     log.info(`Create project`);
   }

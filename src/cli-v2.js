@@ -16,11 +16,15 @@ const {
   addCloudProvider,
 } = require("./actions/add-cloud-provider/add-cloud-provider");
 const { sync } = require("./actions/sync/sync");
+const { addProject } = require("./actions/add-project/add-project");
+const { loadConfig } = require("./actions/translate/utils/load-config");
 
 async function main() {
   let action;
 
   const [mainCommand, subCommand, ...args] = process.argv.slice(2);
+
+  const config = await loadConfig({ throw: false });
 
   if (mainCommand) {
     action = mainCommand;
@@ -28,16 +32,22 @@ async function main() {
     note(myelin);
     intro(`Translate your app with Myelin AI.`);
 
+    const mainOptions = [
+      { value: "init", label: "Initialize a new Myelin configuration" },
+      { value: "translate", label: "Translate" },
+      { value: "sync", label: "Sync" },
+      { value: "add", label: "Add a component" },
+      { value: "add-cloud", label: "Add a cloud provider" },
+      { value: "upsert", label: "Upsert a component" },
+    ];
+
+    if (config.storageProvider) {
+      mainOptions.push({ value: "add-project", label: "Add a new project" });
+    }
+
     action = await select({
       message: "What would you like to do?",
-      options: [
-        { value: "init", label: "Initialize a new Myelin configuration" },
-        { value: "translate", label: "Translate" },
-        { value: "sync", label: "Sync" },
-        { value: "add", label: "Add a component" },
-        { value: "add-cloud", label: "Add a cloud provider" },
-        { value: "upsert", label: "Upsert a component" },
-      ],
+      options: mainOptions,
     });
   }
 
@@ -59,6 +69,10 @@ async function main() {
 
       case "add-cloud": {
         await addCloudProvider();
+        break;
+      }
+      case "add-project": {
+        await addProject();
         break;
       }
 

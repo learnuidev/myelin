@@ -38,13 +38,16 @@ async function loadSourceTranslation(
     return sourceTranslation;
   }
 
-  const sourceTranslation = await readFile(sourceTranslationKey);
+  let sourceTranslation;
 
-  if (!sourceTranslation) {
+  try {
+    sourceTranslation = await readFile(sourceTranslationKey);
+
+    return JSON.parse(sourceTranslation);
+    // eslint-disable-next-line no-unused-vars
+  } catch (err) {
     return null;
   }
-
-  return JSON.parse(sourceTranslation);
 }
 
 module.exports = {

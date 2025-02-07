@@ -1,42 +1,21 @@
-const { loadClient } = require("./load-client");
-
-const { parseInput } = require("./parse-input");
+const { createTranslationService } = require("../create-translation-service");
+const { customRepository } = require("../repositories/custom-repository");
+const { openAiRepository } = require("../repositories/openai-repository");
 
 const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
-  const client = await loadClient({ config });
+  const repository = config.customAiUrl
+    ? customRepository()
+    : openAiRepository();
 
-  const prompt = `
-    You are an expert language translator, given the stringified JSON object, translate the into the following language: ${targetLanguage}
-  
-    Please provide the response in stringified JSON format like so.
-  
-    For example, if the source translation is:
-    { "title": "Heyy", "description:"Learn Anything" }
-  
-    And target language is "es", then it should return
-    { "title": "Ey", "description": "Aprende cualquier cosa."}
-    
-    `;
+  const translationService = createTranslationService(repository);
 
-  const chatCompletion = await client.chat.completions.create({
-    messages: [
-      {
-        role: "system",
-        content: `${prompt}`,
-      },
-      {
-        role: "user",
-        content: `source translation: ${JSON.stringify(sourceTranslation)}`,
-      },
-    ],
-    model: config.aiModel,
+  const response = await translationService.translate({
+    sourceTranslation,
+    config,
+    targetLanguage,
   });
 
-  const respObj = await parseInput(
-    chatCompletion?.choices?.[0]?.message?.content
-  );
-
-  return respObj;
+  return response;
 };
 
 module.exports = {

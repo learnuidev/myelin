@@ -1,21 +1,13 @@
 {
-  "aiProvider": "openai",
-  "aiModel": "o3-mini",
+  "customAiUrl": "https://www.ai.obrizum.io",
+  "aiProvider": "custom",
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
     "targetLanguages": [
       "fr",
       "es",
-      "zh",
-      "ko",
-      "ja"
+      "zh"
     ]
-  },
-  "cloudProvider": "aws",
-  "cloud": {
-    "provider": "aws",
-    "awsProfile": "yoserverless",
-    "awsRegion": "us-east-1"
   }
 }

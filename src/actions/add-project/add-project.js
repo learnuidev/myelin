@@ -1,4 +1,4 @@
-const { select, log, note } = require("@clack/prompts");
+const { select, log, note, text } = require("@clack/prompts");
 const { loadConfig } = require("../translate/utils/load-config");
 const crypto = require("crypto");
 const {
@@ -14,6 +14,7 @@ const {
 const { listProjects } = require("../translate/utils/list-projects");
 
 const { formatDistanceToNow } = require("date-fns");
+const { syncUp } = require("../sync/sync-up");
 
 function timeAgo(timestamp) {
   return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
@@ -81,10 +82,20 @@ const addProject = async () => {
 
   const { customAiUrl, aiProvider, locale, cloud, storageProvider } = config;
 
+  const name = await text({
+    message: "Give your project a name",
+    placeholder: "my-awesome-project",
+    validate: (value) => {
+      if (!value) return "Name cannot be empty";
+      return;
+    },
+  });
+
   const newProjectId = crypto.randomUUID();
 
   const newProject = {
     id: crypto.randomUUID(),
+    name: `${name}`,
     customAiUrl,
     aiProvider,
     locale,
@@ -98,6 +109,8 @@ const addProject = async () => {
   await updateConfig({
     projectId: newProjectId,
   });
+
+  await syncUp();
 
   log.info("Creating new project");
 

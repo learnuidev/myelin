@@ -3,7 +3,6 @@ const { loadRemoteSourceFiles } = require("./load-remote-source-files");
 
 async function isFolder(path, { remote } = { remote: false }) {
   if (remote) {
-    console.log("REMOTE", remote);
     const items = await loadRemoteSourceFiles();
     return items?.length > 0;
   }

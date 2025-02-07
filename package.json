@@ -19,6 +19,7 @@
   "dependencies": {
     "@clack/prompts": "^0.10.0",
     "@tandil/diffparse": "^0.2.0",
+    "aws-sdk": "^2.1692.0",
     "commander": "^12.1.0",
     "dotenv": "^16.4.7",
     "figlet": "^1.7.0",

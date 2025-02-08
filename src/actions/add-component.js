@@ -58,7 +58,7 @@ const addComponent = async (name) => {
 
   if (component.version === 2) {
     // install dependencies
-    if (component.dependencies) {
+    if (component.dependencies?.length) {
       await installDependencies(component.dependencies);
     }
 

@@ -26,19 +26,21 @@ async function installDependencies(deps) {
 }
 
 async function installMyelinDependencies(deps) {
-  const script = `npx myelino ${deps?.join(" ")}`;
+  for (const dep of deps) {
+    const script = `npx myelino add ${dep}`;
 
-  const s = spinner();
+    const s = spinner();
 
-  try {
-    s.start(`Installing myelin dependencies...`);
+    try {
+      s.start(`Installing ${dep}`);
 
-    await execAsync(script);
-    s.stop("Dependencies installed successfully!");
-    // eslint-disable-next-line no-unused-vars
-  } catch (error) {
-    throw new Error(error);
-    // console.error("Installation failed:", error.stderr || error.message);
+      await execAsync(script);
+      s.stop("Dependencies installed successfully!");
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      throw new Error(error);
+      // console.error("Installation failed:", error.stderr || error.message);
+    }
   }
 }
 

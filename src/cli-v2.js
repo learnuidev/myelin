@@ -117,6 +117,10 @@ async function main() {
                 value: "copy-to-clipboard-button",
                 label: "copy-to-clipboard-button",
               },
+              {
+                value: "blog",
+                label: "blog",
+              },
             ],
             validate: (value) => {
               if (!value) return "Component name is required!";

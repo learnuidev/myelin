@@ -2,6 +2,9 @@ const {
   customTranslationsTableName,
 } = require("../../storage/dynamodb/custom-translations-table");
 const {
+  translationsTableName,
+} = require("../../storage/dynamodb/translations-table");
+const {
   getItem,
 } = require("../actions/add-cloud-provider/aws/utils/dynamodb/get-item");
 const {
@@ -9,6 +12,15 @@ const {
 } = require("../actions/add-cloud-provider/aws/utils/dynamodb/upsert-item");
 
 const upsertCustomTranslation = async ({ id, projectId, translations }) => {
+  const originalItem = await getItem({
+    tableName: translationsTableName,
+    partitionKey: {
+      id,
+    },
+    sortKey: {
+      projectId,
+    },
+  });
   const item = await getItem({
     tableName: customTranslationsTableName,
     partitionKey: {
@@ -29,6 +41,7 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
     },
 
     data: {
+      ...originalItem,
       translations: JSON.stringify(
         item?.translations
           ? { ...JSON.parse(item?.translations), ...translations }

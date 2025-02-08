@@ -26,7 +26,7 @@ async function loadSourceTranslation(
     const sourceTranslationRemote = await getItem({
       tableName: translationsTableName,
       partitionKey: {
-        id: sourceTranslationKey,
+        id: `${config.projectId}#${sourceTranslationKey}`,
       },
       sortKey: {
         projectId: config.projectId,

@@ -3,14 +3,7 @@
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": [
-      "fr",
-      "es",
-      "zh",
-      "ar",
-      "ja",
-      "zh-TW"
-    ]
+    "targetLanguages": ["fr", "es", "zh", "ar", "ja", "zh-TW"]
   },
   "cloud": {
     "provider": "aws",
@@ -18,9 +11,6 @@
     "awsRegion": "us-east-1"
   },
   "storageProvider": "dynamodb",
-  "projectIdOld": "292e2f39-4b6e-4b6f-b8ef-3fd6bb993328",
-  "projectIdOld2": "b3c514d7-1a07-49c3-b0b5-f0615e548cae",
-  "projectIdOld3": "f03d4c09-f527-4b39-bddb-70a763fcf17b",
-  "projectId": "2f88b304-d1ce-4f5d-914c-6fe159e2d138",
+  "projectId": "1a112464-0eac-4f24-a4e6-b6fd10dc0f22",
   "aiModel": "deepseek-chat"
 }

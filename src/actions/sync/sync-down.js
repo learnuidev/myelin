@@ -23,6 +23,7 @@ const {
 const {
   checkForDynamoDBStorageProvider,
 } = require("./check-for-dynamodb-storage-provider");
+const { loadTranslation } = require("../translate/utils/load-translation");
 
 const _syncDown = async ({ fileLocation, projectId }) => {
   log.info(`Downloading ${fileLocation}`);
@@ -39,6 +40,13 @@ const _syncDown = async ({ fileLocation, projectId }) => {
 
   if (item) {
     const translations = JSON.parse(item?.translations);
+
+    const localTranslation = await loadTranslation(`${fileLocation}`);
+
+    if (JSON.stringify(translations) === JSON.stringify(localTranslation)) {
+      log.warn(`Translation already exists. Skipping...`);
+      return null;
+    }
 
     if (translations) {
       await writeJsonFile(fileLocation, translations);

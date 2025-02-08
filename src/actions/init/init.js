@@ -3,46 +3,12 @@ const { loadConfig } = require("../translate/utils/load-config");
 const { languageOptions } = require("../../constants/language-options");
 const picocolors = require("picocolors");
 const { removeNull } = require("../../utils/remove-null");
-
-const getPlaceholderModel = (aiProvider) => {
-  switch (aiProvider) {
-    case "openai":
-    default:
-      return "gpt-4o-mini";
-    case "deepseek":
-      return "deekseek-chat";
-    case "moonshot":
-      return "moonshot-v1-auto";
-    case "qwen":
-      return "qwen-plus";
-  }
-};
-
-const getProviderModelOptions = (aiProvider) => {
-  switch (aiProvider) {
-    case "openai":
-    default:
-      return [
-        { value: "o3-mini", label: "o3 Mini" },
-        { value: "o1", label: "o1" },
-        { value: "o1-mini", label: "o1 Mini" },
-        { value: "gpt-4o", label: "GTP 4o" },
-        { value: "gpt-4o-mini", label: "GTP 4o Mini" },
-        { value: "gpt-3.5-turbo", label: "GPT 3.5 Turbo" },
-      ];
-    case "deepseek":
-      return [{ value: "deepseek-chat", label: "Deepseek Chat" }];
-    case "moonshot":
-      return [
-        { value: "moonshot-v1-8k", label: "Moonshot 8k" },
-        { value: "moonshot-v1-32k", label: "Moonshot 32k" },
-        { value: "moonshot-v1-128k", label: "Moonshot 128k" },
-        { value: "moonshot-v1-audi", label: "Moonshot Auto" },
-      ];
-    case "qwen":
-      return [{ value: "qwen-plus", label: "Openai" }];
-  }
-};
+const {
+  addAiProviderCli,
+} = require("../add-ai-provider/utils/add-ai-provider-cli");
+const {
+  addAiProviderSuccessLog,
+} = require("../add-ai-provider/utils/add-ai-provider-success-log");
 
 const init = async () => {
   const configExists = await loadConfig();
@@ -96,40 +62,7 @@ const init = async () => {
     },
   });
 
-  const aiProvider = await select({
-    message: "Enter your ai provider",
-    placeholder: "deepseek",
-    options: [
-      { value: "openai", label: "Openai" },
-      { value: "deepseek", label: "Deepseek" },
-      { value: "qwen", label: "Qwen" },
-      { value: "moonshot", label: "Moonshot" },
-      { value: "custom", label: "Custom" },
-    ],
-  });
-
-  let aiModel;
-
-  if (aiProvider !== "custom") {
-    aiModel = await select({
-      message: "Enter your preferred ai model",
-      placeholder: getPlaceholderModel(aiProvider),
-      options: getProviderModelOptions(aiProvider),
-    });
-  }
-
-  let customAiUrl;
-
-  if (aiProvider === "custom") {
-    customAiUrl = await text({
-      message: "Enter the url of your custom ai model",
-      placeholder: "https://www.myaimodel.com",
-      validate: (value) => {
-        if (!value) return "This cannot be empty";
-        return;
-      },
-    });
-  }
+  const { aiModel, aiProvider, customAiUrl } = await addAiProviderCli();
 
   const fs = await require("node:fs/promises");
 
@@ -152,14 +85,7 @@ const init = async () => {
 
   outro(picocolors.green("Configuration file created successfully!"));
 
-  if (config.customAiUrl) {
-    note(
-      `Please dont forget to add AI_X_API_KEY into your .env file :)`,
-      "FYI:"
-    );
-  } else {
-    note(`Please dont forget to add AI_API_KEY into your .env file :)`, "FYI:");
-  }
+  addAiProviderSuccessLog(config);
 
   note(`Run 'npx myelino translate' to start translating your files`, "Next: ");
 };

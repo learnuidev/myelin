@@ -1,10 +1,10 @@
-const { select, note, multiselect, text, outro } = require("@clack/prompts");
+const { select, outro } = require("@clack/prompts");
 const { loadConfig } = require("../translate/utils/load-config");
 const picocolors = require("picocolors");
 const {
   cloudProviderOptions,
 } = require("../../constants/cloud-provider-options");
-const { listAWSCredentials } = require("./aws/utils/list-aws-credentials");
+
 const { listAWSProfiles } = require("./aws/utils/list-aws-profiles");
 const { awsRegions } = require("./aws/constants/aws-regions");
 

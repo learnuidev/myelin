@@ -37,10 +37,12 @@ const _syncDown = async ({ fileLocation, projectId }) => {
     },
   });
 
-  const translations = JSON.parse(item?.translations);
+  if (item) {
+    const translations = JSON.parse(item?.translations);
 
-  if (translations) {
-    await writeJsonFile(fileLocation, translations);
+    if (translations) {
+      await writeJsonFile(fileLocation, translations);
+    }
   }
 };
 

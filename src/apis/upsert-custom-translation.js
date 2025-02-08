@@ -51,6 +51,8 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
       updatedAt: Date.now(),
     },
   });
+
+  return true;
 };
 
 module.exports = {

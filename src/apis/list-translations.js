@@ -10,12 +10,7 @@ const listTranslations = async () => {
     projectId: config.projectId,
   });
 
-  return items?.map((item) => {
-    return {
-      ...item,
-      translations: JSON.parse(item?.translations || "{}"),
-    };
-  });
+  return items;
 };
 
 module.exports = {

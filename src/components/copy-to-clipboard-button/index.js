@@ -1,6 +1,7 @@
 const copyToClipboardButton = {
   "copy-to-clipboard-button": {
     id: "copy-to-clipboard-button",
+    myelinDependencies: ["copy-to-clipboard"],
 
     version: 2,
     codes: [

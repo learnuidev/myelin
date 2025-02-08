@@ -19,6 +19,7 @@ const { sync } = require("./actions/sync/sync");
 const { addProject } = require("./actions/add-project/add-project");
 const { loadConfig } = require("./actions/translate/utils/load-config");
 const { addAiProvider } = require("./actions/add-ai-provider/add-ai-provider");
+const { startUi } = require("./actions/start-ui/start-ui");
 
 async function main() {
   let action;
@@ -46,6 +47,7 @@ async function main() {
         { value: "add-project", label: "Add a new project" },
         { value: "add-cloud", label: "Add a cloud provider" },
         { value: "add-ai", label: "Add a AI provider" },
+        { value: "start-ui", label: "Start an interactive ui" },
       ].concat(mainOptions);
     }
 
@@ -73,6 +75,10 @@ async function main() {
 
       case "add-cloud": {
         await addCloudProvider();
+        break;
+      }
+      case "start-ui": {
+        await startUi();
         break;
       }
       case "add-ai": {

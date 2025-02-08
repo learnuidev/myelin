@@ -1,20 +1,16 @@
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const {
   DynamoDBDocumentClient,
   QueryCommand,
 } = require("@aws-sdk/lib-dynamodb");
 const { getDynamodbClient } = require("./get-dynamodb-client");
-const {
-  translationsTableName,
-} = require("../../../../../../storage/dynamodb/translations-table");
 
-async function queryItemsByProjectId({ projectId }) {
+async function queryItemsByProjectId({ projectId, tableName }) {
   const client = await getDynamodbClient();
 
   const docClient = DynamoDBDocumentClient.from(client);
 
   const params = {
-    TableName: translationsTableName,
+    TableName: tableName,
     KeyConditionExpression: "projectId = :projectId",
     ExpressionAttributeValues: {
       ":projectId": projectId,

@@ -1,10 +1,10 @@
 const {
+  translationsTableName,
+} = require("../../../storage/dynamodb/translations-table");
+const {
   queryItemsByProjectId,
 } = require("../add-cloud-provider/aws/utils/dynamodb/query-items-by-project-id");
 const { loadConfig } = require("../translate/utils/load-config");
-const {
-  loadRemoteSourceFiles,
-} = require("../translate/utils/load-remote-source-files");
 
 const startUi = async () => {
   const http = await require("http");
@@ -23,14 +23,8 @@ const startUi = async () => {
         const config = await loadConfig();
         const items = await queryItemsByProjectId({
           projectId: config.projectId,
+          tableName: translationsTableName,
         });
-
-        const filteredItems = items.filter(
-          (item) =>
-            item.lang === config?.locale?.sourceLanguage &&
-            item.type === "folder" &&
-            Object.keys(item.translations)?.length > 0
-        );
 
         const displayValues = items.map((item) => {
           return {

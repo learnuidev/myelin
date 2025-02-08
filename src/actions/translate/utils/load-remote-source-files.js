@@ -2,11 +2,17 @@ const { loadConfig } = require("./load-config");
 const {
   queryItemsByProjectId,
 } = require("../../add-cloud-provider/aws/utils/dynamodb/query-items-by-project-id");
+const {
+  translationsTableName,
+} = require("../../../../storage/dynamodb/translations-table");
 
 const loadRemoteSourceFiles = async () => {
   const config = await loadConfig();
 
-  const items = await queryItemsByProjectId({ projectId: config.projectId });
+  const items = await queryItemsByProjectId({
+    projectId: config.projectId,
+    tableName: translationsTableName,
+  });
 
   const filteredItems = items.filter(
     (item) =>

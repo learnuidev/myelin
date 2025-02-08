@@ -79,7 +79,11 @@ const syncUp = async (projectId) => {
     const sourceTranslation = await loadSourceTranslation({ config });
 
     if (_isFolder) {
-      log.info(`Handle folder level sync`);
+      if (!sourceTranslations?.length) {
+        throw new Error(
+          `No translations found! Please add some translations and try again`
+        );
+      }
 
       for (let targetLanguage of allLanguages) {
         for (let sourceTranslationAndFileName of sourceTranslations || []) {

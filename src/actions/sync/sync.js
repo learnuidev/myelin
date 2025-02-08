@@ -7,6 +7,7 @@ const {
   translationsTableOptions,
   translationsTableName,
 } = require("../../../storage/dynamodb/translations-table");
+
 const {
   projectsTableName,
   projectsTableOptions,
@@ -18,6 +19,9 @@ const {
 const { syncDown } = require("./sync-down");
 const { syncUp } = require("./sync-up");
 const { addProject } = require("../add-project/add-project");
+const {
+  customTranslationsTableName,
+} = require("../../../storage/dynamodb/custom-translations-table");
 
 const sync = async (step) => {
   let config = await loadConfig();
@@ -46,6 +50,10 @@ const sync = async (step) => {
     });
     await createTableIfDoesntExist({
       tableName: translationsTableName,
+      tableOptions: translationsTableOptions,
+    });
+    await createTableIfDoesntExist({
+      tableName: customTranslationsTableName,
       tableOptions: translationsTableOptions,
     });
 

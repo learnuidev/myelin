@@ -12,7 +12,7 @@ const createTableIfDoesntExist = async ({ tableName, tableOptions }) => {
   const table = await checkIfDynamoDBTableExists(tableName);
 
   if (!table) {
-    s.stop(`${tableName} doesnt exist`);
+    log.warn(`${tableName} doesnt exist`);
     s.start(`Creating new table [${tableName}]. Please wait`);
 
     await createAndWaitForTable(tableName, tableOptions);

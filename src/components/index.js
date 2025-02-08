@@ -8,6 +8,7 @@ const { i18next } = require("./i18next");
 
 const { theDock } = require("./the-dock");
 const { copyToClipboard } = require("./copy-to-clipboard");
+const { blog } = require("./blog/blog");
 
 const components = {
   "animated-navbar": animatedNavbar,
@@ -20,6 +21,7 @@ const components = {
   "next-i18n": i18next.i18next,
   "copy-to-clipboard": copyToClipboard,
   ...copyToClipboardButton,
+  ...blog,
 };
 
 module.exports.components = components;

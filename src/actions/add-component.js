@@ -25,6 +25,23 @@ async function installDependencies(deps) {
   }
 }
 
+async function installMyelinDependencies(deps) {
+  const script = `npx myelino ${deps?.join(" ")}`;
+
+  const s = spinner();
+
+  try {
+    s.start(`Installing myelin dependencies...`);
+
+    await execAsync(script);
+    s.stop("Dependencies installed successfully!");
+    // eslint-disable-next-line no-unused-vars
+  } catch (error) {
+    throw new Error(error);
+    // console.error("Installation failed:", error.stderr || error.message);
+  }
+}
+
 const addComponent = async (name) => {
   const component = components[name];
   if (!component) {
@@ -43,6 +60,10 @@ const addComponent = async (name) => {
     // install dependencies
     if (component.dependencies) {
       await installDependencies(component.dependencies);
+    }
+
+    if (component.myelinDependencies) {
+      await installMyelinDependencies(component.myelinDependencies);
     }
 
     // add codes

@@ -8,7 +8,7 @@ const theDock = {
     {
       targetDir: "components/",
       path: "components/the-dock.tsx",
-      codeUrl: `https://raw.githubusercontent.com/learnuidev/vishalgautam.io/refs/heads/main/components/the-dock.tsx?token=GHSAT0AAAAAAC5OV3CYK3QGYELBQ3IT7WF6Z5HKPEA`,
+      codeUrl: `https://raw.githubusercontent.com/learnuidev/myelin/refs/heads/main/src/components/the-dock/the-dock.tsx`,
     },
   ],
 };

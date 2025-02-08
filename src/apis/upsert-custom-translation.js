@@ -52,7 +52,7 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
     },
   });
 
-  return true;
+  return { status: "success" };
 };
 
 module.exports = {

@@ -5,6 +5,7 @@ const myelinUI = {
     "@tanstack/react-query-devtools",
     "@tanstack/react-query",
     "framer-motion",
+    "myelino@latest",
   ],
   codes: [
     // react-query dependency

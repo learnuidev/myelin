@@ -1,7 +1,11 @@
 const myelinUI = {
   id: "myelin-ui",
   version: 2,
-  dependencies: ["@tanstack/react-query-devtools", "@tanstack/react-query"],
+  dependencies: [
+    "@tanstack/react-query-devtools",
+    "@tanstack/react-query",
+    "framer-motion",
+  ],
   codes: [
     // react-query dependency
     {
@@ -69,6 +73,12 @@ const myelinUI = {
       targetDir: "app/api/myelin/upsert-custom-translation/",
       path: "app/api/myelin/upsert-custom-translation/route.ts",
       codeUrl: `https://raw.githubusercontent.com/learnuidev/vishalgautam.io/refs/heads/main/app/api/myelin/upsert-custom-translation/route.ts`,
+    },
+    // translations
+    {
+      targetDir: "locales/en/",
+      path: "locales/en/myelin.json",
+      codeUrl: `https://raw.githubusercontent.com/learnuidev/vishalgautam.io/refs/heads/main/locales/en/myelin.json`,
     },
   ],
 };

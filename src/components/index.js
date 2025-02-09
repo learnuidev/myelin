@@ -9,6 +9,7 @@ const { i18next } = require("./i18next");
 const { theDock } = require("./the-dock");
 const { copyToClipboard } = require("./copy-to-clipboard");
 const { blog } = require("./blog/blog");
+const { myelinUI } = require("./myelin-ui");
 
 const components = {
   "animated-navbar": animatedNavbar,
@@ -22,6 +23,7 @@ const components = {
   "copy-to-clipboard": copyToClipboard,
   ...copyToClipboardButton,
   ...blog,
+  "myelin-ui": myelinUI,
 };
 
 module.exports.components = components;

@@ -39,6 +39,7 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
     },
   });
 
+  // writing to custom table
   await upsertItem({
     tableName: customTranslationsTableName,
     partitionKey: {

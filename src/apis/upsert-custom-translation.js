@@ -22,6 +22,13 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
       projectId,
     },
   });
+
+  const {
+    id: originalId,
+    projectId: originalProjectId,
+    ...rest
+  } = originalItem;
+
   const item = await getItem({
     tableName: customTranslationsTableName,
     partitionKey: {
@@ -42,7 +49,8 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
     },
 
     data: {
-      ...originalItem,
+      // ...originalItem,
+      ...rest,
       translations: JSON.stringify(
         item?.translations
           ? { ...JSON.parse(item?.translations), ...translations }

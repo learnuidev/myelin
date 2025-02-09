@@ -86,6 +86,8 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
     },
   });
 
+  console.log("ORIGINAL FILE", originalItem?.fileLocation);
+
   if (originalItem?.fileLocation) {
     await writeJsonFile(originalItem.fileLocation, updatedTranslation);
   }

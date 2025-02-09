@@ -80,6 +80,11 @@ const myelinUI = {
       path: "locales/en/myelin.json",
       codeUrl: `https://raw.githubusercontent.com/learnuidev/vishalgautam.io/refs/heads/main/locales/en/myelin.json`,
     },
+    {
+      targetDir: "types/",
+      path: "types/myelino.d.ts",
+      codeUrl: `https://raw.githubusercontent.com/learnuidev/vishalgautam.io/refs/heads/main/types/myelino.d.ts`,
+    },
   ],
 };
 

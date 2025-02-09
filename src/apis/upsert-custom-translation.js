@@ -61,13 +61,36 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
     },
   });
 
+  const updatedTranslation = {
+    ...JSON.parse(originalItem?.translations),
+    ...JSON.parse(item?.translations),
+    ...translations,
+  };
+
+  // writing to translations table
+  await upsertItem({
+    tableName: translationsTableName,
+    partitionKey: {
+      id,
+    },
+    sortKey: {
+      projectId,
+    },
+
+    data: {
+      // ...originalItem,
+      ...rest,
+      translations: JSON.stringify(updatedTranslation),
+
+      updatedAt: Date.now(),
+    },
+  });
+
   if (originalItem?.fileLocation) {
-    await writeJsonFile(originalItem.fileLocation, {
-      ...JSON.parse(originalItem?.translations),
-      ...JSON.parse(item?.translations),
-      ...translations,
-    });
+    await writeJsonFile(originalItem.fileLocation, updatedTranslation);
   }
+
+  // sync up yo
 
   return { status: "success" };
 };

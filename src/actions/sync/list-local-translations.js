@@ -30,7 +30,7 @@ const listLocalTranslations = async ({ config }) => {
       let translations = await loadTranslation(fileLocation);
 
       translationsRes.push({
-        id: `${crypto.randomUUID()}#${fileLocation}`,
+        id: `${fileLocation}`,
         lang: targetLanguage,
         fileLocation,
         fileName,

@@ -21,7 +21,7 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
   const config = await loadConfig();
 
   if (isLocalSync({ config })) {
-    const fileLocation = id?.split("#")?.[1];
+    const fileLocation = id;
 
     // return fileLocation;
 

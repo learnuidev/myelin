@@ -1,0 +1,20 @@
+{
+  "profile_meta_user_settings": {
+    "h1": "Paramètres de l'utilisateur Meta",
+    "p": "Que va-t-il se passer",
+    "li": "Mangue",
+    "button": "Cliquez ici"
+  },
+  "profile_profile": {
+    "h1": "Profil",
+    "p": "Cliquez ici pour apporter des modifications"
+  },
+  "profile_settings_user_settings": {
+    "h1": "Paramètres de l'utilisateur",
+    "p": "Que va-t-il se passer",
+    "li": "Pomme",
+    "li_1": "Oranges",
+    "li_2": "Mangue",
+    "button": "Cliquez ici"
+  }
+}

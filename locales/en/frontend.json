@@ -1,0 +1,20 @@
+{
+  "profile_meta_user_settings": {
+    "h1": "Meta User Settings",
+    "p": "What will happen",
+    "li": "Mango",
+    "button": "Click here"
+  },
+  "profile_profile": {
+    "h1": "Profile",
+    "p": "Click here to make changes"
+  },
+  "profile_settings_user_settings": {
+    "h1": "User Settings",
+    "p": "What will happen",
+    "li": "Apple",
+    "li_1": "Oranges",
+    "li_2": "Mango",
+    "button": "Click here"
+  }
+}

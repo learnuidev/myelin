@@ -62,6 +62,20 @@ const init = async () => {
     },
   });
 
+  const syncType = await select({
+    message: "Where do you want your frontend to load translations from",
+    placeholder: "en",
+    value: "local",
+    validate: (value) => {
+      if (!value) return "This value cannot be empty";
+      return;
+    },
+    options: [
+      { value: "local", label: "Local" },
+      { value: "remote", label: "Remote" },
+    ],
+  });
+
   const { aiModel, aiProvider, customAiUrl } = await addAiProviderCli();
 
   const fs = await require("node:fs/promises");
@@ -71,7 +85,7 @@ const init = async () => {
     aiProvider,
     aiModel,
     sync: {
-      type: "local",
+      type: syncType,
     },
     locale: {
       location: localeLocation,

@@ -1,9 +1,13 @@
 {
-  "aiProvider": "deepseek",
+  "aiProvider": "openai",
+  "aiModel": "gpt-4o-mini",
+  "sync": {
+    "type": "local"
+  },
   "locale": {
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["fr", "es", "zh", "ar", "ja", "zh-TW"]
+    "targetLanguages": ["fr", "es", "de"]
   },
   "cloud": {
     "provider": "aws",
@@ -11,6 +15,5 @@
     "awsRegion": "us-east-1"
   },
   "storageProvider": "dynamodb",
-  "projectId": "1a112464-0eac-4f24-a4e6-b6fd10dc0f22",
-  "aiModel": "deepseek-chat"
+  "projectId": "1a112464-0eac-4f24-a4e6-b6fd10dc0f22"
 }

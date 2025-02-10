@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { loadRemoteSourceFiles } = require("./load-remote-source-files");
+const crypto = require("crypto");
 
 async function loadJsonFilesFromFolder(
   folderPath,
@@ -31,7 +32,15 @@ async function loadJsonFilesFromFolder(
     })
   );
 
-  return jsonData;
+  return jsonData.map((item) => {
+    const fileLocation = `${folderPath}/${item.fileName}`;
+    return {
+      ...item,
+      id: `${crypto.randomUUID()}#${fileLocation}`,
+      translations: item.sourceTranslation,
+      fileLocation,
+    };
+  });
 }
 
 module.exports = {

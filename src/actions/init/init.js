@@ -70,6 +70,9 @@ const init = async () => {
     customAiUrl,
     aiProvider,
     aiModel,
+    sync: {
+      type: "local",
+    },
     locale: {
       location: localeLocation,
       sourceLanguage,

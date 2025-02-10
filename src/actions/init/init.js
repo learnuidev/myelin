@@ -61,6 +61,14 @@ const init = async () => {
       return;
     },
   });
+  const sourceEntry = await text({
+    message: "Enter the entry location of your source code",
+    placeholder: "app",
+    validate: (value) => {
+      if (!value) return "Source location cannot be empty";
+      return;
+    },
+  });
 
   const syncType = await select({
     message: "Where do you want your frontend to load translations from",
@@ -88,6 +96,7 @@ const init = async () => {
       type: syncType,
     },
     locale: {
+      sourceEntry,
       location: localeLocation,
       sourceLanguage,
       targetLanguages,

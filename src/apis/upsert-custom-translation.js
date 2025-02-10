@@ -10,9 +10,32 @@ const {
 const {
   upsertItem,
 } = require("../actions/add-cloud-provider/aws/utils/dynamodb/upsert-item");
+const { loadConfig } = require("../actions/translate/utils/load-config");
+const {
+  loadTranslation,
+} = require("../actions/translate/utils/load-translation");
 const { writeJsonFile } = require("../actions/translate/utils/write-json-file");
+const { isLocalSync } = require("../utils/is-local-sync");
 
 const upsertCustomTranslation = async ({ id, projectId, translations }) => {
+  const config = await loadConfig();
+
+  if (isLocalSync({ config })) {
+    const fileLocation = id?.split("#")?.[1];
+
+    // return fileLocation;
+
+    const oldTranslations = await loadTranslation(fileLocation);
+
+    const updatedTranslation = {
+      ...oldTranslations,
+      ...translations,
+    };
+
+    await writeJsonFile(fileLocation, updatedTranslation);
+
+    return updatedTranslation;
+  }
   const originalItem = await getItem({
     tableName: translationsTableName,
     partitionKey: {
@@ -95,8 +118,17 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
 
   // sync up yo
 
-  return { status: "success" };
+  return updatedTranslation;
 };
+
+// upsertCustomTranslation({
+//   id: "9b4101ef-9a85-4478-961b-92a4fa5c0b4c#./locales/es/common.json",
+//   translations: {
+//     okay: "Bale bale",
+//   },
+// }).then((location) => {
+//   console.log("LOCATION", location);
+// });
 
 module.exports = {
   upsertCustomTranslation,

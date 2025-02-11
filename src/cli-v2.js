@@ -20,7 +20,6 @@ const { addProject } = require("./actions/add-project/add-project");
 const { loadConfig } = require("./actions/translate/utils/load-config");
 const { addAiProvider } = require("./actions/add-ai-provider/add-ai-provider");
 const { startUi } = require("./actions/start-ui/start-ui");
-const { eat } = require("./actions/eat/eat");
 
 async function main() {
   let action;
@@ -44,7 +43,6 @@ async function main() {
     if (config) {
       mainOptions = [
         { value: "translate", label: "Translate" },
-        { value: "eat", label: "EAT" },
         { value: "sync", label: "Sync" },
         { value: "add-project", label: "Add a new project" },
         { value: "add-cloud", label: "Add a cloud provider" },
@@ -68,10 +66,6 @@ async function main() {
     switch (action) {
       case "init": {
         await init();
-        break;
-      }
-      case "eat": {
-        await eat(subCommand);
         break;
       }
       case "sync": {

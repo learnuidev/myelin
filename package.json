@@ -1,6 +1,6 @@
 {
   "name": "myelino",
-  "version": "0.0.96",
+  "version": "0.0.97",
   "main": "src/index.js",
   "bin": {
     "myelino": "src/cli-v2.js"
@@ -14,7 +14,7 @@
     "tooling"
   ],
   "author": "Vishal Gautam",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.743.0",

@@ -77,10 +77,14 @@ const printStats = async (subCommands) => {
 
     const unusedKeys = Object.keys(item?.sourceTranslation || {})?.filter(
       (key) => {
-        const notUsedInFile = files?.filter((file) =>
-          // file?.code?.includes(`${nameSpace}:${key}`)
-          file?.code?.includes(`${key}`)
-        );
+        const notUsedInFile = files?.filter((file) => {
+          const keyWithUnderScore = key?.split("_");
+
+          if (keyWithUnderScore?.length > 1) {
+            return file?.code?.includes(`${keyWithUnderScore?.[0]}`);
+          }
+          return file?.code?.includes(`${key}`);
+        });
         return notUsedInFile?.length === 0;
       }
     );

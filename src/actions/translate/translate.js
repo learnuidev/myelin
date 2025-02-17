@@ -2,7 +2,7 @@ const { note } = require("@clack/prompts");
 const { loadConfig } = require("./utils/load-config");
 const { translateAndSave } = require("./utils/translate-and-save");
 
-const translate = async () => {
+const translate = async (namespaces) => {
   // step 1: read config
   const config = await loadConfig();
 
@@ -15,7 +15,7 @@ const translate = async () => {
   }
 
   // Step 2: Translate and save
-  await translateAndSave({ config });
+  await translateAndSave({ config, namespaces: namespaces?.filter(Boolean) });
 };
 
 module.exports = {

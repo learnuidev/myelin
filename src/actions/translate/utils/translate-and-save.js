@@ -184,7 +184,7 @@ const smartTranslateAndSave = async ({
   return true;
 };
 
-const translateAndSave = async ({ config }) => {
+const translateAndSave = async ({ config, namespaces }) => {
   // Flow for folder level
   const localeLocation = config.locale.location;
 
@@ -196,8 +196,39 @@ const translateAndSave = async ({ config }) => {
   if (_isFolder) {
     const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath);
 
+    if (namespaces?.length) {
+      const isValidNameSpace = namespaces?.every((nameSpace) =>
+        sourceTranslations?.find(
+          (translation) => translation.baseFileName === nameSpace
+        )
+      );
+      if (!isValidNameSpace) {
+        const invalidNameSpaceFiles = namespaces?.filter(
+          (nameSpace) =>
+            sourceTranslations?.filter(
+              (translation) => translation.baseFileName === nameSpace
+            )?.length === 0
+        );
+
+        const validNamespaces = sourceTranslations?.map(
+          (translation) => translation.baseFileName
+        );
+        throw new Error(
+          `${JSON.stringify(invalidNameSpaceFiles)} is not a valid namespace. Please enter one of the following: ${JSON.stringify(validNamespaces)} `
+        );
+      }
+    }
+
+    const filteredSourceTranslations =
+      namespaces?.length > 0
+        ? sourceTranslations?.filter((translation) =>
+            namespaces?.includes(translation.baseFileName)
+          )
+        : sourceTranslations;
+
     for (let targetLanguage of config.locale.targetLanguages) {
-      for (let sourceTranslationAndFileName of sourceTranslations || []) {
+      for (let sourceTranslationAndFileName of filteredSourceTranslations ||
+        []) {
         const { fileName, sourceTranslation } = sourceTranslationAndFileName;
         const fileLocation = `./${localeLocation}/${targetLanguage}/${fileName}`;
 

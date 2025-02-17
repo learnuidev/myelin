@@ -177,7 +177,7 @@ async function main() {
       }
 
       case "translate": {
-        await translate();
+        await translate([subCommand, ...args]);
         log.success("Translation completed successfully!");
         break;
       }

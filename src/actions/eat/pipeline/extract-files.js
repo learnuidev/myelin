@@ -17,7 +17,10 @@ async function extractFiles({ directoryPath }) {
         await readDirectory(fullPath);
       } else if (
         stats.isFile() &&
-        (entry.endsWith(".jsx") || entry.endsWith(".tsx"))
+        (entry.endsWith(".jsx") ||
+          entry.endsWith(".tsx") ||
+          entry.endsWith(".ts") ||
+          entry.endsWith(".js"))
       ) {
         const code = await fs.readFile(fullPath, "utf-8");
         result.push({

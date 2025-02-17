@@ -20,8 +20,6 @@ const printStats = async (subCommands) => {
     Object.values(item?.sourceTranslation)
   );
 
-  console.log(JSON.stringify(sourceTranslationsAll, null, 4));
-
   const structuredDiffs = await getUncommittedChanges(config?.locale?.location);
 
   const entries = config?.locale?.sourceEntries;

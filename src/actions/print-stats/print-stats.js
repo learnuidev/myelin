@@ -8,6 +8,7 @@ const {
 } = require("../translate/utils/git/get-uncommited-changes");
 
 const picocolors = require("picocolors");
+const { extractFiles } = require("../eat/pipeline/extract-files");
 
 const printStats = async () => {
   const config = await loadConfig();
@@ -16,9 +17,16 @@ const printStats = async () => {
 
   const structuredDiffs = await getUncommittedChanges(config?.locale?.location);
 
+  const entry = config.locale.sourceEntry;
+
+  const files = await extractFiles({
+    directoryPath: `./${entry}`,
+  });
+
   const formattedTranslations = sourceTranslations.map((item) => {
+    const nameSpace = item?.baseFileName;
     const changed = structuredDiffs?.find(
-      (val) => val?.nameSpace === item?.baseFileName
+      (val) => val?.nameSpace === nameSpace
     );
 
     const lastContent = changed?.lastContent;
@@ -39,13 +47,22 @@ const printStats = async () => {
           JSON.stringify(lastContent?.[item])
     )?.length;
 
+    const unusedKeys = Object.keys(item?.sourceTranslation || {})?.filter(
+      (key) => {
+        const notUsedInFile = files?.filter((file) =>
+          file?.code?.includes(`${nameSpace}:${key}`)
+        );
+        return notUsedInFile?.length === 0;
+      }
+    );
+
     return {
       name_space: item?.baseFileName,
       total_keys: Object.keys(item?.sourceTranslation)?.length,
       new_keys: newKeys,
       edited_keys: editedKeys,
       removed_keys: deletedKeys,
-      // unused_keys: 42,
+      unused_keys: unusedKeys?.length || 0,
     };
   });
 
@@ -60,6 +77,7 @@ const printStats = async () => {
             new_keys: acc?.new_keys + curr?.new_keys,
             edited_keys: acc?.edited_keys + curr?.edited_keys,
             removed_keys: acc?.removed_keys + curr?.removed_keys,
+            unused_keys: acc?.unused_keys + curr?.unused_keys,
           };
         },
         {
@@ -67,6 +85,7 @@ const printStats = async () => {
           new_keys: 0,
           edited_keys: 0,
           removed_keys: 0,
+          unused_keys: 0,
         }
       ),
       name_space: picocolors.bold("total"),
@@ -81,7 +100,7 @@ const printStats = async () => {
         new_keys,
         edited_keys,
         removed_keys,
-        // unused_keys,
+        unused_keys,
       } = item;
       return {
         name_space,
@@ -91,7 +110,8 @@ const printStats = async () => {
           edited_keys > 0 ? picocolors.yellowBright(edited_keys) : edited_keys,
         removed_keys:
           removed_keys > 0 ? picocolors.redBright(removed_keys) : removed_keys,
-        // unused_keys: unused_keys,
+        unused_keys:
+          unused_keys > 0 ? picocolors?.yellowBright(unused_keys) : unused_keys,
       };
     })
   );

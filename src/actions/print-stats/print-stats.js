@@ -7,6 +7,8 @@ const {
   getUncommittedChanges,
 } = require("../translate/utils/git/get-uncommited-changes");
 
+const picocolors = require("picocolors");
+
 const printStats = async () => {
   const config = await loadConfig();
 
@@ -43,10 +45,56 @@ const printStats = async () => {
       new_keys: newKeys,
       edited_keys: editedKeys,
       removed_keys: deletedKeys,
+      // unused_keys: 42,
     };
   });
 
-  printTable(formattedTranslations);
+  const formattedTranslationsWithTotal = [
+    ...formattedTranslations,
+    {
+      ...formattedTranslations?.reduce(
+        (acc, curr) => {
+          return {
+            ...acc,
+            total_keys: acc?.total_keys + curr?.total_keys,
+            new_keys: acc?.new_keys + curr?.new_keys,
+            edited_keys: acc?.edited_keys + curr?.edited_keys,
+            removed_keys: acc?.removed_keys + curr?.removed_keys,
+          };
+        },
+        {
+          total_keys: 0,
+          new_keys: 0,
+          edited_keys: 0,
+          removed_keys: 0,
+        }
+      ),
+      name_space: picocolors.bold("total"),
+    },
+  ];
+
+  printTable(
+    formattedTranslationsWithTotal.map((item) => {
+      const {
+        name_space,
+        total_keys,
+        new_keys,
+        edited_keys,
+        removed_keys,
+        // unused_keys,
+      } = item;
+      return {
+        name_space,
+        total_keys,
+        new_keys: new_keys > 0 ? picocolors.greenBright(new_keys) : new_keys,
+        edited_keys:
+          edited_keys > 0 ? picocolors.yellowBright(edited_keys) : edited_keys,
+        removed_keys:
+          removed_keys > 0 ? picocolors.redBright(removed_keys) : removed_keys,
+        // unused_keys: unused_keys,
+      };
+    })
+  );
 };
 
 module.exports = {

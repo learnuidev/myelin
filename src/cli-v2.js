@@ -21,6 +21,7 @@ const { loadConfig } = require("./actions/translate/utils/load-config");
 const { addAiProvider } = require("./actions/add-ai-provider/add-ai-provider");
 const { startUi } = require("./actions/start-ui/start-ui");
 const { printStats } = require("./actions/print-stats/print-stats");
+const { eat } = require("./actions/eat/eat");
 
 async function main() {
   let action;
@@ -44,6 +45,7 @@ async function main() {
     if (config) {
       mainOptions = [
         { value: "translate", label: "Translate" },
+        { value: "eat", label: "EAT" },
         { value: "sync", label: "Sync" },
         { value: "stats", label: "Stats about your translations" },
         { value: "add-project", label: "Add a new project" },
@@ -72,6 +74,10 @@ async function main() {
       }
       case "sync": {
         await sync(subCommand || "up");
+        break;
+      }
+      case "eat": {
+        await eat(subCommand);
         break;
       }
 

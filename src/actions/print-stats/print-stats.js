@@ -75,7 +75,7 @@ const printStats = async (subCommands) => {
       );
     }
 
-    const sourceTranslationValues = item.sourceTranslation;
+    const sourceTranslationValues = Object.values(item.sourceTranslation);
 
     const unusedKeys = Object.keys(item?.sourceTranslation || {})?.filter(
       (key) => {

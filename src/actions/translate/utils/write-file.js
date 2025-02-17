@@ -12,7 +12,7 @@ async function writeFile(filePath, data) {
   // Write the JSON string to the file
   await fs.writeFile(filePath, data);
 
-  log.success(`File written successfully to ${filePath}`);
+  // log.success(`File written successfully to ${filePath}`);
 }
 
 module.exports = {

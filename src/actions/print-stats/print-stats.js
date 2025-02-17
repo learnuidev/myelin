@@ -81,16 +81,17 @@ const printStats = async (subCommands) => {
       (key) => {
         const notUsedInFile = files?.filter((file) => {
           const keyWithUnderScore = key?.split("_");
+          const parentKey = keyWithUnderScore?.[0];
 
           if (keyWithUnderScore?.length > 1) {
             return (
-              file?.code?.includes(`${keyWithUnderScore?.[0]}`) ||
-              JSON.stringify(sourceTranslationValues)?.includes(key)
+              file?.code?.includes(`${parentKey}`) ||
+              JSON.stringify(sourceTranslationValues)?.includes(parentKey)
             );
           }
           return (
             file?.code?.includes(`${key}`) ||
-            JSON.stringify(sourceTranslationValues)?.includes(key)
+            JSON.stringify(sourceTranslationValues)?.includes(parentKey)
           );
         });
         return notUsedInFile?.length === 0;

@@ -16,6 +16,12 @@ const printStats = async (subCommands) => {
 
   const sourceTranslations = await loadSourceTranslations({ config });
 
+  const sourceTranslationsAll = sourceTranslations.map((item) =>
+    Object.values(item?.sourceTranslation)
+  );
+
+  console.log(JSON.stringify(sourceTranslationsAll, null, 4));
+
   const structuredDiffs = await getUncommittedChanges(config?.locale?.location);
 
   const entries = config?.locale?.sourceEntries;
@@ -81,7 +87,10 @@ const printStats = async (subCommands) => {
           const keyWithUnderScore = key?.split("_");
 
           if (keyWithUnderScore?.length > 1) {
-            return file?.code?.includes(`${keyWithUnderScore?.[0]}`);
+            return (
+              file?.code?.includes(`${keyWithUnderScore?.[0]}`) ||
+              JSON.stringify(sourceTranslationsAll)?.includes(key)
+            );
           }
           return file?.code?.includes(`${key}`);
         });

@@ -100,10 +100,10 @@ const clean = async (params) => {
 
       await writeJsonFile(fileLocation, existingTranslationWithRemovedKeys);
 
-      console.log(
-        "original existing translation",
-        existingTranslationWithRemovedKeys
-      );
+      //   console.log(
+      //     "original existing translation",
+      //     existingTranslationWithRemovedKeys
+      //   );
     }
   }
   await new Promise((resolve) => setTimeout(resolve, 2000));

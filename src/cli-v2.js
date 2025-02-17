@@ -22,6 +22,7 @@ const { addAiProvider } = require("./actions/add-ai-provider/add-ai-provider");
 const { startUi } = require("./actions/start-ui/start-ui");
 const { printStats } = require("./actions/print-stats/print-stats");
 const { eat } = require("./actions/eat/eat");
+const { clean } = require("./actions/clean/clean");
 
 async function main() {
   let action;
@@ -47,6 +48,7 @@ async function main() {
     if (config) {
       mainOptions = [
         { value: "translate", label: "Translate" },
+        { value: "clean", label: "Remove unused keys" },
         { value: "eat", label: "EAT" },
         { value: "sync", label: "Sync" },
         { value: "stats", label: "Stats about your translations" },
@@ -101,6 +103,10 @@ async function main() {
       }
       case "stats": {
         await printStats(subCommands);
+        break;
+      }
+      case "clean": {
+        await clean(subCommands);
         break;
       }
 

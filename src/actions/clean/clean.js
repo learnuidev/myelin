@@ -109,7 +109,7 @@ const clean = async (params) => {
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
   s.stop(
-    `Removed ${totalUnusedKeys?.length} unused keys in ${sourceTranslationsWithUnusedKeys?.length} namespaces... ✨`
+    `Removed ${totalUnusedKeys?.length} unused keys from ${sourceTranslationsWithUnusedKeys?.length} namespaces... ✨`
   );
 };
 

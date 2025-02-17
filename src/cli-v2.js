@@ -20,6 +20,7 @@ const { addProject } = require("./actions/add-project/add-project");
 const { loadConfig } = require("./actions/translate/utils/load-config");
 const { addAiProvider } = require("./actions/add-ai-provider/add-ai-provider");
 const { startUi } = require("./actions/start-ui/start-ui");
+const { printStats } = require("./actions/print-stats/print-stats");
 
 async function main() {
   let action;
@@ -44,6 +45,7 @@ async function main() {
       mainOptions = [
         { value: "translate", label: "Translate" },
         { value: "sync", label: "Sync" },
+        { value: "stats", label: "Stats about your translations" },
         { value: "add-project", label: "Add a new project" },
         { value: "add-cloud", label: "Add a cloud provider" },
         { value: "add-ai", label: "Add a AI provider" },
@@ -87,6 +89,10 @@ async function main() {
       }
       case "add-project": {
         await addProject();
+        break;
+      }
+      case "stats": {
+        await printStats();
         break;
       }
 

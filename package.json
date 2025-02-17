@@ -1,6 +1,6 @@
 {
   "name": "myelino",
-  "version": "0.0.99",
+  "version": "0.1.0",
   "main": "src/index.js",
   "bin": {
     "myelino": "src/cli-v2.js"
@@ -24,6 +24,7 @@
     "@clack/prompts": "^0.10.0",
     "@tandil/diffparse": "^0.2.0",
     "commander": "^12.1.0",
+    "console-table-printer": "^2.12.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "fast-glob": "^3.3.3",

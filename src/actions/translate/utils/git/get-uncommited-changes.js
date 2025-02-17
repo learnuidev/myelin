@@ -21,8 +21,14 @@ async function getUncommittedChanges(folderPath) {
       // Read the current uncommitted version of the file
       const currentContent = fs.readFileSync(file, "utf-8");
 
+      const fileNames = file?.split("/");
+      const fileName = fileNames?.[fileNames?.length - 1];
+      const nameSpace = fileName?.split(".")?.[0];
+
       results.push({
         path: file,
+        fileName,
+        nameSpace,
         lastContent: JSON.parse(lastCommittedContent),
         currentContent: JSON.parse(currentContent),
       });

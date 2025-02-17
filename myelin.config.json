@@ -5,6 +5,7 @@
     "type": "local"
   },
   "locale": {
+    "sourceEntries": ["src", "components"],
     "sourceEntry": "src/frontend",
     "location": "locales",
     "sourceLanguage": "en",

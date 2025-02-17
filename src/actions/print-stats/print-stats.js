@@ -14,21 +14,21 @@ const { note } = require("@clack/prompts");
 const printStats = async (subCommands) => {
   const config = await loadConfig();
 
-  const subCommand = subCommands?.[0];
-
-  const isRoot = subCommand === "root";
-
   const sourceTranslations = await loadSourceTranslations({ config });
 
-  const structuredDiffs = await getUncommittedChanges(
-    isRoot ? "" : config?.locale?.location
-  );
+  const structuredDiffs = await getUncommittedChanges(config?.locale?.location);
 
-  const entry = config.locale.sourceEntry;
+  const entries = config?.locale?.sourceEntries;
 
-  const files = await extractFiles({
-    directoryPath: `./${entry}`,
-  });
+  const files = (
+    await Promise.all(
+      entries.map(async (entry) => {
+        return await extractFiles({
+          directoryPath: `./${entry}`,
+        });
+      })
+    )
+  )?.flat();
 
   const formattedTranslations = sourceTranslations.map((item) => {
     const nameSpace = item?.baseFileName;

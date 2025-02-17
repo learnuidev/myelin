@@ -11,15 +11,30 @@ const eat = async (location) => {
   const s = spinner();
   const config = await loadConfig();
 
-  const entry = location || config.locale.sourceEntry;
-
   try {
     // Start analyzing spinner
     s.start("Analyzing code...");
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const files = await extractFiles({
-      directoryPath: `./${entry}`,
-    });
+    // const files = await extractFiles({
+    //   directoryPath: `./${entry}`,
+    // });
+
+    const entries = config?.locale?.sourceEntries;
+
+    const files = location
+      ? await extractFiles({
+          directoryPath: `./${location}`,
+        })
+      : (
+          await Promise.all(
+            entries.map(async (entry) => {
+              return await extractFiles({
+                directoryPath: `./${entry}`,
+              });
+            })
+          )
+        )?.flat();
+
     // console.log("FILES", files);
     log.success(`Analysis complete...`);
 

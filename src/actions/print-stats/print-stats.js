@@ -16,10 +16,6 @@ const printStats = async (subCommands) => {
 
   const sourceTranslations = await loadSourceTranslations({ config });
 
-  const sourceTranslationsAll = sourceTranslations.map((item) =>
-    Object.values(item?.sourceTranslation)
-  );
-
   const structuredDiffs = await getUncommittedChanges(config?.locale?.location);
 
   const entries = config?.locale?.sourceEntries;
@@ -79,6 +75,8 @@ const printStats = async (subCommands) => {
       );
     }
 
+    const sourceTranslationValues = item.sourceTranslation;
+
     const unusedKeys = Object.keys(item?.sourceTranslation || {})?.filter(
       (key) => {
         const notUsedInFile = files?.filter((file) => {
@@ -87,12 +85,13 @@ const printStats = async (subCommands) => {
           if (keyWithUnderScore?.length > 1) {
             return (
               file?.code?.includes(`${keyWithUnderScore?.[0]}`) ||
-              JSON.stringify(sourceTranslationsAll)?.includes(
-                keyWithUnderScore?.[0]
-              )
+              JSON.stringify(sourceTranslationValues)?.includes(key)
             );
           }
-          return file?.code?.includes(`${key}`);
+          return (
+            file?.code?.includes(`${key}`) ||
+            JSON.stringify(sourceTranslationValues)?.includes(key)
+          );
         });
         return notUsedInFile?.length === 0;
       }

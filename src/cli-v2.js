@@ -28,6 +28,8 @@ async function main() {
 
   const [mainCommand, subCommand, ...args] = process.argv.slice(2);
 
+  const subCommands = [subCommand, ...args]?.filter(Boolean);
+
   const config = await loadConfig({ throw: false });
 
   if (mainCommand) {
@@ -98,7 +100,7 @@ async function main() {
         break;
       }
       case "stats": {
-        await printStats();
+        await printStats(subCommands);
         break;
       }
 
@@ -189,7 +191,7 @@ async function main() {
       }
 
       case "translate": {
-        await translate([subCommand, ...args]);
+        await translate(subCommands);
         log.success("Translation completed successfully!");
         break;
       }

@@ -9,13 +9,20 @@ const {
 
 const picocolors = require("picocolors");
 const { extractFiles } = require("../eat/pipeline/extract-files");
+const { note } = require("@clack/prompts");
 
-const printStats = async () => {
+const printStats = async (subCommands) => {
   const config = await loadConfig();
+
+  const subCommand = subCommands?.[0];
+
+  const isRoot = subCommand === "root";
 
   const sourceTranslations = await loadSourceTranslations({ config });
 
-  const structuredDiffs = await getUncommittedChanges(config?.locale?.location);
+  const structuredDiffs = await getUncommittedChanges(
+    isRoot ? "" : config?.locale?.location
+  );
 
   const entry = config.locale.sourceEntry;
 
@@ -34,18 +41,39 @@ const printStats = async () => {
 
     const newKeys = Object.keys(currentContent || [])?.filter(
       (item) => !lastContent?.[item]
-    )?.length;
+    );
+
+    if (subCommands?.includes("added") && newKeys?.length > 0) {
+      note(
+        JSON.stringify(newKeys, null, 4),
+        `${picocolors.bold(item?.baseFileName)}:${picocolors.greenBright(`added`)}`
+      );
+    }
 
     const deletedKeys = Object.keys(lastContent || [])?.filter(
       (item) => !currentContent?.[item]
-    )?.length;
+    );
+
+    if (subCommands?.includes("deleted") && deletedKeys?.length > 0) {
+      note(
+        JSON.stringify(deletedKeys, null, 4),
+        `${picocolors.bold(item?.baseFileName)}:${picocolors.redBright(`removed`)}`
+      );
+    }
 
     const editedKeys = Object.keys(currentContent || [])?.filter(
       (item) =>
         lastContent?.[item] &&
         JSON.stringify(currentContent?.[item]) !==
           JSON.stringify(lastContent?.[item])
-    )?.length;
+    );
+
+    if (subCommands?.includes("edited") && editedKeys?.length > 0) {
+      note(
+        JSON.stringify(editedKeys, null, 4),
+        `${picocolors.bold(item?.baseFileName)}:${picocolors.blueBright(`edited`)}`
+      );
+    }
 
     const unusedKeys = Object.keys(item?.sourceTranslation || {})?.filter(
       (key) => {
@@ -57,12 +85,19 @@ const printStats = async () => {
       }
     );
 
+    if (subCommands?.includes("unused") && unusedKeys?.length > 0) {
+      note(
+        JSON.stringify(unusedKeys, null, 4),
+        `${picocolors.bold(item?.baseFileName)}:${picocolors.yellowBright(`unused`)}`
+      );
+    }
+
     return {
       name_space: item?.baseFileName,
       total_keys: Object.keys(item?.sourceTranslation)?.length,
-      new_keys: newKeys,
-      edited_keys: editedKeys,
-      removed_keys: deletedKeys,
+      new_keys: newKeys?.length || 0,
+      edited_keys: editedKeys?.length || 0,
+      removed_keys: deletedKeys?.length || 0,
       unused_keys: unusedKeys?.length || 0,
     };
   });
@@ -108,7 +143,7 @@ const printStats = async () => {
         total_keys,
         new_keys: new_keys > 0 ? picocolors.greenBright(new_keys) : new_keys,
         edited_keys:
-          edited_keys > 0 ? picocolors.yellowBright(edited_keys) : edited_keys,
+          edited_keys > 0 ? picocolors.blueBright(edited_keys) : edited_keys,
         removed_keys:
           removed_keys > 0 ? picocolors.redBright(removed_keys) : removed_keys,
         unused_keys:

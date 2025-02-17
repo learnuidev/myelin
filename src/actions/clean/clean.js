@@ -108,7 +108,9 @@ const clean = async (params) => {
   }
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  s.stop("Removed unused 10 keys... ✨");
+  s.stop(
+    `Removed ${totalUnusedKeys?.length} unused keys in ${sourceTranslationsWithUnusedKeys?.length} namespaces... ✨`
+  );
 };
 
 module.exports = {

@@ -87,7 +87,9 @@ const printStats = async (subCommands) => {
           if (keyWithUnderScore?.length > 1) {
             return (
               file?.code?.includes(`${keyWithUnderScore?.[0]}`) ||
-              JSON.stringify(sourceTranslationsAll)?.includes(key)
+              JSON.stringify(sourceTranslationsAll)?.includes(
+                keyWithUnderScore?.[0]
+              )
             );
           }
           return file?.code?.includes(`${key}`);

@@ -10,8 +10,6 @@ const {
   log,
 } = require("@clack/prompts");
 
-console.log("test");
-
 const { addComponent, translate, upsertComponent, init } = require("./actions");
 const { myelin } = require("./constants/myelin");
 const {

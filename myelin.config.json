@@ -1,6 +1,6 @@
 {
   "aiProvider": "ollama",
-  "aiModel": "deepseek-r1:32b",
+  "aiModel": "deepseek-r1:1.5b",
   "sync": {
     "type": "local"
   },

@@ -1,9 +1,9 @@
 const ollama = require("ollama").default;
 
 function parseDeepseekR1(inputString) {
-  const arr = inputString?.split("\n");
+  const arr = inputString?.split("</think>");
 
-  const finalString = arr?.[arr?.length - 1];
+  const finalString = arr?.[1];
 
   return JSON.parse(finalString);
 }
@@ -38,6 +38,8 @@ const ollamaRepository = () => {
       ],
       model: config.aiModel,
     });
+
+    console.log("RESP OBJ", chatCompletion);
 
     const respObj = await parseDeepseekR1(chatCompletion?.message?.content);
 

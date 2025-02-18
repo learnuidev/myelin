@@ -90,7 +90,7 @@ const printStats = async (subCommands) => {
             );
           }
           return (
-            file?.code?.includes(`${item?.baseFileName}:${key}`) ||
+            file?.code?.includes(`${nameSpace}:${key}`) ||
             JSON.stringify(sourceTranslationValues)?.includes(parentKey)
           );
         });

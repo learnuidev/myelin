@@ -73,7 +73,7 @@ const smartTranslateAndSave = async ({
     );
 
     if (!changedFile) {
-      log.info(`Nothing to translate for ${key}`);
+      // log.info(`Nothing to translate for ${key}`);
       return true;
     }
 
@@ -150,10 +150,12 @@ const smartTranslateAndSave = async ({
 
   const totalKeys = Object.keys(newSourceTranslation)?.length;
 
-  log.info(`${totalKeys} new ${totalKeys?.length > 1 ? "keys" : "key"} found`);
+  log.info(
+    `${totalKeys} new ${totalKeys > 1 ? "keys" : "key"} found in ${fileName} [${targetLanguage}]`
+  );
 
   s.start(
-    `😃 - Translating the following for: ${targetLanguage} [${fileLocation}]: `
+    `😃 - Translating the following for: ${targetLanguage} [${fileName}]: `
   );
 
   // 5: Otherwise translate new translations and save new translations with

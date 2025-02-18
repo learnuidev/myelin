@@ -11,17 +11,29 @@ const addAiProviderCli = async () => {
       { value: "deepseek", label: "Deepseek" },
       { value: "qwen", label: "Qwen" },
       { value: "moonshot", label: "Moonshot" },
+      { value: "ollama", label: "Ollama" },
       { value: "custom", label: "Custom" },
     ],
   });
 
   let aiModel;
 
-  if (aiProvider !== "custom") {
+  if (!["custom", "ollama"]?.includes(aiProvider)) {
     aiModel = await select({
       message: "Enter your preferred ai model",
       placeholder: getPlaceholderModel(aiProvider),
       options: getProviderModelOptions(aiProvider),
+    });
+  }
+
+  if (aiProvider === "ollama") {
+    aiModel = await text({
+      message: "Enter the your local model",
+      placeholder: "deepseek-r1:32b",
+      validate: (value) => {
+        if (!value) return "This cannot be empty";
+        return;
+      },
     });
   }
 

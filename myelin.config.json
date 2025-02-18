@@ -1,6 +1,6 @@
 {
-  "aiProvider": "openai",
-  "aiModel": "gpt-4o-mini",
+  "aiProvider": "ollama",
+  "aiModel": "deepseek-r1:32b",
   "sync": {
     "type": "local"
   },

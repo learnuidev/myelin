@@ -30,6 +30,7 @@
     "fast-glob": "^3.3.3",
     "figlet": "^1.7.0",
     "framer-motion": "^12.4.1",
+    "ollama": "^0.5.13",
     "openai": "^4.82.0",
     "picocolors": "^1.1.1",
     "react-i18next": "^15.4.0",

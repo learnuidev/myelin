@@ -121,15 +121,6 @@ const upsertCustomTranslation = async ({ id, projectId, translations }) => {
   return updatedTranslation;
 };
 
-// upsertCustomTranslation({
-//   id: "9b4101ef-9a85-4478-961b-92a4fa5c0b4c#./locales/es/common.json",
-//   translations: {
-//     okay: "Bale bale",
-//   },
-// }).then((location) => {
-//   console.log("LOCATION", location);
-// });
-
 module.exports = {
   upsertCustomTranslation,
 };

@@ -8,6 +8,14 @@ function parseDeepseekR1(inputString) {
   return JSON.parse(finalString);
 }
 
+function parseDeepseekR132(inputString) {
+  const arr = inputString?.split("\n");
+
+  const finalString = arr?.[arr?.length - 1];
+
+  return JSON.parse(finalString);
+}
+
 const ollamaRepository = () => {
   const translate = async ({ sourceTranslation, config, targetLanguage }) => {
     const prompt = `
@@ -18,11 +26,10 @@ const ollamaRepository = () => {
     For example, if the source translation is:
     { "title": "Heyy", "description:"Learn Anything" }
   
-    And target language is "es" (spanish), then it should return
+    And target language is "es", then it should return
     { "title": "Ey", "description": "Aprende cualquier cosa."}
 
-
-
+    Please skip the thinking part and just return the answer
     
     `;
 
@@ -40,7 +47,10 @@ const ollamaRepository = () => {
       model: config.aiModel,
     });
 
-    const respObj = await parseDeepseekR1(chatCompletion?.message?.content);
+    const respObj =
+      config.aiModel === "deepseek-r1:32b"
+        ? parseDeepseekR132(chatCompletion?.message?.content)
+        : parseDeepseekR1(chatCompletion?.message?.content);
 
     return respObj;
   };

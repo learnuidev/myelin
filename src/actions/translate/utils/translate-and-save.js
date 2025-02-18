@@ -178,7 +178,7 @@ const smartTranslateAndSave = async ({
   );
 
   s.stop(
-    `🎉 - Successfully translated for: ${targetLanguage}. Saving it in the path: ${fileLocation}`,
+    `🎉 - Successfully translated for: ${targetLanguage} [${fileName}]`,
     newExistingTranslation
   );
 

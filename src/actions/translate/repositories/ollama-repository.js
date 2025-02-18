@@ -18,10 +18,11 @@ const ollamaRepository = () => {
     For example, if the source translation is:
     { "title": "Heyy", "description:"Learn Anything" }
   
-    And target language is "es", then it should return
+    And target language is "es" (spanish), then it should return
     { "title": "Ey", "description": "Aprende cualquier cosa."}
 
-    Please skip the thinking part and just return the answer
+
+
     
     `;
 
@@ -38,8 +39,6 @@ const ollamaRepository = () => {
       ],
       model: config.aiModel,
     });
-
-    console.log("RESP OBJ", chatCompletion);
 
     const respObj = await parseDeepseekR1(chatCompletion?.message?.content);
 

@@ -85,12 +85,12 @@ const printStats = async (subCommands) => {
 
           if (keyWithUnderScore?.length > 1) {
             return (
-              file?.code?.includes(`${parentKey}`) ||
+              file?.code?.includes(`${item?.baseFileName}:${parentKey}`) ||
               JSON.stringify(sourceTranslationValues)?.includes(parentKey)
             );
           }
           return (
-            file?.code?.includes(`${key}`) ||
+            file?.code?.includes(`${item?.baseFileName}:${key}`) ||
             JSON.stringify(sourceTranslationValues)?.includes(parentKey)
           );
         });

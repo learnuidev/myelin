@@ -1,9 +1,9 @@
 {
   "name": "myelino",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "main": "src/index.js",
   "bin": {
-    "myelino": "src/cli-v2.js"
+    "myelin": "src/cli-v2.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

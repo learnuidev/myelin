@@ -1,3 +1,5 @@
+const { parseInput } = require("../utils/parse-input");
+
 const ollama = require("ollama").default;
 
 function parseDeepseekR1(inputString) {
@@ -47,12 +49,19 @@ const ollamaRepository = () => {
       model: config.aiModel,
     });
 
-    const respObj =
-      config.aiModel === "deepseek-r1:32b"
-        ? parseDeepseekR132(chatCompletion?.message?.content)
-        : parseDeepseekR1(chatCompletion?.message?.content);
+    const resp = chatCompletion?.message?.content;
 
-    return respObj;
+    try {
+      const respObj =
+        config.aiModel === "deepseek-r1:32b"
+          ? parseDeepseekR132(chatCompletion?.message?.content)
+          : parseDeepseekR1(chatCompletion?.message?.content);
+
+      return respObj;
+    } catch {
+      const respObj = parseInput(resp);
+      return respObj;
+    }
   };
 
   return {

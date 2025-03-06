@@ -29,6 +29,10 @@ const getTranslationRepositoryV2 = ({ config }) => {
 const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
   const providerPerLang = config?.aiProviders?.[targetLanguage];
 
+  if (config.logMode) {
+    console.log("provider: ", providerPerLang);
+  }
+
   const repository = providerPerLang
     ? getTranslationRepositoryV2({ config: providerPerLang, targetLanguage })
     : getTranslationRepository({ config });

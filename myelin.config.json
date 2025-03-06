@@ -1,24 +1,23 @@
 {
   "aiProvider": "ollama",
-  "aiModel": "qwen2.5:32b",
-  "aiModel7b": "deepseek-r1:7b",
-  "aiModel1.5": "deepseek-r1:1.5b",
-  "aiModel32": "deepseek-r1:32b",
+  "aiModel": "mistral-small:24b",
+  "aiProviders": {
+    "fr": {
+      "aiProvider": "ollama",
+      "aiModel": "mistral-small:24b"
+    },
+    "zh": {
+      "aiProvider": "ollama",
+      "aiModel": "deepseek-r1:32b"
+    }
+  },
   "sync": {
     "type": "local"
   },
   "locale": {
-    "sourceEntries": ["src"],
-    "sourceEntry": "src/frontend",
+    "sourceEntries": ["app", "components"],
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["fr", "es", "de"]
-  },
-  "cloud": {
-    "provider": "aws",
-    "awsProfile": "yoserverless",
-    "awsRegion": "us-east-1"
-  },
-  "storageProvider": "dynamodb",
-  "projectId": "1a112464-0eac-4f24-a4e6-b6fd10dc0f22"
+    "targetLanguages": ["fr"]
+  }
 }

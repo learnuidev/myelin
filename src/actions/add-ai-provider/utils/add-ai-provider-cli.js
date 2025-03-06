@@ -1,6 +1,9 @@
 const { select, text } = require("@clack/prompts");
 const { getPlaceholderModel } = require("./get-placeholder-model");
 const { getProviderModelOptions } = require("./get-provider-model-options");
+const {
+  listOllamaModels,
+} = require("../../../../lib/ollama/list-ollama-models");
 
 const addAiProviderCli = async () => {
   const aiProvider = await select({
@@ -27,14 +30,27 @@ const addAiProviderCli = async () => {
   }
 
   if (aiProvider === "ollama") {
-    aiModel = await text({
-      message: "Enter the your local model",
-      placeholder: "deepseek-r1:32b",
-      validate: (value) => {
-        if (!value) return "This cannot be empty";
-        return;
-      },
+    const ollamaModels = await listOllamaModels();
+
+    aiModel = await select({
+      message: "Enter your preferred ai model",
+      placeholder: ollamaModels?.[0]?.modelName,
+      options: ollamaModels.map((model) => {
+        return {
+          value: model.modelName,
+          label: model.modelName,
+        };
+      }),
     });
+
+    // aiModel = await text({
+    //   message: "Enter the your local model",
+    //   placeholder: "deepseek-r1:32b",
+    //   validate: (value) => {
+    //     if (!value) return "This cannot be empty";
+    //     return;
+    //   },
+    // });
   }
 
   let customAiUrl;

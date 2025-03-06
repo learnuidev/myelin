@@ -113,9 +113,14 @@ const init = async () => {
 
   outro(picocolors.green("Configuration file created successfully!"));
 
-  addAiProviderSuccessLog(config);
+  if (aiProvider !== "ollama") {
+    addAiProviderSuccessLog(config);
+  }
 
-  note(`Run 'npx myelino translate' to start translating your files`, "Next: ");
+  note(
+    `Run 'npx myelin.dev@latest translate' to start translating your files`,
+    "Next: "
+  );
 };
 
 module.exports = {

@@ -46,7 +46,8 @@ const ollamaRepository = () => {
           content: `source translation: ${JSON.stringify(sourceTranslation)}`,
         },
       ],
-      model: config.aiModel,
+      model:
+        config?.customTranslations?.[targetLanguage]?.aiModel || config.aiModel,
     });
 
     const resp = chatCompletion?.message?.content;

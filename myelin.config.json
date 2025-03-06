@@ -18,6 +18,6 @@
     "sourceEntries": ["app", "components"],
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["fr"]
+    "targetLanguages": ["fr", "es", "de", "zh"]
   }
 }

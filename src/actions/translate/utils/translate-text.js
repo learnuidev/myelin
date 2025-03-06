@@ -3,7 +3,8 @@ const { customRepository } = require("../repositories/custom-repository");
 const { ollamaRepository } = require("../repositories/ollama-repository");
 const { openAiRepository } = require("../repositories/openai-repository");
 
-const getTranslationRepository = ({ config }) => {
+const getTranslationRepository = ({ config, targetLanguage }) => {
+  console.log("V1", targetLanguage);
   if (config.customAiUrl) {
     return customRepository();
   }
@@ -14,7 +15,8 @@ const getTranslationRepository = ({ config }) => {
 
   return openAiRepository();
 };
-const getTranslationRepositoryV2 = (config) => {
+const getTranslationRepositoryV2 = ({ config, targetLanguage }) => {
+  console.log("V2", targetLanguage);
   if (config.customAiUrl) {
     return customRepository();
   }
@@ -29,7 +31,7 @@ const getTranslationRepositoryV2 = (config) => {
 const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
   const providerPerLang = config?.aiProviders?.[targetLanguage];
   const repository = providerPerLang
-    ? getTranslationRepositoryV2(providerPerLang)
+    ? getTranslationRepositoryV2({ config: providerPerLang, targetLanguage })
     : getTranslationRepository({ config });
 
   const translationService = createTranslationService(repository);

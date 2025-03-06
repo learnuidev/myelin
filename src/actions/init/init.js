@@ -105,9 +105,11 @@ const init = async () => {
     },
   });
 
+  const oldConfig = await loadConfig();
+
   await fs.writeFile(
     "myelin.config.json",
-    JSON.stringify(config, null, 2),
+    JSON.stringify({ ...oldConfig, ...config }, null, 2),
     "utf-8"
   );
 

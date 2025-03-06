@@ -31,8 +31,7 @@ const openAiRepository = () => {
           content: `source translation: ${JSON.stringify(sourceTranslation)}`,
         },
       ],
-      model:
-        config?.customTranslations?.[targetLanguage]?.aiModel || config.aiModel,
+      model: config?.aiProviders?.[targetLanguage]?.aiModel || config.aiModel,
     });
 
     const respObj = await parseInput(

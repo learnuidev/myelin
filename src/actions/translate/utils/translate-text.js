@@ -3,8 +3,7 @@ const { customRepository } = require("../repositories/custom-repository");
 const { ollamaRepository } = require("../repositories/ollama-repository");
 const { openAiRepository } = require("../repositories/openai-repository");
 
-const getTranslationRepository = ({ config, targetLanguage }) => {
-  console.log("V1", targetLanguage);
+const getTranslationRepository = ({ config }) => {
   if (config.customAiUrl) {
     return customRepository();
   }
@@ -15,8 +14,7 @@ const getTranslationRepository = ({ config, targetLanguage }) => {
 
   return openAiRepository();
 };
-const getTranslationRepositoryV2 = ({ config, targetLanguage }) => {
-  console.log("V2", targetLanguage);
+const getTranslationRepositoryV2 = ({ config }) => {
   if (config.customAiUrl) {
     return customRepository();
   }

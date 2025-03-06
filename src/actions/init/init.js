@@ -21,6 +21,10 @@ const init = async () => {
         "Config already exists, are you sure you want to continue. Continuing will overwrite the old version!",
       options: [
         { value: "yes", label: "Yes" },
+        {
+          value: "yes-no",
+          label: "Yes and No. Overwrite only new config values",
+        },
         { value: "no", label: "No" },
       ],
     });
@@ -86,13 +90,15 @@ const init = async () => {
     ],
   });
 
-  const { aiModel, aiProvider, customAiUrl } = await addAiProviderCli();
+  const { aiModel, aiProvider, aiProviders, customAiUrl } =
+    await addAiProviderCli({ targetLanguages });
 
   const fs = await require("node:fs/promises");
 
   const config = removeNull({
     customAiUrl,
     aiProvider,
+    aiProviders,
     aiModel,
     sync: {
       type: syncType,
@@ -105,7 +111,7 @@ const init = async () => {
     },
   });
 
-  const oldConfig = await loadConfig();
+  const oldConfig = confirm === "yes-no" ? await loadConfig() : {};
 
   await fs.writeFile(
     "myelin.config.json",

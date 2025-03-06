@@ -1,14 +1,20 @@
 {
-  "aiProvider": "ollama",
-  "aiModel": "mistral-small:24b",
   "aiProviders": {
     "fr": {
-      "aiProvider": "ollama",
-      "aiModel": "mistral-small:24b"
+      "aiModel": "mistral-small:24b",
+      "aiProvider": "ollama"
+    },
+    "es": {
+      "aiModel": "mistral-small:24b",
+      "aiProvider": "ollama"
     },
     "zh": {
-      "aiProvider": "ollama",
-      "aiModel": "deepseek-r1:32b"
+      "aiModel": "qwen2.5:32b",
+      "aiProvider": "ollama"
+    },
+    "zh-TW": {
+      "aiModel": "deepseek-r1:32b",
+      "aiProvider": "ollama"
     }
   },
   "sync": {
@@ -18,6 +24,6 @@
     "sourceEntries": ["app", "components"],
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["fr", "es", "de", "zh"]
+    "targetLanguages": ["fr", "es", "zh", "zh-TW"]
   }
 }

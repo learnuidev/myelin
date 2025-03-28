@@ -44,7 +44,9 @@ async function installMyelinDependencies(deps) {
   }
 }
 
-const addComponent = async (name) => {
+const addComponent = async (name, componentType) => {
+  console.log("COMPONENT TYPE", componentType);
+  // return;
   const component = components[name];
   if (!component) {
     log.error(`Component: ${name} does not exist`);
@@ -59,6 +61,37 @@ const addComponent = async (name) => {
   let pathName;
 
   if (component.version === 2) {
+    if (componentType) {
+      const variant = component?.variants?.[componentType];
+
+      if (!variant?.codes?.length) {
+        throw new Error(
+          `Code for this variant ${componentType} for ${name} doesnt exist`
+        );
+      }
+
+      if (component.dependencies?.length) {
+        await installDependencies(variant.dependencies);
+      }
+
+      await Promise.all(
+        variant?.codes.map(async (code) => {
+          const codeRaw = await fetch(code.codeUrl);
+          const codeRawStr = await codeRaw.text();
+
+          if (!existsSync(code.targetDir)) {
+            await fs.mkdir(code.targetDir, { recursive: true });
+          }
+
+          fs.writeFile(code.path, codeRawStr).then(() => {
+            log.success(`${name}: successfully installed`);
+          });
+        })
+      );
+
+      return null;
+    }
+
     // install dependencies
     if (component.dependencies?.length) {
       await installDependencies(component.dependencies);

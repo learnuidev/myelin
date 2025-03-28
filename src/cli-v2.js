@@ -154,7 +154,7 @@ async function main() {
           return process.exit(0);
         }
 
-        await addComponent(name);
+        await addComponent(name, args?.[0]);
         break;
       }
 

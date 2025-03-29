@@ -55,8 +55,6 @@ const addComponent = async (name, componentType) => {
     return null;
   }
 
-  log.info(`Installing: ${name}... please wait`);
-
   let pathName;
 
   if (component.version === 2) {
@@ -73,6 +71,20 @@ const addComponent = async (name, componentType) => {
           ],
         });
       }
+
+      if (!["nexjs", "tanstack"]?.includes(componentVariant)) {
+        log.error(`Invalid framework provider: ${componentVariant}`);
+
+        componentVariant = await select({
+          message: "Please enter your framework",
+          placeholder: "nextjs",
+          options: [
+            { value: "nextjs", label: "NextJS" },
+            { value: "tanstack", label: "Tanstack Start" },
+          ],
+        });
+      }
+
       if (componentVariant) {
         const variant = component?.variants?.[componentVariant];
 
@@ -81,6 +93,8 @@ const addComponent = async (name, componentType) => {
             `Code for this variant ${componentVariant} for ${name} doesnt exist`
           );
         }
+
+        log.info(`Installing: ${name}... please wait`);
 
         if (variant.dependencies?.length) {
           await installDependencies(variant.dependencies);
@@ -104,6 +118,8 @@ const addComponent = async (name, componentType) => {
         return null;
       }
     }
+
+    log.info(`Installing: ${name}... please wait`);
 
     // install dependencies
     if (component.dependencies?.length) {

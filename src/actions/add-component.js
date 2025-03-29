@@ -5,7 +5,7 @@ const { components } = require("../components");
 
 const { exec } = require("child_process");
 const { promisify } = require("util");
-const { log, spinner } = require("@clack/prompts");
+const { log, spinner, select } = require("@clack/prompts");
 const execAsync = promisify(exec);
 
 async function installDependencies(deps) {
@@ -45,7 +45,6 @@ async function installMyelinDependencies(deps) {
 }
 
 const addComponent = async (name, componentType) => {
-  console.log("COMPONENT TYPE", componentType);
   // return;
   const component = components[name];
   if (!component) {
@@ -61,35 +60,49 @@ const addComponent = async (name, componentType) => {
   let pathName;
 
   if (component.version === 2) {
-    if (componentType) {
-      const variant = component?.variants?.[componentType];
+    if (name === "i18next") {
+      let componentVariant = componentType;
 
-      if (!variant?.codes?.length) {
-        throw new Error(
-          `Code for this variant ${componentType} for ${name} doesnt exist`
+      if (!componentVariant) {
+        componentVariant = await select({
+          message: "Please enter your framework",
+          placeholder: "nextjs",
+          options: [
+            { value: "nextjs", label: "NextJS" },
+            { value: "tanstack", label: "Tanstack Start" },
+          ],
+        });
+      }
+      if (componentVariant) {
+        const variant = component?.variants?.[componentVariant];
+
+        if (!variant?.codes?.length) {
+          throw new Error(
+            `Code for this variant ${componentVariant} for ${name} doesnt exist`
+          );
+        }
+
+        if (variant.dependencies?.length) {
+          await installDependencies(variant.dependencies);
+        }
+
+        await Promise.all(
+          variant?.codes.map(async (code) => {
+            const codeRaw = await fetch(code.codeUrl);
+            const codeRawStr = await codeRaw.text();
+
+            if (!existsSync(code.targetDir)) {
+              await fs.mkdir(code.targetDir, { recursive: true });
+            }
+
+            fs.writeFile(code.path, codeRawStr).then(() => {
+              log.success(`${name}: successfully installed`);
+            });
+          })
         );
+
+        return null;
       }
-
-      if (component.dependencies?.length) {
-        await installDependencies(variant.dependencies);
-      }
-
-      await Promise.all(
-        variant?.codes.map(async (code) => {
-          const codeRaw = await fetch(code.codeUrl);
-          const codeRawStr = await codeRaw.text();
-
-          if (!existsSync(code.targetDir)) {
-            await fs.mkdir(code.targetDir, { recursive: true });
-          }
-
-          fs.writeFile(code.path, codeRawStr).then(() => {
-            log.success(`${name}: successfully installed`);
-          });
-        })
-      );
-
-      return null;
     }
 
     // install dependencies

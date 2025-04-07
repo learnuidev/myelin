@@ -33,8 +33,7 @@ const nsfy = async (subCommands) => {
       async (key) => {
         const notUsedInFile = files
           ?.filter((file) => {
-            const searchSingleStr = `('${key}')`;
-
+            const searchSingleStr = `t('${key}')`;
             const searchDoubleStr = `t("${key}")`;
             const codeContainsKey =
               file?.code?.includes(searchDoubleStr) ||

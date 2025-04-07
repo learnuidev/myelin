@@ -23,6 +23,7 @@ const { startUi } = require("./actions/start-ui/start-ui");
 const { printStats } = require("./actions/print-stats/print-stats");
 const { eat } = require("./actions/eat/eat");
 const { clean } = require("./actions/clean/clean");
+const { nsfy } = require("./actions/nsfy/nsfy");
 
 async function main() {
   let action;
@@ -50,6 +51,7 @@ async function main() {
         { value: "translate", label: "Translate" },
         { value: "clean", label: "Remove unused keys" },
         { value: "eat", label: "EAT" },
+        { value: "nsfy", label: "Namespacefy files" },
         { value: "sync", label: "Sync" },
         { value: "stats", label: "Stats about your translations" },
         { value: "add-project", label: "Add a new project" },
@@ -71,6 +73,7 @@ async function main() {
   }
 
   try {
+    console.log("ACTION", action);
     switch (action) {
       case "init": {
         await init();
@@ -103,6 +106,10 @@ async function main() {
       }
       case "stats": {
         await printStats(subCommands);
+        break;
+      }
+      case "nsfy": {
+        await nsfy(subCommands);
         break;
       }
       case "clean": {

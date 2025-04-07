@@ -21,7 +21,7 @@
     "type": "local"
   },
   "locale": {
-    "sourceEntries": ["app", "components"],
+    "sourceEntries": ["src"],
     "location": "locales",
     "sourceLanguage": "en",
     "targetLanguages": ["fr", "es", "zh", "zh-TW"]

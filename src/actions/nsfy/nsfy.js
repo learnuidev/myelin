@@ -86,7 +86,7 @@ const nsfy = async (subCommands) => {
     return unusedKeys;
   });
 
-  if (count === 5) {
+  if (count === 25) {
     return;
   } else {
     count = count + 1;

@@ -1,3 +1,10 @@
 const Foo = () => {
-  return <div>{t("common:okay")}</div>;
+  const { t } = useTranslation(["common", "analytics"]);
+  return (
+    <div>
+      <h1>{t("common:okay")}</h1>
+
+      <p>{t("analytics:analytics.overview")}</p>
+    </div>
+  );
 };

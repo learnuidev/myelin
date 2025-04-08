@@ -9,11 +9,18 @@ const { extractFiles } = require("../eat/pipeline/extract-files");
 const { note, log } = require("@clack/prompts");
 const { writeFile } = require("../translate/utils/write-file");
 
+// steps
+// 1. get all source translations
+// 2. get all files
+
+let count = 0;
 const nsfy = async (subCommands) => {
   const config = await loadConfig();
 
+  // 1. get all source translations
   const sourceTranslations = await loadSourceTranslations({ config });
 
+  // 2. get all files
   const entries = config?.locale?.sourceEntries;
 
   const files = (
@@ -26,7 +33,7 @@ const nsfy = async (subCommands) => {
     )
   )?.flat();
 
-  const formattedTranslations = sourceTranslations.map((item) => {
+  sourceTranslations.map((item) => {
     const nameSpace = item?.baseFileName;
 
     const unusedKeys = Object.keys(item?.sourceTranslation || {})?.filter(
@@ -78,6 +85,13 @@ const nsfy = async (subCommands) => {
 
     return unusedKeys;
   });
+
+  if (count === 5) {
+    return;
+  } else {
+    count = count + 1;
+    return nsfy(subCommands);
+  }
 };
 
 module.exports = {

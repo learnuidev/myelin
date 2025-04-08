@@ -39,7 +39,7 @@ const nsfy = async (subCommands) => {
               file?.code?.includes(searchDoubleStr) ||
               file?.code?.includes(searchSingleStr);
 
-            if (codeContainsKey) {
+            if (codeContainsKey && file?.code?.includes("useTranslation")) {
               return true;
             }
 

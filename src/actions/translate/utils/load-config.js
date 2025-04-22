@@ -1,8 +1,9 @@
+const { translationProviders } = require("../constants/translation-providers");
 const { readFile } = require("./read-file");
 
 const defaultConfig = JSON.stringify(
   {
-    aiProvider: "openai",
+    aiProvider: translationProviders.openai,
     aiModel: "gpt-4o-mini",
     locale: {
       location: "locales",

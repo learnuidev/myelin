@@ -1,29 +1,31 @@
 {
   "aiProviders": {
-    "fr": {
-      "aiModel": "mistral-small:24b",
-      "aiProvider": "ollama"
-    },
-    "es": {
-      "aiModel": "mistral-small:24b",
-      "aiProvider": "ollama"
-    },
     "zh": {
-      "aiModel": "qwen2.5:32b",
-      "aiProvider": "ollama"
+      "aiModel": "deepseek-chat",
+      "aiProvider": "deepseek"
     },
-    "zh-TW": {
-      "aiModel": "deepseek-r1:32b",
-      "aiProvider": "ollama"
+    "fr": {
+      "aiModel": "mistral-large-latest",
+      "aiProvider": "mistral"
+    },
+    "ar": {
+      "aiModel": "mistral-saba-latest",
+      "aiProvider": "mistral"
     }
   },
   "sync": {
     "type": "local"
   },
   "locale": {
-    "sourceEntries": ["src"],
+    "sourceEntries": [
+      "src"
+    ],
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": ["fr", "es", "zh", "zh-TW"]
+    "targetLanguages": [
+      "zh",
+      "fr",
+      "ar"
+    ]
   }
 }

@@ -21,6 +21,7 @@ const getAiProviderAndModel = async ({ targetLanguage }) => {
       { value: "deepseek", label: "Deepseek" },
       { value: "qwen", label: "Qwen" },
       { value: "moonshot", label: "Moonshot" },
+      { value: "mistral", label: "Mistral" },
       { value: "ollama", label: "Ollama" },
       { value: "custom", label: "Custom" },
     ],

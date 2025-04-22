@@ -1,13 +1,17 @@
+const {
+  translationProviders,
+} = require("../../translate/constants/translation-providers");
+
 const getPlaceholderModel = (aiProvider) => {
   switch (aiProvider) {
-    case "openai":
+    case translationProviders.openai:
     default:
       return "gpt-4o-mini";
-    case "deepseek":
+    case translationProviders.deepseek:
       return "deekseek-chat";
-    case "moonshot":
+    case translationProviders.moonshot:
       return "moonshot-v1-auto";
-    case "qwen":
+    case translationProviders.qwen:
       return "qwen-plus";
   }
 };

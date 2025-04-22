@@ -73,7 +73,6 @@ async function main() {
   }
 
   try {
-    console.log("ACTION", action);
     switch (action) {
       case "init": {
         await init();

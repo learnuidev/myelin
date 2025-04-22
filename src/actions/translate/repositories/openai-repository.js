@@ -6,7 +6,11 @@ const { parseInput } = require("../utils/parse-input");
 
 const openAiRepository = () => {
   const translate = async ({ sourceTranslation, config, targetLanguage }) => {
-    const client = await loadClient({ config });
+    const client = await loadClient({
+      config,
+      sourceTranslation,
+      targetLanguage,
+    });
     const prompt = `
     You are an expert language translator, given the stringified JSON object, translate the into the following language: ${targetLanguage}
   

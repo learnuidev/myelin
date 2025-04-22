@@ -1,6 +1,17 @@
+const {
+  translationProviders,
+} = require("../../translate/constants/translation-providers");
+
 const getProviderModelOptions = (aiProvider) => {
   switch (aiProvider) {
-    case "openai":
+    case translationProviders.mistral:
+      return [
+        { value: "mistral-saba-latest", label: "Mistral Saba" },
+        { value: "mistral-large-latest", label: "Mistral Large" },
+        { value: "ministral-3b-latest", label: "Ministral 3B" },
+        { value: "ministral-8b-latest", label: "Ministral 8B" },
+      ];
+    case translationProviders.openai:
     default:
       return [
         { value: "o3-mini", label: "o3 Mini" },
@@ -10,16 +21,16 @@ const getProviderModelOptions = (aiProvider) => {
         { value: "gpt-4o-mini", label: "GTP 4o Mini" },
         { value: "gpt-3.5-turbo", label: "GPT 3.5 Turbo" },
       ];
-    case "deepseek":
+    case translationProviders.deepseek:
       return [{ value: "deepseek-chat", label: "Deepseek Chat" }];
-    case "moonshot":
+    case translationProviders.moonshot:
       return [
         { value: "moonshot-v1-8k", label: "Moonshot 8k" },
         { value: "moonshot-v1-32k", label: "Moonshot 32k" },
         { value: "moonshot-v1-128k", label: "Moonshot 128k" },
         { value: "moonshot-v1-audi", label: "Moonshot Auto" },
       ];
-    case "qwen":
+    case translationProviders.qwen:
       return [{ value: "qwen-plus", label: "Openai" }];
   }
 };

@@ -4,6 +4,8 @@ const translationProviders = {
   moonshot: "moonshot",
   deepseek: "deepseek",
   qwen: "qwen",
+  mistral: "mistral",
+  claude: "claude",
 };
 
 module.exports = {

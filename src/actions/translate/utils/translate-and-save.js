@@ -29,6 +29,7 @@ const smartTranslateAndSave = async ({
   if (!existingTranslation) {
     s.start("Starting translation...");
     const translation = await translateText({
+      fileLocation,
       sourceTranslation,
       config,
       targetLanguage,
@@ -99,6 +100,7 @@ const smartTranslateAndSave = async ({
         );
 
         const edited = await translateText({
+          fileLocation,
           sourceTranslation: newContent,
           config,
           targetLanguage,
@@ -160,6 +162,7 @@ const smartTranslateAndSave = async ({
 
   // 5: Otherwise translate new translations and save new translations with
   const translation = await translateText({
+    fileLocation,
     sourceTranslation: newSourceTranslation,
     config,
     targetLanguage,

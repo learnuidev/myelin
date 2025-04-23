@@ -33,7 +33,12 @@ const getTranslationRepositoryV2 = ({ config, targetLanguage }) => {
   return getTranslationRepository(providerPerLang);
 };
 
-const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
+const translateText = async ({
+  fileLocation,
+  sourceTranslation,
+  config,
+  targetLanguage,
+}) => {
   const providerPerLang = getProviderPerLang({ config, targetLanguage });
 
   if (config.logMode) {
@@ -47,6 +52,7 @@ const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
   const translationService = createTranslationService(repository);
 
   const response = await translationService.translate({
+    fileLocation,
     sourceTranslation,
     config,
     targetLanguage,

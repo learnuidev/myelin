@@ -4,7 +4,7 @@ const { customRepository } = require("../repositories/custom-repository");
 const { deepLRepository } = require("../repositories/deepl-repository");
 const { googleRepository } = require("../repositories/google-repository");
 const { ollamaRepository } = require("../repositories/ollama-repository");
-const { openAiRepository } = require("../repositories/openai-repository");
+const { openAiRepositoryV2 } = require("../repositories/openai-repository-v2");
 const { getProviderPerLang } = require("./get-provider-per-lang");
 
 const getTranslationRepository = (config) => {
@@ -24,7 +24,7 @@ const getTranslationRepository = (config) => {
     return deepLRepository();
   }
 
-  return openAiRepository();
+  return openAiRepositoryV2();
 };
 const getTranslationRepositoryV2 = ({ config, targetLanguage }) => {
   const providerPerLang = getProviderPerLang({ config, targetLanguage });

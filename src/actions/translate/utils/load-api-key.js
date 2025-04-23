@@ -36,6 +36,8 @@ async function loadApiKey({ config, targetLanguage }) {
           return process.env.CLAUDE_API_KEY;
         case translationProviders.google:
           return process.env.GOOGLE_API_KEY;
+        case translationProviders.deepl:
+          return process.env.DEEPL_API_KEY;
       }
     })();
 

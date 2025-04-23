@@ -1,12 +1,13 @@
 const { translationProviders } = require("../constants/translation-providers");
 const { createTranslationService } = require("../create-translation-service");
 const { customRepository } = require("../repositories/custom-repository");
+const { deepLRepository } = require("../repositories/deepl-repository");
 const { googleRepository } = require("../repositories/google-repository");
 const { ollamaRepository } = require("../repositories/ollama-repository");
 const { openAiRepository } = require("../repositories/openai-repository");
 const { getProviderPerLang } = require("./get-provider-per-lang");
 
-const getTranslationRepository = ({ config }) => {
+const getTranslationRepository = (config) => {
   if (config.customAiUrl) {
     return customRepository();
   }
@@ -19,24 +20,16 @@ const getTranslationRepository = ({ config }) => {
     return googleRepository();
   }
 
+  if (config.aiProvider === translationProviders.deepl) {
+    return deepLRepository();
+  }
+
   return openAiRepository();
 };
 const getTranslationRepositoryV2 = ({ config, targetLanguage }) => {
   const providerPerLang = getProviderPerLang({ config, targetLanguage });
 
-  if (providerPerLang.customAiUrl) {
-    return customRepository();
-  }
-
-  if (providerPerLang.aiProvider === translationProviders.ollama) {
-    return ollamaRepository();
-  }
-
-  if (providerPerLang.aiProvider === translationProviders.google) {
-    return googleRepository();
-  }
-
-  return openAiRepository();
+  return getTranslationRepository(providerPerLang);
 };
 
 const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
@@ -48,7 +41,7 @@ const translateText = async ({ sourceTranslation, config, targetLanguage }) => {
 
   const repository = providerPerLang
     ? getTranslationRepositoryV2({ config, targetLanguage })
-    : getTranslationRepository({ config, targetLanguage });
+    : getTranslationRepository(config);
 
   const translationService = createTranslationService(repository);
 

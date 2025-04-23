@@ -8,6 +8,7 @@ const translationProviders = {
   claude: "claude",
   google: "google",
   ollama: "ollama",
+  deepl: "deepl",
 };
 
 module.exports = {

@@ -1,5 +1,7 @@
+const { translationProviders } = require("../constants/translation-providers");
 const { createTranslationService } = require("../create-translation-service");
 const { customRepository } = require("../repositories/custom-repository");
+const { googleRepository } = require("../repositories/google-repository");
 const { ollamaRepository } = require("../repositories/ollama-repository");
 const { openAiRepository } = require("../repositories/openai-repository");
 const { getProviderPerLang } = require("./get-provider-per-lang");
@@ -9,8 +11,12 @@ const getTranslationRepository = ({ config }) => {
     return customRepository();
   }
 
-  if (config.aiProvider === "ollama") {
+  if (config.aiProvider === translationProviders.ollama) {
     return ollamaRepository();
+  }
+
+  if (config.aiProvider === translationProviders.google) {
+    return googleRepository();
   }
 
   return openAiRepository();
@@ -22,8 +28,12 @@ const getTranslationRepositoryV2 = ({ config, targetLanguage }) => {
     return customRepository();
   }
 
-  if (providerPerLang.aiProvider === "ollama") {
+  if (providerPerLang.aiProvider === translationProviders.ollama) {
     return ollamaRepository();
+  }
+
+  if (providerPerLang.aiProvider === translationProviders.google) {
+    return googleRepository();
   }
 
   return openAiRepository();

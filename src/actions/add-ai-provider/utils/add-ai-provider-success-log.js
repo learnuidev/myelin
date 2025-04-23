@@ -7,6 +7,7 @@ const envMapper = {
   mistral: "MISTRAL_API_KEY",
   moonshot: "MOONSHOT_API_KEY",
   claude: "CLAUDE_API_KEY",
+  google: "GOOGLE_API_KEY",
 };
 
 const addAiProviderSuccessLog = (config) => {

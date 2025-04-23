@@ -1,31 +1,34 @@
 {
   "aiProviders": {
-    "zh": {
-      "aiModel": "deepseek-chat",
-      "aiProvider": "deepseek"
-    },
     "fr": {
       "aiModel": "mistral-large-latest",
       "aiProvider": "mistral"
     },
+    "zh": {
+      "aiModel": "deepseek-chat",
+      "aiProvider": "deepseek"
+    },
     "ar": {
       "aiModel": "mistral-saba-latest",
       "aiProvider": "mistral"
+    },
+    "fa": {
+      "aiProvider": "google"
+    },
+    "ru": {
+      "aiProvider": "google"
+    },
+    "de": {
+      "aiProvider": "google"
     }
   },
   "sync": {
     "type": "local"
   },
   "locale": {
-    "sourceEntries": [
-      "src"
-    ],
+    "sourceEntries": ["src"],
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": [
-      "zh",
-      "fr",
-      "ar"
-    ]
+    "targetLanguages": ["fr", "zh", "ar", "fa", "ru", "de"]
   }
 }

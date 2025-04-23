@@ -6,6 +6,8 @@ const translationProviders = {
   qwen: "qwen",
   mistral: "mistral",
   claude: "claude",
+  google: "google",
+  ollama: "ollama",
 };
 
 module.exports = {

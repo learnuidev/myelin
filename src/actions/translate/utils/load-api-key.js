@@ -34,6 +34,8 @@ async function loadApiKey({ config, targetLanguage }) {
           return process.env.MOONSHOT_API_KEY;
         case translationProviders.claude:
           return process.env.CLAUDE_API_KEY;
+        case translationProviders.google:
+          return process.env.GOOGLE_API_KEY;
       }
     })();
 

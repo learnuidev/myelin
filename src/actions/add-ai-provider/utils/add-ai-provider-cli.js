@@ -18,6 +18,7 @@ const getAiProviderAndModel = async ({ targetLanguage }) => {
     placeholder: "deepseek",
     options: [
       { value: "openai", label: "Openai" },
+      { value: "google", label: "Google Translate" },
       { value: "deepseek", label: "Deepseek" },
       { value: "qwen", label: "Qwen" },
       { value: "moonshot", label: "Moonshot" },
@@ -29,7 +30,7 @@ const getAiProviderAndModel = async ({ targetLanguage }) => {
 
   let aiModel;
 
-  if (!["custom", "ollama"]?.includes(aiProvider)) {
+  if (!["custom", "ollama", "google"]?.includes(aiProvider)) {
     aiModel = await select({
       message: "Enter your preferred ai model",
       placeholder: getPlaceholderModel(aiProvider),

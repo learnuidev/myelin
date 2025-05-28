@@ -24,6 +24,7 @@ const { printStats } = require("./actions/print-stats/print-stats");
 const { eat } = require("./actions/eat/eat");
 const { clean } = require("./actions/clean/clean");
 const { nsfy } = require("./actions/nsfy/nsfy");
+const { cleanV2 } = require("./actions/translate/clean-v2");
 
 async function main() {
   let action;
@@ -112,7 +113,8 @@ async function main() {
         break;
       }
       case "clean": {
-        await clean(subCommands);
+        // await clean(subCommands);
+        await cleanV2(subCommands);
         break;
       }
 

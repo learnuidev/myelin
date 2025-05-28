@@ -1,6 +1,6 @@
 {
   "name": "myelin.dev",
-  "version": "2025.05.28.1057",
+  "version": "2025.05.28.1141",
   "main": "src/index.js",
   "bin": {
     "myelin.dev": "src/cli-v2.js"

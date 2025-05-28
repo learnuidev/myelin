@@ -25,6 +25,9 @@ const smartTranslateAndSave = async ({
   let originalExistingTranslation = await loadTranslation(fileLocation);
   let existingTranslation = { ...originalExistingTranslation };
 
+  console.log("SOURCE", sourceTranslation);
+  console.log("EXISTING", existingTranslation);
+
   // 2. If not found then proceed with normal translation
   if (!existingTranslation) {
     s.start("Starting translation...");

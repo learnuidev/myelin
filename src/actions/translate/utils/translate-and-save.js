@@ -25,9 +25,6 @@ const smartTranslateAndSave = async ({
   let originalExistingTranslation = await loadTranslation(fileLocation);
   let existingTranslation = { ...originalExistingTranslation };
 
-  console.log("SOURCE", sourceTranslation);
-  console.log("EXISTING", existingTranslation);
-
   // 2. If not found then proceed with normal translation
   if (!existingTranslation) {
     s.start("Starting translation...");
@@ -76,6 +73,34 @@ const smartTranslateAndSave = async ({
       file?.path?.includes(key)
     );
 
+    if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
+      log.info(
+        `🧹 - Removing ${Object.keys(existingTranslationWithRemovedKeys)?.length} keys for: ${targetLanguage} from: ${fileLocation}`,
+        existingTranslationWithRemovedKeys
+      );
+
+      const newExistingKey = Object.fromEntries(
+        Object.entries(existingTranslation).filter((translationKeyAndValue) => {
+          const [translationKey] = translationKeyAndValue;
+          return sourceTranslation?.[translationKey];
+        })
+      );
+
+      log.success(
+        `🎉 - Successfully removed the keys ${Object.keys(existingTranslationWithRemovedKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
+      );
+
+      await writeJsonFile(fileLocation, newExistingKey);
+    } else {
+      if (
+        JSON.stringify(existingTranslation) !==
+        JSON.stringify(originalExistingTranslation)
+      ) {
+        await writeJsonFile(fileLocation, existingTranslation);
+      }
+      return null;
+    }
+
     if (!changedFile) {
       // log.info(`Nothing to translate for ${key}`);
       return true;
@@ -120,34 +145,6 @@ const smartTranslateAndSave = async ({
           `🎉 - Successfully translated edited the ${newKeys?.length} keys for: ${targetLanguage}. Saving it path: ${fileLocation}.`
         );
       }
-    }
-
-    if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
-      log.info(
-        `🧹 - Removing ${Object.keys(existingTranslationWithRemovedKeys)?.length} keys for: ${targetLanguage} from: ${fileLocation}`,
-        existingTranslationWithRemovedKeys
-      );
-
-      const newExistingKey = Object.fromEntries(
-        Object.entries(existingTranslation).filter((translationKeyAndValue) => {
-          const [translationKey] = translationKeyAndValue;
-          return sourceTranslation?.[translationKey];
-        })
-      );
-
-      log.success(
-        `🎉 - Successfully removed the keys ${Object.keys(existingTranslationWithRemovedKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
-      );
-
-      await writeJsonFile(fileLocation, newExistingKey);
-    } else {
-      if (
-        JSON.stringify(existingTranslation) !==
-        JSON.stringify(originalExistingTranslation)
-      ) {
-        await writeJsonFile(fileLocation, existingTranslation);
-      }
-      return null;
     }
 
     return null;

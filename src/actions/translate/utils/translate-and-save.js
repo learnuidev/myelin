@@ -141,6 +141,8 @@ const smartTranslateAndSave = async ({
           ...edited,
         };
 
+        await writeJsonFile(fileLocation, existingTranslation);
+
         s.stop(
           `🎉 - Successfully translated edited the ${newKeys?.length} keys for: ${targetLanguage}. Saving it path: ${fileLocation}.`
         );

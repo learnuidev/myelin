@@ -20,30 +20,32 @@ async function loadApiKey({ config, targetLanguage }) {
   const providerPerLang = getProviderPerLang({ config, targetLanguage });
 
   if (providerPerLang) {
-    const aiApiKey = (() => {
+    const aiApiKeyProperty = (() => {
       switch (providerPerLang.aiProvider) {
         case translationProviders.openai:
-          return process.env.OPENAI_API_KEY;
+          return "OPENAI_API_KEY";
         case translationProviders.deepseek:
-          return process.env.DEEPSEEK_API_KEY;
+          return "DEEPSEEK_API_KEY";
         case translationProviders.qwen:
-          return process.env.QWEN_API_KEY;
+          return "QWEN_API_KEY";
         case translationProviders.mistral:
-          return process.env.MISTRAL_API_KEY;
+          return "MISTRAL_API_KEY";
         case translationProviders.moonshot:
-          return process.env.MOONSHOT_API_KEY;
+          return "MOONSHOT_API_KEY";
         case translationProviders.claude:
-          return process.env.CLAUDE_API_KEY;
+          return "CLAUDE_API_KEY";
         case translationProviders.google:
-          return process.env.GOOGLE_API_KEY;
+          return "GOOGLE_API_KEY";
         case translationProviders.deepl:
-          return process.env.DEEPL_API_KEY;
+          return "DEEPL_API_KEY";
       }
     })();
 
+    const aiApiKey = process.env?.[aiApiKeyProperty];
+
     if (!aiApiKey) {
       throw new Error(
-        `API Key for ${providerPerLang.aiProvider} not found. Please add AI_API_KEY in your .env file and try again :)`
+        `API Key for ${providerPerLang.aiProvider} not found. Please add ${aiApiKeyProperty} in your .env file and try again :)`
       );
     }
 

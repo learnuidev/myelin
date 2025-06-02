@@ -1,7 +1,8 @@
 {
   "aiProviders": {
     "de": {
-      "aiProvider": "deepl"
+      "aiModel": "mistral-saba-latest",
+      "aiProvider": "mistral"
     },
     "ar": {
       "aiModel": "mistral-saba-latest",

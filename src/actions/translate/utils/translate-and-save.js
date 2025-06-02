@@ -98,7 +98,7 @@ const smartTranslateAndSave = async ({
       ) {
         await writeJsonFile(fileLocation, existingTranslation);
       }
-      return null;
+      // return null;
     }
 
     if (!changedFile) {

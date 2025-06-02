@@ -59,8 +59,7 @@ const smartTranslateAndSave = async ({
     })
   );
 
-  // 4. If there is no need to translate then, log saying: nothing to translate
-  if (!Object.keys(newSourceTranslation)?.length) {
+  const handleChanged = async () => {
     const structuredDiff = await getUncommittedChanges(
       config?.locale?.location
     );
@@ -73,37 +72,9 @@ const smartTranslateAndSave = async ({
       file?.path?.includes(key)
     );
 
-    if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
-      log.info(
-        `🧹 - Removing ${Object.keys(existingTranslationWithRemovedKeys)?.length} keys for: ${targetLanguage} from: ${fileLocation}`,
-        existingTranslationWithRemovedKeys
-      );
-
-      const newExistingKey = Object.fromEntries(
-        Object.entries(existingTranslation).filter((translationKeyAndValue) => {
-          const [translationKey] = translationKeyAndValue;
-          return sourceTranslation?.[translationKey];
-        })
-      );
-
-      log.success(
-        `🎉 - Successfully removed the keys ${Object.keys(existingTranslationWithRemovedKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
-      );
-
-      await writeJsonFile(fileLocation, newExistingKey);
-    } else {
-      if (
-        JSON.stringify(existingTranslation) !==
-        JSON.stringify(originalExistingTranslation)
-      ) {
-        await writeJsonFile(fileLocation, existingTranslation);
-      }
-      // return null;
-    }
-
     if (!changedFile) {
       // log.info(`Nothing to translate for ${key}`);
-      return true;
+      return null;
     }
 
     if (changedFile) {
@@ -141,12 +112,54 @@ const smartTranslateAndSave = async ({
           ...edited,
         };
 
-        await writeJsonFile(fileLocation, existingTranslation);
-
         s.stop(
           `🎉 - Successfully translated edited the ${newKeys?.length} keys for: ${targetLanguage}. Saving it path: ${fileLocation}.`
         );
+
+        return existingTranslation;
       }
+    }
+  };
+
+  // 4. If there is no need to translate then, log saying: nothing to translate
+  if (!Object.keys(newSourceTranslation)?.length) {
+    if (Object.keys(existingTranslationWithRemovedKeys)?.length) {
+      log.info(
+        `🧹 - Removing ${Object.keys(existingTranslationWithRemovedKeys)?.length} keys for: ${targetLanguage} from: ${fileLocation}`,
+        existingTranslationWithRemovedKeys
+      );
+
+      const newExistingKey = Object.fromEntries(
+        Object.entries(existingTranslation).filter((translationKeyAndValue) => {
+          const [translationKey] = translationKeyAndValue;
+          return sourceTranslation?.[translationKey];
+        })
+      );
+
+      log.success(
+        `🎉 - Successfully removed the keys ${Object.keys(existingTranslationWithRemovedKeys)} for: ${targetLanguage}. Saving it in the path: ${fileLocation}.`
+      );
+
+      await writeJsonFile(fileLocation, newExistingKey);
+    } else {
+      if (
+        JSON.stringify(existingTranslation) !==
+        JSON.stringify(originalExistingTranslation)
+      ) {
+        await writeJsonFile(fileLocation, existingTranslation);
+      }
+      // return null;
+    }
+
+    const changed = await handleChanged();
+
+    if (!changed) {
+      // log.info(`Nothing to translate for ${key}`);
+      return true;
+    }
+
+    if (changed) {
+      await writeJsonFile(fileLocation, changed);
     }
 
     return null;
@@ -162,6 +175,8 @@ const smartTranslateAndSave = async ({
     `😃 - Translating the following for: ${targetLanguage} [${fileName}]: `
   );
 
+  const changed = await handleChanged();
+
   // 5: Otherwise translate new translations and save new translations with
   const translation = await translateText({
     fileLocation,
@@ -173,6 +188,7 @@ const smartTranslateAndSave = async ({
   const newTranslation = {
     ...existingTranslation,
     ...translation,
+    ...changed,
   };
 
   const newExistingTranslation = Object.fromEntries(

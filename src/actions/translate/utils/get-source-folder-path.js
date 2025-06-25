@@ -1,8 +1,12 @@
+const { getTranslationsFolderPath } = require("./get-translations-folder-path");
+
 const getSourceFolderPath = ({ config }) => {
-  const localeLocation = config.locale.location;
   const sourceLanguage = config.locale.sourceLanguage;
 
-  const sourceFolderPath = `./${localeLocation}/${sourceLanguage}`;
+  const sourceFolderPath = getTranslationsFolderPath({
+    config,
+    lang: sourceLanguage,
+  });
 
   return sourceFolderPath;
 };

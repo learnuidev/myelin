@@ -1,28 +1,14 @@
 const { note } = require("@clack/prompts");
-const {
-  getSourceFolderPath,
-} = require("../translate/utils/get-source-folder-path");
+const {} = require("../translate/utils/get-source-folder-path");
 const { loadConfig } = require("../translate/utils/load-config");
 const {
   loadJsonFilesFromFolder,
 } = require("../translate/utils/load-json-files-from-folder");
+const {
+  getTranslationsFolderPath,
+} = require("../translate/utils/get-translations-folder-path");
 
-const low = async (subCommands) => {
-  // step 1: read config
-  const config = await loadConfig();
-
-  if (!config) {
-    note(
-      "myelin.config.json not found. Please run `npx myelino` to create one",
-      "Error"
-    );
-    return null;
-  }
-
-  const sourceFolderPath = getSourceFolderPath({ config });
-
-  const sourceTranslations = await loadJsonFilesFromFolder(sourceFolderPath);
-
+const getTotalTranslations = (sourceTranslations) => {
   const allTranslations = sourceTranslations
     ?.map((trans) => Object.values(trans.sourceTranslation).join(" "))
     .join(" ")
@@ -37,7 +23,39 @@ const low = async (subCommands) => {
     },
   };
 
-  console.log(stats);
+  return stats;
+};
+
+const low = async (subCommands) => {
+  // step 1: read config
+  const config = await loadConfig();
+
+  if (!config) {
+    note(
+      "myelin.config.json not found. Please run `npx myelino` to create one",
+      "Error"
+    );
+    return null;
+  }
+
+  const allLangs = [
+    config.locale.sourceLanguage,
+    ...config.locale.targetLanguages,
+  ];
+
+  let res = {};
+
+  for (let lang of allLangs) {
+    const folterPath = await getTranslationsFolderPath({ config, lang });
+
+    const translations = await loadJsonFilesFromFolder(folterPath);
+
+    const stats = getTotalTranslations(translations);
+
+    res[lang] = stats;
+  }
+
+  console.log(res);
 };
 
 module.exports = {

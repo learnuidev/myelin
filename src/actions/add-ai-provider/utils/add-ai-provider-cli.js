@@ -84,54 +84,33 @@ const getAiProviderAndModel = async ({ targetLanguage }) => {
 };
 
 const addAiProviderCli = async ({ targetLanguages }) => {
-  if (targetLanguages?.length > 1) {
-    const addProviderPerLang = await select({
-      message:
-        "You have selected more than one languages, would you like to add provider per language",
-      placeholder: "yes",
-      options: [
-        { value: "yes", label: "Yes" },
-        { value: "no", label: "No" },
-      ],
-    });
-
-    if (addProviderPerLang === "yes") {
-      let aiProviders = targetLanguages.reduce((acc, curr) => {
-        return {
-          ...acc,
-          [curr]: {},
-        };
-      }, {});
-
-      for (const targetLanguage of targetLanguages) {
-        const { aiProvider, aiModel, customAiUrl } =
-          await getAiProviderAndModel({ targetLanguage });
-
-        aiProviders = {
-          ...aiProviders,
-          [targetLanguage]: removeNull({
-            aiModel,
-            aiProvider,
-            customAiUrl,
-          }),
-        };
-      }
-
+  if (targetLanguages?.length) {
+    let aiProviders = targetLanguages.reduce((acc, curr) => {
       return {
-        aiProviders,
+        ...acc,
+        [curr]: {},
+      };
+    }, {});
+
+    for (const targetLanguage of targetLanguages) {
+      const { aiProvider, aiModel, customAiUrl } = await getAiProviderAndModel({
+        targetLanguage,
+      });
+
+      aiProviders = {
+        ...aiProviders,
+        [targetLanguage]: removeNull({
+          aiModel,
+          aiProvider,
+          customAiUrl,
+        }),
       };
     }
+
+    return {
+      aiProviders,
+    };
   }
-
-  const { aiProvider, aiModel, customAiUrl } = await getAiProviderAndModel({
-    targetLanguage: null,
-  });
-
-  return {
-    aiProvider,
-    aiModel,
-    customAiUrl,
-  };
 };
 
 module.exports = {

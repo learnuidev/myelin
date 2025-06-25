@@ -26,6 +26,12 @@ const { clean } = require("./actions/clean/clean");
 const { nsfy } = require("./actions/nsfy/nsfy");
 const { cleanV2 } = require("./actions/translate/clean-v2");
 const { low } = require("./actions/low/low");
+const {
+  addTargetLanguage,
+} = require("./actions/add-target-language/add-target-language");
+const {
+  removeTargetLanguage,
+} = require("./actions/remove-target-language/remove-target-language");
 
 async function main() {
   let action;
@@ -60,6 +66,8 @@ async function main() {
         { value: "add-project", label: "Add a new project" },
         { value: "add-cloud", label: "Add a cloud provider" },
         { value: "add-ai", label: "Add a AI provider" },
+        { value: "add-lang", label: "Add a target language(s)" },
+        { value: "remove-lang", label: "Remove a target language(s)" },
         { value: "start-ui", label: "Start an interactive ui" },
       ].concat(mainOptions);
     }
@@ -102,6 +110,17 @@ async function main() {
         await addAiProvider();
         break;
       }
+      case "add-lang":
+      case "add-language": {
+        await addTargetLanguage();
+        break;
+      }
+      case "remove-lang":
+      case "remove-language": {
+        await removeTargetLanguage();
+        break;
+      }
+
       case "add-project": {
         await addProject();
         break;

@@ -1,5 +1,4 @@
 const { note } = require("@clack/prompts");
-const {} = require("../translate/utils/get-source-folder-path");
 const { loadConfig } = require("../translate/utils/load-config");
 const {
   loadJsonFilesFromFolder,
@@ -26,6 +25,7 @@ const getTotalTranslations = (sourceTranslations) => {
   return stats;
 };
 
+// eslint-disable-next-line no-unused-vars
 const low = async (subCommands) => {
   // step 1: read config
   const config = await loadConfig();

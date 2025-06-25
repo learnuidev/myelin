@@ -25,6 +25,7 @@ const { eat } = require("./actions/eat/eat");
 const { clean } = require("./actions/clean/clean");
 const { nsfy } = require("./actions/nsfy/nsfy");
 const { cleanV2 } = require("./actions/translate/clean-v2");
+const { low } = require("./actions/low/low");
 
 async function main() {
   let action;
@@ -52,6 +53,7 @@ async function main() {
         { value: "translate", label: "Translate" },
         { value: "clean", label: "Remove unused keys" },
         { value: "eat", label: "EAT" },
+        { value: "low", label: "Line of words" },
         { value: "nsfy", label: "Namespacefy files" },
         { value: "sync", label: "Sync" },
         { value: "stats", label: "Stats about your translations" },
@@ -115,6 +117,11 @@ async function main() {
       case "clean": {
         // await clean(subCommands);
         await cleanV2(subCommands);
+        break;
+      }
+
+      case "low": {
+        await low(subCommands);
         break;
       }
 

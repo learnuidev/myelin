@@ -1,3 +1,4 @@
+const { getPromptMessages } = require("../utils/get-prompt-messages");
 const { loadClient } = require("../utils/load-client");
 const { parseInput } = require("../utils/parse-input");
 // const { loadClient } = require("./load-client");
@@ -16,30 +17,14 @@ const openAiRepository = () => {
       sourceTranslation,
       targetLanguage,
     });
-    const prompt = `
-    You are an expert language translator, given the stringified JSON object, translate the into the following language: ${targetLanguage}
-  
-    Please provide the response in stringified JSON format like so.
-  
-    For example, if the source translation is:
-    { "title": "Heyy", "description:"Learn Anything" }
-  
-    And target language is "es", then it should return
-    { "title": "Ey", "description": "Aprende cualquier cosa."}
-    
-    `;
+
+    const promptMessages = getPromptMessages({
+      targetLanguage,
+      sourceTranslation,
+    });
 
     const chatCompletion = await client.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: `${prompt}`,
-        },
-        {
-          role: "user",
-          content: `source translation: ${JSON.stringify(sourceTranslation)}`,
-        },
-      ],
+      messages: promptMessages,
       model: config?.aiProviders?.[targetLanguage]?.aiModel || config.aiModel,
     });
 

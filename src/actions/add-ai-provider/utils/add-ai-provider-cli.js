@@ -19,6 +19,7 @@ const getAiProviderAndModel = async ({ targetLanguage }) => {
     options: [
       { value: "openai", label: "Openai" },
       { value: "google", label: "Google Translate" },
+      { value: "claude", label: "Claude" },
       { value: "deepl", label: "DeepL" },
       { value: "deepseek", label: "Deepseek" },
       { value: "qwen", label: "Qwen" },

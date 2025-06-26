@@ -21,6 +21,12 @@ const getProviderModelOptions = (aiProvider) => {
         { value: "gpt-4o-mini", label: "GTP 4o Mini" },
         { value: "gpt-3.5-turbo", label: "GPT 3.5 Turbo" },
       ];
+    case translationProviders.claude:
+      return [
+        { value: "claude-3-5-sonnet-20241022", label: "Claude Sonnet 3.5 v2" },
+        { value: "claude-3-7-sonnet-20250219", label: "Claude Sonnet 3.7" },
+        { value: "claude-sonnet-4-20250514", label: "Claude Sonnet 4" },
+      ];
     case translationProviders.deepseek:
       return [{ value: "deepseek-chat", label: "Deepseek Chat" }];
     case translationProviders.moonshot:

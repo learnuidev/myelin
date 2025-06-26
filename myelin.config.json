@@ -1,21 +1,22 @@
 {
+  "logMode": true,
   "aiProviders": {
     "de": {
       "aiModel": "mistral-saba-latest",
       "aiProvider": "mistral"
+    },
+    "fr": {
+      "aiModel": "claude-sonnet-4-20250514",
+      "aiProvider": "claude"
     }
   },
   "sync": {
     "type": "local"
   },
   "locale": {
-    "sourceEntries": [
-      "src"
-    ],
+    "sourceEntries": ["src"],
     "location": "locales",
     "sourceLanguage": "en",
-    "targetLanguages": [
-      "de"
-    ]
+    "targetLanguages": ["de", "fr"]
   }
 }
